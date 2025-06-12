@@ -50,7 +50,9 @@ runserver-job:
     - python3 src/manage.py runserver localhost:8000 &
     - sleep 15
     - curl -sSf http://localhost:8000 > /dev/null && echo "Server is Up"
-
+    - pkill python
+    - deactivate
+    
 .dockerhub-job:
   stage: release
   environment: production
