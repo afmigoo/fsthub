@@ -45,6 +45,7 @@ release-to-github:
   tags:
     - python
   script:
+    - eval $(ssh-agent -s)
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo 'echo $GH_SSH_PASSPHRASE' > ~/.ssh/tmp && chmod 700 ~/.ssh/tmp
