@@ -13,16 +13,13 @@ initialize-db-job:
     - source venv/bin/activate
     - pip install -r requirements.txt
     - pip freeze
-    - deactivate
   script:
-    - source venv/bin/activate
     - echo "DJANGO_SUPERUSER_USERNAME=TEST" >> secret.env
     - echo "DJANGO_SUPERUSER_PASSWORD=TEST" >> secret.env
     - echo "DJANGO_SUPERUSER_EMAIL=TEST@example.com" >> secret.env
     - python3 src/manage.py createsuperuser
     - python3 src/manage.py migrate
     - deactivate
-    - rm -rf venv
   artifacts:
     expire_in: 10 minutes
     paths:
@@ -40,8 +37,9 @@ runserver-job:
     - python3 src/manage.py runserver localhost:8000 &
     - sleep 15
     - curl -sSf http://localhost:8000 > /dev/null && echo "Server is Up"
-    - pkill python
     - deactivate
+  after_script:
+    - pkill python
 
 .dockerhub-job:
   stage: release
