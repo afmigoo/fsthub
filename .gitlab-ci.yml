@@ -1,19 +1,18 @@
 build-job:
   stage: build
   script:
-    - python -m venv $(pwd)/venv
-    - echo "Created $(pwd)/venv"
-    - source $(pwd)/venv/bin/activate
+    - python -m venv venv
+    - source venv/bin/activate
     - pip install -r requirements.txt
     - deactivate
   artifacts:
     paths:
-      - $(pwd)/venv
+      - venv
 
 test-job:
   stage: test
   script:
-    - source $(pwd)/venv/bin/activate
+    - source venv/bin/activate
     - pip freeze
 
 deploy-prod:
