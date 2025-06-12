@@ -38,6 +38,7 @@ runserver-job:
     - sleep 15
     - curl -sSf http://localhost:8000 > /dev/null && echo "Server is Up"
     - deactivate
+    - pkill python
   after_script:
     - pkill python
 
