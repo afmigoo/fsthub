@@ -25,8 +25,9 @@ initialize-job:
     - python3 src/manage.py createsuperuser
     - python3 src/manage.py migrate
     - deactivate
+    - rm -rf venv
   artifacts:
-    expire_in: '60'
+    expire_in: 1 week
     paths:
       - secret.env
       - src/*.sqlite3
