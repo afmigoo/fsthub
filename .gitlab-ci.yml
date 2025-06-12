@@ -1,30 +1,19 @@
 stages:
   - build
-  - init
   - test
   - release
 
-install-job:
+initialize-db-job:
   stage: build
   environment: development
   tags:
     - python
-  script:
+  before_script:
     - python -m venv venv
     - source venv/bin/activate
     - pip install -r requirements.txt
     - pip freeze
     - deactivate
-  artifacts:
-    expire_in: '60'
-    paths:
-      - venv
-
-initialize-db-job:
-  stage: init
-  environment: development
-  tags:
-    - python
   script:
     - source venv/bin/activate
     - echo "DJANGO_SUPERUSER_USERNAME=TEST" >> secret.env
@@ -35,8 +24,9 @@ initialize-db-job:
     - deactivate
     - rm -rf venv
   artifacts:
-    expire_in: 1 week
+    expire_in: 60 seconds
     paths:
+      - venv
       - secret.env
       - src/*.sqlite3
 
@@ -52,7 +42,7 @@ runserver-job:
     - curl -sSf http://localhost:8000 > /dev/null && echo "Server is Up"
     - pkill python
     - deactivate
-    
+
 .dockerhub-job:
   stage: release
   environment: production
