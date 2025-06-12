@@ -1,13 +1,16 @@
 build-job:
   stage: build
   script:
-    - echo "Hello, $GITLAB_USER_LOGIN!"
+    - python -m venv $(pwd)/venv
+    - source $(pwd)/venv/bin/activate
     - pip install -r requirements.txt
+    - deactivate
 
 test-job1:
   stage: test
   script:
-    - echo "This job tests something"
+    - source $(pwd)/venv/bin/activate
+    - pip freeze
 
 deploy-prod:
   stage: deploy
