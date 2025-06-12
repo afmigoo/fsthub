@@ -1,3 +1,8 @@
+stages:
+  - build
+  - init
+  - release
+
 install-job:
   stage: build
   environment: development
@@ -15,7 +20,7 @@ install-job:
       - venv
 
 initialize-job:
-  stage: test
+  stage: init
   environment: development
   tags:
     - python
