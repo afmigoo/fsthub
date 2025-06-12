@@ -1,5 +1,7 @@
 install-job:
   stage: build
+  tags:
+    - python
   script:
     - python -m venv venv
     - source venv/bin/activate
@@ -13,6 +15,8 @@ install-job:
 
 initialize-job:
   stage: test
+  tags:
+    - python
   script:
     - source venv/bin/activate
     - echo "DJANGO_SUPERUSER_USERNAME=TEST" >> secret.env
@@ -27,15 +31,10 @@ initialize-job:
       - secret.env
       - src/*.sqlite3
 
-test-job:
-  stage: test
-  script:
-    - source venv/bin/activate
-    - echo "" > secret.env
-    - python src/manage.py 
-
 deploy-prod:
   stage: deploy
+  tags:
+    - python
   script:
     - echo "This job deploys something from the $CI_COMMIT_BRANCH branch."
   environment: production
