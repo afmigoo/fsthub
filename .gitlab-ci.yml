@@ -24,7 +24,7 @@ initialize-db-job:
     - deactivate
     - rm -rf venv
   artifacts:
-    expire_in: 60 seconds
+    expire_in: 10 minutes
     paths:
       - venv
       - secret.env
