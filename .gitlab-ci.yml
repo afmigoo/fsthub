@@ -5,6 +5,9 @@ build-job:
     - source $(pwd)/venv/bin/activate
     - pip install -r requirements.txt
     - deactivate
+  artifacts:
+    paths:
+      - $(pwd)/venv
 
 test-job1:
   stage: test
