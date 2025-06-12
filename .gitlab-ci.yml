@@ -1,19 +1,38 @@
-build-job:
+install-job:
   stage: build
   script:
     - python -m venv venv
     - source venv/bin/activate
     - pip install -r requirements.txt
+    - pip freeze
     - deactivate
   artifacts:
+    expire_in: '60'
     paths:
       - venv
+
+initialize-job:
+  stage: test
+  script:
+    - source venv/bin/activate
+    - echo "DJANGO_SUPERUSER_USERNAME=TEST" >> secret.env
+    - echo "DJANGO_SUPERUSER_PASSWORD=TEST" >> secret.env
+    - echo "DJANGO_SUPERUSER_EMAIL=TEST@example.com" >> secret.env
+    - python3 src/manage.py createsuperuser
+    - python3 src/manage.py migrate
+    - deactivate
+  artifacts:
+    expire_in: '60'
+    paths:
+      - secret.env
+      - src/*.sqlite3
 
 test-job:
   stage: test
   script:
     - source venv/bin/activate
-    - pip freeze
+    - echo "" > secret.env
+    - python src/manage.py 
 
 deploy-prod:
   stage: deploy
