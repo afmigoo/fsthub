@@ -1,6 +1,7 @@
 stages:
   - build
   - init
+  - test
   - release
 
 install-job:
@@ -19,7 +20,7 @@ install-job:
     paths:
       - venv
 
-initialize-job:
+initialize-db-job:
   stage: init
   environment: development
   tags:
@@ -39,20 +40,27 @@ initialize-job:
       - secret.env
       - src/*.sqlite3
 
-release-to-github:
+runserver-job:
+  stage: test
+  environment: development
+  tags:
+    - python
+  script:
+    - source venv/bin/activate
+    - python3 src/manage.py runserver localhost:8000 &
+    - sleep 15
+    - curl -sSf http://localhost:8000 > /dev/null && echo "Server is Up"
+
+.dockerhub-job:
   stage: release
   environment: production
   tags:
     - python
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
-    - eval $(ssh-agent -s)
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "#!/bin/bash" > ~/.ssh/tmp
-    - echo 'echo $GH_SSH_PASSPHRASE' >> ~/.ssh/tmp && chmod 700 ~/.ssh/tmp
-    - echo "$GH_SSH_PK_BASE64" | base64 -d | DISPLAY=None SSH_ASKPASS=~/.ssh/tmp ssh-add -
-    - ssh-keyscan github.com >> ~/.ssh/known_hosts && chmod 644 ~/.ssh/known_hosts
-    - git config --global user.email "affenmilchmann@gmail.com"
-    - git config --global user.name "Elen Kartina"
-    - git status
-    - git push git@github.com:afmigoo/fsthub.git main
+    - docker build -t $CONTAINER_IMAGE .
+    - docker push $CONTAINER_IMAGE
+  after_script:
+    - docker logout
+
