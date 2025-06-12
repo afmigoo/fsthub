@@ -54,4 +54,5 @@ release-to-github:
     - ssh-keyscan github.com >> ~/.ssh/known_hosts && chmod 644 ~/.ssh/known_hosts
     - git config --global user.email "affenmilchmann@gmail.com"
     - git config --global user.name "Elen Kartina"
+    - git status
     - git push git@github.com:afmigoo/fsthub.git main
