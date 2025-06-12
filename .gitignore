@@ -1,0 +1,6 @@
+secret.env
+venv
+*.sqlite3
+*.hfst
+*.hfstol
+*.pyc
