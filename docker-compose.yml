@@ -1,0 +1,6 @@
+services:
+  django_backend:
+    image: fsthub_django
+    container_name: fsthub_django
+    build: .
+    network_mode: bridge

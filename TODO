@@ -1,0 +1,4 @@
+- create container for django with uwsgi
+- test container with uwsgi during ci?
+- publish image automatically to dockerhub
+- fetch image automatically to conlab

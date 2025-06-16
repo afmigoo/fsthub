@@ -1,0 +1,60 @@
+stages:
+  - build
+  - test
+  - release
+
+initialize-db-job:
+  stage: build
+  environment: development
+  tags:
+    - python
+  before_script:
+    - python -m venv venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+    - pip freeze
+  script:
+    - python3 src/manage.py migrate
+    - |
+      DJANGO_SUPERUSER_USERNAME=TEST \
+      DJANGO_SUPERUSER_PASSWORD=TEST \
+      DJANGO_SUPERUSER_EMAIL="test@example.com" \
+      python3 src/manage.py createsuperuser --noinput
+    - deactivate
+  artifacts:
+    expire_in: 10 minutes
+    paths:
+      - venv
+      - src/*.sqlite3
+
+runserver-job:
+  stage: test
+  environment: development
+  tags:
+    - python
+  before_script:
+    - source venv/bin/activate
+    - source .env
+    - set -eEuo pipefail
+  script:
+    - python3 src/manage.py runserver localhost:8000 &
+    - sleep 10
+    - curl -fsSIm 1 http://localhost:8000/$FSTHUB_PREFIX
+    - deactivate
+    - pkill python
+  after_script:
+    - pkill python
+
+.dockerhub-job:
+  stage: release
+  environment: production
+  tags:
+    - python
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $CONTAINER_IMAGE .
+    - docker push $CONTAINER_IMAGE
+  after_script:
+    - docker logout
+
