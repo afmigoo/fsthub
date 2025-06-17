@@ -48,4 +48,4 @@ class TestLangLocale(UnitTestCase):
         resp = self.client.get(href, headers={
             'Accept-Language': 'ru-RU,ru;q=0.5'
         })
-        self.assertIn('Каталог! FST', resp.content.decode())
+        self.assertIn('Каталог FST', resp.content.decode())
