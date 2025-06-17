@@ -14,18 +14,18 @@ initialize-db-job:
     - pip install -r requirements.txt
     - pip freeze
   script:
-    - python3 src/manage.py migrate
+    - python3 fsthub/manage.py migrate
     - |
       DJANGO_SUPERUSER_USERNAME=TEST \
       DJANGO_SUPERUSER_PASSWORD=TEST \
       DJANGO_SUPERUSER_EMAIL="test@example.com" \
-      python3 src/manage.py createsuperuser --noinput
+      python3 fsthub/manage.py createsuperuser --noinput
     - deactivate
   artifacts:
     expire_in: 10 minutes
     paths:
       - venv
-      - src/*.sqlite3
+      - fsthub/*.sqlite3
 
 runserver-job:
   stage: test
@@ -37,7 +37,7 @@ runserver-job:
     - source .env
     - set -eEuo pipefail
   script:
-    - python3 src/manage.py runserver localhost:8000 &
+    - python3 fsthub/manage.py runserver localhost:8000 &
     - sleep 10
     - curl -fsSIm 1 http://localhost:8000/$FSTHUB_PREFIX
     - deactivate
