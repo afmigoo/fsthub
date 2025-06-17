@@ -23,7 +23,7 @@ jobs:
           pip freeze
       - name: Migrate DB
         run: |
-          source venv/bin/activate && cd fsthub && \
+          source venv/bin/activate && \
           python3 fsthub/manage.py migrate || { echo "Migration failed"; exit 1; }
           DJANGO_SUPERUSER_USERNAME=TEST \
           DJANGO_SUPERUSER_PASSWORD=TEST \
@@ -43,3 +43,8 @@ jobs:
           echo "Server response: $RESP"
           test $(echo $RESP | awk '{print $2}') = 200
           pkill python
+      - name: Run tests
+        run: |
+          source venv/bin/activate && \
+          source .env && \
+          python3 fsthub/manage.py test fsthub || { echo "Tests failed"; exit 1; }
