@@ -1,5 +1,6 @@
 secret.env
 venv
+static
 *.sqlite3
 *.hfst
 *.hfstol

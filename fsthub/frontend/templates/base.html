@@ -1,0 +1,73 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}FSThub{% endblock %}</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="stylesheet" href="{% static 'frontend/css/simple.css' %}">
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+        <style>
+            body > header > nav {
+                display: flex;
+                justify-content: space-between;
+            }
+            body > header > nav > div {
+                display: inline-block;
+            }
+            body > header {
+                padding-bottom: 0;
+            }
+            body > header > :only-child {
+                margin-block-start: 0.5rem;
+            }
+            body > header > nav {
+                padding-top: 0.5rem;
+            }
+            form > button {
+                color: #212121;
+                background-color: #f5f7ff;
+            }
+            @media (prefers-color-scheme: dark) {
+                form > button {
+                    color: #dcdcdc;
+                    background-color: #2b2b2b;
+                }
+                form > button:hover {
+                    color: #212121;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        {% csrf_token %}
+        <header>
+            <nav>
+                <div style="text-align: left;">
+                    <a href="{% url 'front_index' %}">{% translate "Home" %}</a>
+                    <a href="{% url 'front_browse' %}">{% translate "FST catalog" %}</a>
+                    <a href="{% url 'front_about' %}">{% translate "About" %}</a>
+                </div>
+                <div style="text-align: right;">
+                    <form action="{% url 'set_language' %}" method="post">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ redirect_to }}" />
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                        <button type="submit"
+                                name="language"
+                                value="{{ language.code }}"
+                                class="lang_select adaptive {% if language.code == LANGUAGE_CODE %}selected{% endif %}">
+                            {{ language.code }}
+                        </button>
+                        {% endfor %}
+                    </form>
+                </div>
+            </nav>
+        </header>
+        {% block content %}{% endblock %}
+    </body>
+</html> 
