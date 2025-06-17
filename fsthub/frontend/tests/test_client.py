@@ -40,12 +40,15 @@ class TestLangLocale(UnitTestCase):
             'Accept-Language': 'en-US,en;q=0.5'
         })
         html = resp.content.decode()
-        self.assertIn('Home', html)
-        self.assertIn('FST catalog', html)
-        self.assertIn('About', html)
+        self.assertIn(f'<a href="{self.url_prefix}">Home</a>', html)
+        self.assertIn(f'<a href="{self.url_prefix}browse">FST catalog</a>', html)
+        self.assertIn(f'<a href="{self.url_prefix}about">About</a>', html)
     def test_ping_index_ru(self):
         href = f'{self.url_prefix}'
         resp = self.client.get(href, headers={
             'Accept-Language': 'ru-RU,ru;q=0.5'
         })
-        self.assertIn('Каталог FST', resp.content.decode())
+        html = resp.content.decode()
+        self.assertIn(f'<a href="{self.url_prefix}">Главная</a>', html)
+        self.assertIn(f'<a href="{self.url_prefix}browse">Каталог FST</a>', html)
+        self.assertIn(f'<a href="{self.url_prefix}about">О сайте</a>', html)
