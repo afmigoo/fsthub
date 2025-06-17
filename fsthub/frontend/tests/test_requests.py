@@ -14,7 +14,7 @@ def get_html(url: str, headers: dict = None) -> Tuple[int, str]:
     resp = requests.get(url, headers=headers)
     return resp.status_code, resp.content.decode(encoding='utf-8')
 
-class TestPingViews(LiveServerTestCase):
+class TestRequestsPingViews(LiveServerTestCase):
     def setUp(self):
         load_dotenv(find_dotenv('.env'))
         self.url_prefix = os.getenv('FSTHUB_PREFIX')
@@ -34,7 +34,7 @@ class TestPingViews(LiveServerTestCase):
         code, _ = get_html(url)
         self.assertEqual(code, 200, f'{url} - {code}')
 
-class TestLangLocale(LiveServerTestCase):
+class TestRequestsLangLocale(LiveServerTestCase):
     def setUp(self):
         load_dotenv(find_dotenv('.env'))
         self.url_prefix = os.getenv('FSTHUB_PREFIX')

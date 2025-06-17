@@ -7,7 +7,7 @@ from unittest import TestCase as UnitTestCase
 
 import os
 
-class TestPingViews(UnitTestCase):
+class TestClientPingViews(UnitTestCase):
     def setUp(self):
         load_dotenv(find_dotenv('.env'))
         self.url_prefix = os.getenv('FSTHUB_PREFIX')
@@ -28,7 +28,7 @@ class TestPingViews(UnitTestCase):
         resp = self.client.get(href)
         self.assertEqual(resp.status_code, 200, f'{href} - {resp}')
 
-class TestLangLocale(UnitTestCase):
+class TestClientLangLocale(UnitTestCase):
     def setUp(self):
         load_dotenv(find_dotenv('.env'))
         self.url_prefix = os.getenv('FSTHUB_PREFIX')
