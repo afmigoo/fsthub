@@ -1,4 +1,5 @@
 - frontend js api error handling
+- frontend add admin and api footer
 - create container for django with uwsgi
 - test container with uwsgi during ci?
 - publish image automatically to dockerhub
