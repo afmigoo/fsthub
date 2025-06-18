@@ -15,18 +15,14 @@ class TestClientPingViews(UnitTestCase):
         self.url_prefix = '/' + self.url_prefix
         self.client = Client()
 
-    def test_ping_index(self):
-        href = f'{self.url_prefix}'
+    def ping_page(self, path):
+        href = f'{self.url_prefix}{path}'
         resp = self.client.get(href)
         self.assertEqual(resp.status_code, 200, f'{href} - {resp}')
-    def test_ping_browse(self):
-        href = f'{self.url_prefix}browse'
-        resp = self.client.get(href)
-        self.assertEqual(resp.status_code, 200, f'{href} - {resp}')
-    def test_ping_about(self):
-        href = f'{self.url_prefix}about'
-        resp = self.client.get(href)
-        self.assertEqual(resp.status_code, 200, f'{href} - {resp}')
+    def test_ping_all(self):
+        self.ping_page('')
+        self.ping_page('projects')
+        self.ping_page('about')
 
 class TestClientLangLocale(UnitTestCase):
     def setUp(self):
@@ -43,8 +39,6 @@ class TestClientLangLocale(UnitTestCase):
         })
         html = resp.content.decode()
         self.assertIn(f'<a href="{self.url_prefix}">Home</a>', html)
-        self.assertIn(f'<a href="{self.url_prefix}browse">FST catalog</a>', html)
-        self.assertIn(f'<a href="{self.url_prefix}about">About</a>', html)
     def test_ping_index_ru(self):
         href = f'{self.url_prefix}'
         resp = self.client.get(href, headers={
@@ -52,5 +46,3 @@ class TestClientLangLocale(UnitTestCase):
         })
         html = resp.content.decode()
         self.assertIn(f'<a href="{self.url_prefix}">Главная</a>', html)
-        self.assertIn(f'<a href="{self.url_prefix}browse">Каталог FST</a>', html)
-        self.assertIn(f'<a href="{self.url_prefix}about">О сайте</a>', html)

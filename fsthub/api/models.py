@@ -1,7 +1,5 @@
 from django.db import models
 
-#https://stackoverflow.com/questions/16041232/django-delete-filefield
-
 class FstProject(models.Model):
     directory = models.CharField(max_length=100,blank=False)
     author = models.CharField(max_length=200,blank=True,default='')
@@ -15,7 +13,7 @@ class FstProject(models.Model):
 
 class FstFile(models.Model):
     file_path = models.CharField(max_length=200)
-    file = models.FileField(null=True)
+    file = models.FileField(null=True,blank=True)
     project = models.ForeignKey(FstProject,on_delete=models.CASCADE)
     
     def __repr__(self):

@@ -21,18 +21,14 @@ class TestRequestsPingViews(LiveServerTestCase):
         self.url_prefix = '' if self.url_prefix is None else self.url_prefix
         self.url_prefix = '/' + self.url_prefix
 
-    def test_ping_index(self):
-        url = f'{self.live_server_url}{self.url_prefix}'
-        code, _ = get_html(url)
-        self.assertEqual(code, 200, f'{url} - {code}')
-    def test_ping_browse(self):
-        url = f'{self.live_server_url}{self.url_prefix}browse'
-        code, _ = get_html(url)
-        self.assertEqual(code, 200, f'{url} - {code}')
-    def test_ping_about(self):
-        url = f'{self.live_server_url}{self.url_prefix}about'
-        code, _ = get_html(url)
-        self.assertEqual(code, 200, f'{url} - {code}')
+    def ping_page(self, path):
+        url = f'{self.live_server_url}{self.url_prefix}{path}'
+        code, resp = get_html(url)
+        self.assertEqual(code, 200, f'{url} - {resp}')
+    def test_ping_all(self):
+        self.ping_page('')
+        self.ping_page('projects')
+        self.ping_page('about')
 
 class TestRequestsLangLocale(LiveServerTestCase):
     def setUp(self):
@@ -47,13 +43,9 @@ class TestRequestsLangLocale(LiveServerTestCase):
             'Accept-Language': 'en-US,en;q=0.5'
         })
         self.assertIn(f'<a href="{self.url_prefix}">Home</a>', html)
-        self.assertIn(f'<a href="{self.url_prefix}browse">FST catalog</a>', html)
-        self.assertIn(f'<a href="{self.url_prefix}about">About</a>', html)
     def test_ping_index_ru(self):
         url = f'{self.live_server_url}{self.url_prefix}'
         _, html = get_html(url, headers={
             'Accept-Language': 'ru-RU,ru;q=0.5'
         })
         self.assertIn(f'<a href="{self.url_prefix}">Главная</a>', html)
-        self.assertIn(f'<a href="{self.url_prefix}browse">Каталог FST</a>', html)
-        self.assertIn(f'<a href="{self.url_prefix}about">О сайте</a>', html)

@@ -6,5 +6,5 @@ def index(request):
 def about(request):
     return render(request, 'about.html')
 
-def browse(request):
-    return render(request, 'browse.html')
+def browse_projects(request):
+    return render(request, 'browse_projects.html')

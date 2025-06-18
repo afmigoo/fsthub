@@ -40,7 +40,7 @@ class TestRequestsApiViews(LiveServerTestCase):
         for res, ref in zip(data['results'], reference):
             self.assertIsInstance(res, dict, href)
             self.assertEqual(set(res.keys()), 
-                             set(['directory', 'author', 'year']), href)
+                             set(['id', 'directory']), href)
             for k, v in res.items():
                 self.assertIn(k, ref.__dict__, href)
                 self.assertEqual(v, ref.__dict__[k], href)
@@ -52,7 +52,7 @@ class TestRequestsApiViews(LiveServerTestCase):
         for d in dummies:
             d.save()
 
-        href = f'{self.live_server_url}{self.url_prefix}api/projects/'
+        href = f'{self.live_server_url}{self.url_prefix}api/project/all'
         resp = requests.get(href)
         self.response_tester(resp, href)
         data = json.loads(resp.content.decode(encoding='utf-8'))
@@ -67,7 +67,7 @@ class TestRequestsApiViews(LiveServerTestCase):
         # api returns alphabetical order
         dummies.sort(key=lambda x: x.directory)
 
-        href = f'{self.live_server_url}{self.url_prefix}api/projects/?page_size={limit}'
+        href = f'{self.live_server_url}{self.url_prefix}api/project/all?page_size={limit}'
         resp = requests.get(href)
         self.response_tester(resp, href)
         data = json.loads(resp.content.decode(encoding='utf-8'))
@@ -83,7 +83,7 @@ class TestRequestsApiViews(LiveServerTestCase):
         # api returns alphabetical order
         dummies.sort(key=lambda x: x.directory)
 
-        href = f'{self.live_server_url}{self.url_prefix}api/projects/?page_size={N}'
+        href = f'{self.live_server_url}{self.url_prefix}api/project/all?page_size={N}'
         resp = requests.get(href)
         self.response_tester(resp, href)
         data = json.loads(resp.content.decode(encoding='utf-8'))
@@ -99,7 +99,7 @@ class TestRequestsApiViews(LiveServerTestCase):
         # api returns alphabetical order
         dummies.sort(key=lambda x: x.directory)
 
-        href = f'{self.live_server_url}{self.url_prefix}api/projects/?page_size={N}'
+        href = f'{self.live_server_url}{self.url_prefix}api/project/all?page_size={N}'
         resp = requests.get(href)
         self.response_tester(resp, href)
         data = json.loads(resp.content.decode(encoding='utf-8'))

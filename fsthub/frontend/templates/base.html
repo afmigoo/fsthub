@@ -1,5 +1,6 @@
 {% load static %}
 {% load i18n %}
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -7,8 +8,10 @@
         <title>{% block title %}FSThub{% endblock %}</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <link rel="stylesheet" href="{% static 'frontend/css/simple.css' %}">
-        <script src="{% static 'frontend/js/api.js' %}"></script>
         <style>
+            .content {
+                padding-top: 1rem;
+            }
             body > header > nav {
                 display: flex;
                 justify-content: space-between;
@@ -39,13 +42,15 @@
                 }
             }
         </style>
+        <script src="{% static 'frontend/js/api.js' %}"></script>
+        {% block head %}{% endblock %}
     </head>
     <body>
         <header>
             <nav>
                 <div style="text-align: left;">
                     <a href="{% url 'front_index' %}">{% translate "Home" %}</a>
-                    <a href="{% url 'front_browse' %}">{% translate "FST catalog" %}</a>
+                    <a href="{% url 'front_projects' %}">{% translate "Browse projects" %}</a>
                     <a href="{% url 'front_about' %}">{% translate "About" %}</a>
                 </div>
                 <div style="text-align: right;">
@@ -67,6 +72,9 @@
                 </div>
             </nav>
         </header>
-        {% block content %}{% endblock %}
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
     </body>
+    {% block after_body %}{% endblock %}
 </html> 
