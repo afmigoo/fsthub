@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   test-dev-app:
-    name: Test the development app
+    name: Test the development app mirror test
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
