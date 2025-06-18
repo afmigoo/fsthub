@@ -48,6 +48,7 @@
 {% block after_body %}
 <script>
     const api_search_url = window.location.origin + "{% url 'api-all-projects' %}";
+    const project_base_url = window.location.origin + "{% url 'front_project' %}";
 </script>
 <script src="{% static 'frontend/js/search_projects.js' %}"></script>
 {% endblock %}

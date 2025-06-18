@@ -27,6 +27,7 @@ class TestRequestsPingViews(LiveServerTestCase):
         self.assertEqual(code, 200, f'{url} - {resp}')
     def test_ping_all(self):
         self.ping_page('')
+        self.ping_page('playground')
         self.ping_page('projects')
         self.ping_page('about')
 

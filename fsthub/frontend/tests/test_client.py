@@ -21,6 +21,7 @@ class TestClientPingViews(UnitTestCase):
         self.assertEqual(resp.status_code, 200, f'{href} - {resp}')
     def test_ping_all(self):
         self.ping_page('')
+        self.ping_page('playground')
         self.ping_page('projects')
         self.ping_page('about')
 

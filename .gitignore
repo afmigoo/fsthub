@@ -1,6 +1,7 @@
 secret.env
 venv
 static
+!fsthub/frontend/static
 *.sqlite3
 *.hfst
 *.hfstol
