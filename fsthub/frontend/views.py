@@ -10,8 +10,10 @@ def about(request):
 def browse_projects(request):
     return render(request, 'browse_projects.html')
 
-def playground(request):
-    return render(request, 'playground.html')
+def playground(request, fst=None):
+    return render(request, 'playground.html', context={
+        'selected_fst': fst
+    })
 
 def project(request, id=None):
     if id is None:

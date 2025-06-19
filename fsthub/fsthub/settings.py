@@ -127,8 +127,24 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR.parent / 'static'
+STATICFILES_DIRS = [
+    BASE_DIR / "frontend/static"
+]
+
+HFST_CONTENT_ROOT = BASE_DIR.parent / "hfst_projects"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Django REST framework
+REST_FRAMEWORK = {
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'fst_burst': '60/min',
+        'fst_sustained': '1000/day',
+    }
+}

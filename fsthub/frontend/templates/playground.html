@@ -1,8 +1,82 @@
 {% extends "base.html" %}
+{% load static %}
 {% load i18n %}
 
 {% block title %}FSThub{% endblock %}
 
+{% block head %}
+<style>
+    #control-panel {
+        width: 100%; 
+        display: flex;
+    }
+    .control-big {
+        width: 60%;
+        padding-right: 2rem;
+    }
+    .control-small {
+        width: 20%; 
+    }
+    @media (max-width: 500px) {
+        #control-panel {
+            display: inline-block;
+        }
+        .control-50, .control-25 {
+            display: block;
+            width: 100%;
+        }
+    }
+    #input-output {
+        padding-top: 1rem;
+    }
+    #fst-input-box, #fst-output-box, select {
+        min-width: 100%;
+    }
+    #ratelimit-box {
+        color: red;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<p>TODO: A fst interface page. It has (1) type filter tranlit/morphology , (2) language filter, (3) a list of fsts, (4) a box for input, a box for output and a button for input processing</p>
+<div id="error-box"></div>
+<div id="control-panel">
+    <div class="control-big">
+        <label for="fst-name">{% translate "Transducer" %}</label>
+        <select id="fst-name">
+            <option value="value1" selected disabled>{% translate "Hasn't loaded yet" %}</option>
+        </select>
+    </div>
+    <div class="control-small">
+        <label for="fst-type">{% translate "Type" %}</label>
+        <select id="fst-type">
+            <option value="all" selected disabled>{% translate "Hasn't loaded yet" %}</option>
+        </select>
+    </div>
+    <div class="control-small">
+        <label for="fst-lang">{% translate "Language" %}</label>
+        <select id="fst-lang">
+            <option value="all" selected disabled>{% translate "Hasn't loaded yet" %}</option>
+        </select>
+    </div>
+</div>
+<div id="input-output">
+    <label for="fst-input-box">{% translate "FST input" %}</label>
+    <textarea id="fst-input-box"  wrap="off" placeholder="{% translate "Type input here..." %}" rows="5"></textarea>
+    <div id="ratelimit-box" hidden="hidden">{% translate "Too many requests! Please wait and try later." %}</div>
+    <button id="fst-send">{% translate "Send" %}</button>
+    <label for="fst-output-box">{% translate "FST output" %}</label>
+    <textarea id="fst-output-box" wrap="off" placeholder="{% translate "Output will be here..." %}" rows="5" readonly="readonly"></textarea>
+</div>
+{% endblock %}
+
+{% block after_body %}
+<script>
+    const api_call_fst_url = window.location.origin + "{% url 'api-call-fst' %}";
+    const api_fetch_fst_url = window.location.origin + "{% url 'api-get-all-fst' %}";
+    const api_fetch_types_url = window.location.origin + "{% url 'api-get-fst-types' %}";
+    const api_fetch_langs_url = window.location.origin + "{% url 'api-get-fst-langs' %}";
+    const selected_fst = "{{ selected_fst }}";
+</script>
+<script src="{% static 'frontend/js/playground.js' %}"></script>
 {% endblock %}

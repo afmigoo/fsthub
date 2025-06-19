@@ -8,6 +8,8 @@ urlpatterns = [
     path("project/", views.project, name="front_project"),
     path("project/<int:id>", views.project, name="front_project"),
     path("playground", views.playground, name="front_playground"),
+    path("playground/", views.playground, name="front_playground"),
+    path("playground/<str:fst>", views.playground, name="front_playground"),
     path("about", views.about, name="front_about"),
     path("i18n", include("django.conf.urls.i18n")),
 ]

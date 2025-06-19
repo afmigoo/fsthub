@@ -1,3 +1,4 @@
+/** API logic */
 function form_href(url, params = {}) {
     // Create the URL with parameters
     const url_obj = new URL(url);    
@@ -7,24 +8,46 @@ function form_href(url, params = {}) {
     return url_obj.href;
 }
 
-async function call_api(url, params = {}, options = {}) {
+class TooManyRequests extends Error {
+  constructor(message) {
+    super(message); // (1)
+    this.name = "TooManyRequests"; // (2)
+  }
+}
+
+async function call_api(url, params = {}, options = {}, method = 'GET') {
     const href = form_href(url, params);
     // Merge default options with provided ones
     const defaultOptions = {
-        method: 'GET',
+        method: method,
         headers: {
             'Content-Type': 'application/json'
         }
     };
     const mergedOptions = { ...defaultOptions, ...options };
+    // Execute request
     const response = await fetch(href, mergedOptions);
-
-    if (!response.ok) {
+    if (response.status == 429)
+        throw new TooManyRequests();
+    if (!response.ok)
         throw new Error(`API returned ${response.status}(${response.statusText})\n${await response.text()}`);
-    }
-
+    // Check content type
     const contentType = response.headers.get('content-type');
     const isJson = contentType && contentType.includes('application/json');
+    // Return the result
+    if (isJson)
+        return await response.json()    
+    throw new Error(`API returned invalid format: ${response}`);
+}
 
-    return isJson ? await response.json() : await response.text();
+/** Globals */
+function remove_children(element) {
+    element.innerHTML = '';
+}
+function display_error(element, message) {
+    remove_children(element);
+    const text = document.createElement('p');
+    text.innerText = message;
+    text.style.color = 'red';
+    element.appendChild(text);
 }
