@@ -132,6 +132,7 @@ STATICFILES_DIRS = [
 ]
 
 HFST_CONTENT_ROOT = BASE_DIR.parent / "hfst_projects"
+HFST_CONTENT_ROOT.mkdir(exist_ok=True)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
