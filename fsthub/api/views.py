@@ -15,6 +15,7 @@ from rest_framework.reverse import reverse
 from django.conf import settings
 
 from hfst_adaptor.call import call_hfst
+from hfst_adaptor.exceptions import HfstException
 from project_reader import ProjectReader
 from .models import ProjectMetadata, FstTypeRelation, FstType, FstLanguage, FstLanguageRelation
 from .serializers import (TypeSerializer, LanguageSerializer, ProjectSerializer,
@@ -39,14 +40,16 @@ class FstSustainedThrottle(UserRateThrottle):
 class ProjectViewSet(viewsets.ViewSet):    
     def list(self, request):
         present_projects = ProjectReader.get_projects()
-        return Response({'results': present_projects})
+        return Response({
+            'results': [{'name': p} for p in present_projects]
+        })
     
     def retrieve(self, request, pk):
         if not ProjectReader.project_exists(pk):
             return Response({
                 'detail': f"'{pk}' does not exist"
             }, status=status.HTTP_404_NOT_FOUND)
-        
+        # TODO check if it exists in DB first
         meta = ProjectMetadata.objects.get(directory=pk)
         return Response({
             'results': meta
@@ -57,14 +60,16 @@ class TransducerViewSet(viewsets.ViewSet):
     # TODO: add filtering support with `type` and `language`
     def list(self, request):
         present_transducers = ProjectReader.get_fsts()
-        return Response({'results': present_transducers})
+        return Response({
+            'results': [{'name': fst} for fst in present_transducers]
+        })
     
     def retrieve(self, request, pk):
         return Response({
             'detail': 'TODO retrieve .hfst metadata and serve here'
         }, status=status.HTTP_501_NOT_IMPLEMENTED)
 
-# TMP
+# Transducer filters
 class TypesViewset(viewsets.ReadOnlyModelViewSet):
     queryset = FstType.objects.all()
     serializer_class = TypeSerializer
@@ -72,23 +77,7 @@ class LanguageViewset(viewsets.ReadOnlyModelViewSet):
     queryset = FstLanguage.objects.all()
     serializer_class = LanguageSerializer
 
-@api_view(['GET'])
-def api_fetch_types(request, format=None):
-    return Response({'results': [
-        {'name': 'transliterator'},
-        {'name': 'segmenizer'},
-        {'name': 'morph parser'},
-        {'name': 'transliteratmorph analyzeror'},
-    ]})
-@api_view(['GET'])
-def api_fetch_langs(request, format=None):
-    return Response({'results': [
-        {'name': 'Russian'},
-        {'name': 'German'},
-        {'name': 'Adyghe'},
-        {'name': 'Shughni'},
-    ]})
-
+# Calling a transducer
 class CallFstView(CreateAPIView):
     serializer_class = FstCallRequestSerializer
     throttle_classes = [FstBurstThrottle, FstSustainedThrottle]
@@ -100,10 +89,14 @@ class CallFstView(CreateAPIView):
         serializer = FstCallRequestSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        return Response({
-            'output': call_hfst(
-                settings.HFST_CONTENT_ROOT / "TEST/sgh_analyze_rulem_word_cyr.hfstol",
+        try:
+            output = call_hfst(
+                settings.HFST_CONTENT_ROOT / serializer.data['hfst_file'],
                 serializer.data['fst_input'].split(),
                 oformat=serializer.data['output_format']
             )
-        })
+            return Response({'output': output})
+        except HfstException as e:
+            return Response({
+                'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
+            }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)

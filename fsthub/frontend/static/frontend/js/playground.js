@@ -44,7 +44,11 @@ async function init_filters() {
 function display_fsts(transducers) {
     remove_children(fst_name_select);
     for (i in transducers) {
-        const op = create_option(transducers[i]);
+        const name = transducers[i]['name'];
+        if (name == undefined) {
+            throw new Error(`fst['name'] is undefined; ${JSON.stringify(transducers)}`)
+        }
+        const op = create_option(name);
         fst_name_select.appendChild(op);
     }
 }

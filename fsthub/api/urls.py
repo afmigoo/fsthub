@@ -3,8 +3,11 @@ from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
 from rest_framework.routers import DefaultRouter
 
-from .views import (api_fetch_langs, api_fetch_types, TypesViewset, LanguageViewset,
-                    CallFstView, ProjectViewSet, TransducerViewSet)
+from .views import (TypesViewset, 
+                    LanguageViewset,
+                    CallFstView, 
+                    ProjectViewSet, 
+                    TransducerViewSet)
 
 router = DefaultRouter()
 router.register(r'project', ProjectViewSet, basename='api-project')
