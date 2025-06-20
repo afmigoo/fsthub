@@ -1,5 +1,6 @@
 from django.http import JsonResponse, HttpRequest
 from rest_framework import permissions, viewsets, pagination
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
@@ -14,45 +15,63 @@ from rest_framework.reverse import reverse
 from django.conf import settings
 
 from hfst_adaptor.call import call_hfst
-from .models import FstProject, FstFile
-from .serializers import (ProjectSerializer, 
-                          ProjectNameSerializer, 
-                          FstSerializer,
-                          FstNameSerializer,
+from project_reader import ProjectReader
+from .models import ProjectMetadata, FstTypeRelation, FstType, FstLanguage, FstLanguageRelation
+from .serializers import (TypeSerializer, LanguageSerializer, ProjectSerializer,
                           FstCallRequestSerializer)
-
-class LimitedPagination(pagination.PageNumberPagination):
+# Pagination
+class DefaultPagination(pagination.PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
+# Auth
 class CsrfDisableAuthentication(SessionAuthentication):
     def enforce_csrf(self, request):
         return
+# Throttling
 class FstBurstThrottle(UserRateThrottle):
     scope='fst_burst'
 class FstSustainedThrottle(UserRateThrottle):
     scope='fst_sustained'
 
+
 # Projects
-class ProjectsList(generics.ListAPIView):
-    queryset = FstProject.objects.all().order_by('directory')
-    serializer_class = ProjectNameSerializer
-    pagination_class = LimitedPagination
-class GetProject(generics.RetrieveAPIView):
-    queryset = FstProject.objects.all()
-    lookup_field = 'id'
-    serializer_class = ProjectSerializer
+class ProjectViewSet(viewsets.ViewSet):    
+    def list(self, request):
+        present_projects = ProjectReader.get_projects()
+        return Response({'results': present_projects})
+    
+    def retrieve(self, request, pk):
+        if not ProjectReader.project_exists(pk):
+            return Response({
+                'detail': f"'{pk}' does not exist"
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+        meta = ProjectMetadata.objects.get(directory=pk)
+        return Response({
+            'results': meta
+        })
+        
 # Transducers
-class FstList(generics.ListAPIView):
-    queryset = FstFile.objects.all().order_by('id')
-    serializer_class = FstNameSerializer
-    #pagination_class = LimitedPagination
-class GetFst(generics.RetrieveAPIView):
-    queryset = FstFile.objects.all()
-    lookup_field = 'id'
-    serializer_class = FstSerializer
+class TransducerViewSet(viewsets.ViewSet):    
+    # TODO: add filtering support with `type` and `language`
+    def list(self, request):
+        present_transducers = ProjectReader.get_fsts()
+        return Response({'results': present_transducers})
+    
+    def retrieve(self, request, pk):
+        return Response({
+            'detail': 'TODO retrieve .hfst metadata and serve here'
+        }, status=status.HTTP_501_NOT_IMPLEMENTED)
 
 # TMP
+class TypesViewset(viewsets.ReadOnlyModelViewSet):
+    queryset = FstType.objects.all()
+    serializer_class = TypeSerializer
+class LanguageViewset(viewsets.ReadOnlyModelViewSet):
+    queryset = FstLanguage.objects.all()
+    serializer_class = LanguageSerializer
+
 @api_view(['GET'])
 def api_fetch_types(request, format=None):
     return Response({'results': [
@@ -88,23 +107,3 @@ class CallFstView(CreateAPIView):
                 oformat=serializer.data['output_format']
             )
         })
-
-# API ROOTS
-@api_view(['GET'])
-def api_root(request, format=None):
-    return Response({
-        'projects': reverse('api-project-root', request=request, format=format),
-        'fst': reverse('api-fst-root', request=request, format=format),
-    })
-@api_view(['GET'])
-def project_root(request, format=None):
-    return Response({
-        'all': reverse('api-all-projects', request=request, format=format),
-        'single': reverse('api-get-project', args=[1], request=request, format=format)
-    })
-@api_view(['GET'])
-def fst_root(request, format=None):
-    return Response({
-        'all': reverse('api-all-fst', request=request, format=format),
-        'single': reverse('api-get-fst', args=[1], request=request, format=format)
-    })

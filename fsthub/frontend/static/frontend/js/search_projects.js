@@ -7,8 +7,8 @@ const results_footer = document.getElementById("results-footer");
 function add_result_item(project) {
     const div = document.createElement('div');
     const link = document.createElement('a');
-    link.innerText = `${project['directory']}`;
-    link.href = project_base_url + project['id'];
+    link.innerText = `${project}`;
+    link.href = project_base_url + project;
     div.classList.add('result-item');
     div.appendChild(link);
     results_list.appendChild(div);

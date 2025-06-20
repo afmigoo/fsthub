@@ -73,9 +73,9 @@
 {% block after_body %}
 <script>
     const api_call_fst_url = window.location.origin + "{% url 'api-call-fst' %}";
-    const api_fetch_fst_url = window.location.origin + "{% url 'api-get-all-fst' %}";
-    const api_fetch_types_url = window.location.origin + "{% url 'api-get-fst-types' %}";
-    const api_fetch_langs_url = window.location.origin + "{% url 'api-get-fst-langs' %}";
+    const api_fetch_fst_url = window.location.origin + "{% url 'api-transducer-list' %}";
+    const api_fetch_types_url = window.location.origin + "{% url 'api-transducer-type-list' %}";
+    const api_fetch_langs_url = window.location.origin + "{% url 'api-transducer-lang-list' %}";
     const selected_fst = "{{ selected_fst }}";
 </script>
 <script src="{% static 'frontend/js/playground.js' %}"></script>

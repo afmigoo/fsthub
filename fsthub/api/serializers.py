@@ -1,29 +1,24 @@
-from .models import FstProject, FstFile
 from rest_framework import serializers
 from rest_framework.validators import ValidationError
 from pathlib import Path
 from django.conf import settings
 
 from hfst_adaptor.call import OUTPUT_FORMATS
+from .models import ProjectMetadata, FstType, FstLanguage
 
 # Models
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FstProject
-        fields = ['id', 'directory', 'author', 'year']
-class ProjectNameSerializer(serializers.ModelSerializer):
+        model = ProjectMetadata
+        fields = ['directory', 'author', 'year', 'description']
+class TypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FstProject
-        fields = ['id', 'directory']
-
-class FstSerializer(serializers.ModelSerializer):
+        model = FstType
+        fields = ['name', 'description']
+class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FstFile
-        fields = ['id', 'file_path', 'project']
-class FstNameSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FstFile
-        fields = ['id', 'file_path']
+        model = FstLanguage
+        fields = ['name', 'description']
 
 # Requests
 class FstCallRequestSerializer(serializers.Serializer):

@@ -17,10 +17,7 @@ function create_option(text) {
 
 /** Filters logic */
 async function get_filters(url) {
-    return await call_api(url)
-        .then((data) => {
-            return data['results'];
-        })
+    return await call_api(url);
 }
 function display_filters(element, filters) {
     remove_children(element);
@@ -47,11 +44,7 @@ async function init_filters() {
 function display_fsts(transducers) {
     remove_children(fst_name_select);
     for (i in transducers) {
-        const name = transducers[i]['file_path'];
-        if (name == undefined) {
-            throw new Error(`fst['file_path'] is undefined; ${JSON.stringify(transducers)}`)
-        }
-        const op = create_option(name);
+        const op = create_option(transducers[i]);
         fst_name_select.appendChild(op);
     }
 }
@@ -69,7 +62,7 @@ async function update_results() {
     const params = get_filter_params();
     await call_api(api_fetch_fst_url, params)
         .then((data) => {
-            display_fsts(data);
+            display_fsts(data['results']);
         });
     console.log('update_results end');
 }
