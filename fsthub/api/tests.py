@@ -118,3 +118,25 @@ class ApiTest(LiveServerTestCase):
 
         self.assertSetEqual(resp_projects, set(self.dummy_projects[1:]))
         self.assertSetEqual(db_projects, set(self.dummy_projects))
+
+        # test after one was created in filesystem
+        new_proj = self.test_root / 'Gibberish'
+        new_proj.mkdir()
+        sleep(self.cache_upd_interval)
+        code, url, resp = self.get_json('/api/project')
+        self.assertIn('results', resp, url)
+        resp_projects = set(v['name'] for v in resp['results'])
+        db_projects = set(p.directory for p in ProjectMetadata.objects.all())
+
+        self.assertSetEqual(resp_projects, set([str(new_proj.relative_to(self.test_root))] + \
+                                               self.dummy_projects[1:]))
+        self.assertSetEqual(db_projects, set(self.dummy_projects))
+
+        # update the db and check if its up to date (it must contain deleted dirs too)
+        self.db_cmd.init_projects()
+        db_projects = set(p.directory for p in ProjectMetadata.objects.all())
+        self.assertSetEqual(db_projects, set([str(new_proj.relative_to(self.test_root))] + \
+                                             self.dummy_projects))
+
+    def test_fsts(self):
+        pass
