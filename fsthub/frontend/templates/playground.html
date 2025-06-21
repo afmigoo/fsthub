@@ -72,8 +72,8 @@
 
 {% block after_body %}
 <script>
-    const api_call_fst_url = window.location.origin + "{% url 'api-call-fst' %}";
-    const api_fetch_fst_url = window.location.origin + "{% url 'api-transducer-list' %}";
+    const api_call_fst_url = window.location.origin + "{% url 'api-transducer-call' %}";
+    const api_fetch_fst_url = window.location.origin + "{% url 'api-transducer-filter' %}";
     const api_fetch_types_url = window.location.origin + "{% url 'api-transducer-type-list' %}";
     const api_fetch_langs_url = window.location.origin + "{% url 'api-transducer-lang-list' %}";
     const selected_fst = "{{ selected_fst }}";

@@ -4,8 +4,7 @@ from rest_framework import routers, serializers, viewsets
 from rest_framework.routers import DefaultRouter
 
 from .views import (TypesViewset, 
-                    LanguageViewset,
-                    CallFstView, 
+                    LanguageViewset, 
                     ProjectViewSet, 
                     TransducerViewSet)
 
@@ -16,5 +15,6 @@ router.register(r'fst_type', TypesViewset, basename='api-transducer-type')
 router.register(r'fst_language', LanguageViewset, basename='api-transducer-lang')
 
 urlpatterns = [
-    path('fst/call', CallFstView.as_view(), name='api-call-fst'),
+    #path('call_transducer', CallFstView.as_view(), name='api-call-transducer'),
+    #path('filter_transducer', CallFstView.as_view(), name='api-filter-transducer'),
 ] + router.urls

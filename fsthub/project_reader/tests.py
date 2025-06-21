@@ -18,12 +18,10 @@ class TestPRViews(TestCase):
         shutil.rmtree(self.test_root)
         # make sure to clear all cache
         self.test_root.mkdir()
-        tmp = PR.update_interval
         PR.update_interval = 0.01
-        sleep(0.1)
+        sleep(0.01)
         PR._update_if_time()
         self.test_root.rmdir()
-        PR.update_interval = tmp
 
     def create_project(self, name: str, fsts: List[str]):
         d = self.test_root / name
@@ -34,10 +32,12 @@ class TestPRViews(TestCase):
     
     def test_spam_empty(self):
         for _ in range(10_000):
-            _ = PR.fst_exists(str(getrandbits))
-            _ = PR.project_exists(str(getrandbits))
-            _ = PR.get_projects()
-            _ = PR.get_fsts()
+            self.assertFalse(PR.fst_exists(str(getrandbits)))
+            self.assertFalse(PR.project_exists(str(getrandbits)))
+            self.assertEqual(len(list(PR.get_projects())), 0)
+            self.assertEqual(len(list(PR.get_all_fsts())), 0)
+            self.assertEqual(PR.get_project_count(), 0)
+            self.assertEqual(PR.get_fst_count(), 0)
 
     def test_put_single(self):
         PR.update_interval = 0.5
@@ -71,7 +71,7 @@ class TestPRViews(TestCase):
         self.assertEqual(p_count, Np)
         self.assertEqual(t_count, Np * Nfst)
 
-        prefixes = set(fst.split('/')[-2] for fst in PR.get_fsts())
+        prefixes = set(fst.split('/')[-2] for fst in PR.get_all_fsts())
         for pref in prefixes:
             self.assertTrue(PR.project_exists(str(pref)))
             
@@ -100,8 +100,7 @@ class TestPRViews(TestCase):
 
         for p in range(Np):
             self.create_project(f'SECOND_TEST{p}', [f'fst{i}' for i in range(Nfst)])
-        PR.update_interval = 5
-        sleep(2)
+        PR.update_interval = 3
         p_count = PR.get_project_count()
         t_count = PR.get_fst_count()
         self.assertEqual(p_count, Np)
@@ -125,3 +124,34 @@ class TestPRViews(TestCase):
         t_count = PR.get_fst_count()
         self.assertEqual(p_count, 0)
         self.assertEqual(t_count, 0)
+
+    def test_all_exist(self):
+        Np = 3
+        Nfst = 3
+
+        PR.update_interval = 0.1
+        p_count = PR.get_project_count()
+        t_count = PR.get_fst_count()
+        self.assertEqual(p_count, 0)
+        self.assertEqual(t_count, 0)
+        self.assertFalse(PR.fst_exists('some/thing'))
+        self.assertFalse(PR.project_exists('some'))
+
+        all_projects = []
+        all_fst = []
+        fsts = [f'fst{i}' for i in range(Nfst)]
+        for p in range(Np):
+            new_p = f'TEST{p}'
+            all_projects.append(new_p)
+            all_fst.extend(f'{new_p}/{f}' for f in fsts)
+            self.create_project(new_p, fsts)
+        sleep(0.1)
+        for p in all_projects:
+            self.assertTrue(PR.project_exists(p), f'{p} does not exist')
+            self.assertSetEqual(set(f'{p}/{f}' for f in fsts),
+                                set(PR.get_fsts(p)))
+        for fst in all_fst:
+            self.assertTrue(PR.fst_exists(fst), f'{fst} does not exist')
+
+        self.assertFalse(PR.fst_exists('some/thing'))
+        self.assertFalse(PR.project_exists('some'))

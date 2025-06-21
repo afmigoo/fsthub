@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view, permission_classes, authenticati
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.throttling import UserRateThrottle
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import action
 from rest_framework import permissions
 from rest_framework import mixins
 from rest_framework import generics, status
@@ -19,7 +20,7 @@ from hfst_adaptor.exceptions import HfstException
 from project_reader import ProjectReader
 from .models import ProjectMetadata, FstTypeRelation, FstType, FstLanguage, FstLanguageRelation
 from .serializers import (TypeSerializer, LanguageSerializer, ProjectSerializer,
-                          FstCallRequestSerializer)
+                          FstCallRequestSerializer, FstFilterRequestSerializer, TypeRelationFileSerializer, LangRelationFileSerializer)
 # Pagination
 class DefaultPagination(pagination.PageNumberPagination):
     page_size = 10
@@ -56,36 +57,46 @@ class ProjectViewSet(viewsets.ViewSet):
         })
         
 # Transducers
-class TransducerViewSet(viewsets.ViewSet):    
-    # TODO: add filtering support with `type` and `language`
+class TransducerViewSet(viewsets.ViewSet): 
     def list(self, request):
-        present_transducers = ProjectReader.get_fsts()
+        present_fst = ProjectReader.get_all_fsts()
         return Response({
-            'results': [{'name': fst} for fst in present_transducers]
+            'results': [{'name': p} for p in present_fst]
         })
-    
-    def retrieve(self, request, pk):
+       
+    @action(methods=['GET'], detail=False, url_path='filter', url_name='filter')
+    def filter(self, request, format=None):
+        serializer = FstFilterRequestSerializer(data=request.query_params)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # If no filters then return everything
+        all_fst_files = ProjectReader.get_all_fsts()
+        if not ('type' in serializer.data or 'lang' in serializer.data):
+            return Response({
+                'results': [{'name': fst} for fst in all_fst_files]
+            })
+        # If filters then filter and return
+        candidates = set(all_fst_files)
+        if 'type' in serializer.data:       
+            type_filtered = FstTypeRelation.objects\
+                .prefetch_related('type')\
+                .filter(type=FstType.objects.get(name=serializer.data['type']))
+            serialized = TypeRelationFileSerializer(type_filtered, many=True).data
+            candidates.intersection_update(d['fst_file'] for d in serialized)
+        if 'lang' in serializer.data:
+            lang_filtered = FstLanguageRelation.objects\
+                .prefetch_related('language')\
+                .filter(language=FstLanguage.objects.get(name=serializer.data['lang']))
+            serialized = LangRelationFileSerializer(lang_filtered, many=True).data
+            candidates.intersection_update(d['fst_file'] for d in serialized)
         return Response({
-            'detail': 'TODO retrieve .hfst metadata and serve here'
-        }, status=status.HTTP_501_NOT_IMPLEMENTED)
-
-# Transducer filters
-class TypesViewset(viewsets.ReadOnlyModelViewSet):
-    queryset = FstType.objects.all()
-    serializer_class = TypeSerializer
-class LanguageViewset(viewsets.ReadOnlyModelViewSet):
-    queryset = FstLanguage.objects.all()
-    serializer_class = LanguageSerializer
-
-# Calling a transducer
-class CallFstView(CreateAPIView):
-    serializer_class = FstCallRequestSerializer
-    throttle_classes = [FstBurstThrottle, FstSustainedThrottle]
-    # THIS IS A READ-ONLY POST ENDPOINT
-    # and it has to be accessible via third-party apps
-    # inputs may be larger than url len limit, so GET cannot be used
-    authentication_classes = [CsrfDisableAuthentication]
-    def post(self, request, format=None):
+            'results': [{'name': n} for n in candidates]
+        })
+        
+    @action(methods=['POST'], detail=False, url_path='call', url_name='call')
+    @throttle_classes([FstBurstThrottle, FstSustainedThrottle])
+    @authentication_classes([CsrfDisableAuthentication])
+    def call(self, request, format=None):
         serializer = FstCallRequestSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -100,3 +111,11 @@ class CallFstView(CreateAPIView):
             return Response({
                 'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
             }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+# Transducer filters
+class TypesViewset(viewsets.ReadOnlyModelViewSet):
+    queryset = FstType.objects.all()
+    serializer_class = TypeSerializer
+class LanguageViewset(viewsets.ReadOnlyModelViewSet):
+    queryset = FstLanguage.objects.all()
+    serializer_class = LanguageSerializer
