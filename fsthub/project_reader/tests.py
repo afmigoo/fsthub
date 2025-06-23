@@ -1,6 +1,6 @@
 from unittest import TestCase
 from pathlib import Path
-from typing import List
+from typing import List, Union
 from random import getrandbits
 from time import sleep
 import random
@@ -168,12 +168,12 @@ class TestPRRandom(TestCase):
         PR.update_interval = 0.5  # Short interval for faster testing
         
         # Create test projects/files
-        cls.files = {
+        files = {
             p: [f"file_{i}.hfst" for i in range(random.randint(1, 15))]
             for p in [f"Project_{i}" for i in range(31)]
         }
         
-        for project, files in cls.files.items():
+        for project, files in files.items():
             (cls.temp_root / project).mkdir()
             for f in files:
                 (cls.temp_root / project / f).touch()
@@ -198,58 +198,99 @@ class TestPRRandom(TestCase):
         for _ in range(50):  # Adjust count as needed
             op = random.choice(operations)
             op()
-            sleep(0.1)  # Allow cache updates occasionally
+
+    def _get_real_projects(self):
+        return list(str(d.relative_to(self.temp_root)) 
+                        for d in self.temp_root.iterdir() 
+                        if d.is_dir())
+    
+    def _get_real_fsts(self, proj: Union[str, Path]):
+        if isinstance(proj, str):
+            proj = self.temp_root.joinpath(proj)
+        self.assertTrue(proj.is_dir())
+        return list(str(f.relative_to(self.temp_root)) 
+                        for f in proj.iterdir() 
+                        if f.is_file())
 
     def _get_projects(self):
+        existing_projects = self._get_real_projects()
         result = list(PR.get_projects())
-        self.assertEqual(set(result), set(self.files.keys()))
+        self.assertEqual(set(result), set(existing_projects))
         
     def _get_all_fsts(self):
-        all_files = [
-            f"{p}/{f}" for p in self.files.keys()
-            for f in self.files[p]
-        ]
+        all_files = []
+        for p in self.temp_root.iterdir():
+            all_files.extend(self._get_real_fsts(p))
         result = list(PR.get_all_fsts())
         self.assertEqual(set(result), set(all_files))
         
     def _get_project_fsts(self):
-        project = random.choice(list(self.files.keys()))
-        result = list(PR.get_fsts(project))
-        self.assertEqual(set(result), set(f'{project}/{f}' for f in self.files[project]))
+        project_path = random.choice(self._get_real_projects())
+        result = list(PR.get_fsts(project_path))
+        self.assertEqual(set(result), 
+                         set(self._get_real_fsts(project_path)))
         
     def _project_exists(self):
-        project = random.choice(list(self.files.keys()) + ["nonexistent"])
-        expected = project in self.files.keys()
+        existing_projects = self._get_real_projects()
+        project = random.choice(existing_projects + [f"nonexistent{i}" for i in range(5)])
+        expected = self.temp_root.joinpath(project).exists()
         self.assertEqual(PR.project_exists(project), expected)
         
     def _fst_exists(self):
-        project = random.choice(list(self.files.keys()))
-        fname = random.choice(self.files[project] + ["ghost.hfst"])
-        path = f"{project}/{fname}"
-        expected = fname in self.files[project]
+        existing_projects = self._get_real_projects()
+        project = random.choice(existing_projects)
+        existing_fst = list(str(d.relative_to(self.temp_root)) 
+                            for d in self.temp_root.joinpath(project).iterdir()
+                            if d.is_file())
+        path = random.choice(existing_fst + [f"{project}/ghost.hfst"])
+        expected = self.temp_root.joinpath(path).exists()
         self.assertEqual(PR.fst_exists(path), expected)
 
     def _add_project(self):
         new_proj = f'RandProj{random.randint(1, 10_000_000)}'
         before_update = set(PR.get_projects())
-        self.assertSetEqual(before_update, set(str(d.relative_to(self.temp_root)) 
-                                               for d in self.temp_root.iterdir() if d.is_dir()))
-        self.assertSetEqual(before_update, set(self.files.keys()))
+        self.assertSetEqual(before_update, set(self._get_real_projects()))
 
         (self.temp_root / new_proj).mkdir(exist_ok=True)
-        if not new_proj in self.files.keys():
-            self.files[new_proj] = []
         sleep(PR.update_interval)
         after_update = set(PR.get_projects())
-        self.assertSetEqual(after_update, set([str(d.relative_to(self.temp_root)) 
-                                               for d in self.temp_root.iterdir() if d.is_dir()]))
-        self.assertSetEqual(after_update, set(self.files.keys()))
+        self.assertSetEqual(after_update, set(self._get_real_projects()))
 
     def _del_project(self):
-        pass
+        existing_projects = self._get_real_projects()        
+        before_update = set(PR.get_projects())
+        self.assertSetEqual(before_update, set(existing_projects))
+
+        proj_to_delete = random.choice(existing_projects)
+        shutil.rmtree(self.temp_root / proj_to_delete)
+        sleep(PR.update_interval)
+
+        after_update = set(PR.get_projects())
+        self.assertSetEqual(after_update, set(self._get_real_projects()))
 
     def _add_fst(self):
-        pass
+        existing_projects = self._get_real_projects()   
+        proj = random.choice(existing_projects)
+        new_fst = f'{proj}/rand_fst_{random.randint(1, 10_000_000)}'
+        before_update = set(PR.get_fsts(proj))
+        self.assertSetEqual(before_update, set(self._get_real_fsts(proj)))
+
+        (self.temp_root / new_fst).touch()
+        sleep(PR.update_interval)
+        after_update = set(PR.get_fsts(proj))
+        self.assertSetEqual(after_update, set(self._get_real_fsts(proj)))
 
     def _del_fst(self):
-        pass
+        existing_projects = self._get_real_projects()   
+        proj = random.choice(existing_projects)
+        existing_fsts = self._get_real_fsts(proj)
+        if len(existing_fsts) == 0:
+            return
+        fst_to_delete = random.choice(existing_fsts)
+        before_update = set(PR.get_fsts(proj))
+        self.assertSetEqual(before_update, set(self._get_real_fsts(proj)))
+
+        (self.temp_root / fst_to_delete).unlink()
+        sleep(PR.update_interval)
+        after_update = set(PR.get_fsts(proj))
+        self.assertSetEqual(after_update, set(self._get_real_fsts(proj)))
