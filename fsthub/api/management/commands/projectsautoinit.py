@@ -4,7 +4,7 @@ from django.db.utils import IntegrityError
 from django.conf import settings
 from api.models import ProjectMetadata, FstType, FstTypeRelation, FstLanguage, FstLanguageRelation
 
-from project_reader import ProjectReader
+from project_reader import get_all_fsts, get_projects
 from hfst_adaptor.call import call_metadata_extractor
 from hfst_adaptor.parse import parse_metadata
 from hfst_adaptor.exceptions import HfstException
@@ -68,7 +68,7 @@ class Command(BaseCommand):
             )
 
     def init_projects(self):
-        filesystem_projects = set(ProjectReader.get_projects())
+        filesystem_projects = set(get_projects())
         db_projects = (x.directory for x in ProjectMetadata.objects.only('directory').all())
         db_missing = filesystem_projects.difference(db_projects)
         if len(db_missing) == 0:
@@ -86,7 +86,7 @@ class Command(BaseCommand):
             )
 
     def init_transducers(self):
-        filesystem_transducers = set(ProjectReader.get_all_fsts())
+        filesystem_transducers = set(get_all_fsts())
         for fst in filesystem_transducers:
             for t in self.detect_autotypes(fst):
                 self.add_type_relation(t, fst)

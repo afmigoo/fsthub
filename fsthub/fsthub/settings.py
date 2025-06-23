@@ -131,9 +131,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "frontend/static"
 ]
 
-HFST_CONTENT_ROOT = BASE_DIR.parent / "hfst_projects"
-HFST_CONTENT_ROOT.mkdir(exist_ok=True)
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -149,3 +146,9 @@ REST_FRAMEWORK = {
         'fst_sustained': '1000/day',
     }
 }
+
+# Api settings
+HFST_CONTENT_ROOT = BASE_DIR.parent / "hfst_projects"
+HFST_CONTENT_ROOT.mkdir(exist_ok=True)
+HFST_FORMATS = {'.hfst', '.hfstol'}
+CACHE_TTL = 3

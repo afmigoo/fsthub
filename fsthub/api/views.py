@@ -1,13 +1,15 @@
 from rest_framework import viewsets, pagination, authentication, throttling
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from django.conf import settings
 
 from hfst_adaptor.call import call_hfst, call_metadata_extractor
 from hfst_adaptor.parse import parse_metadata
 from hfst_adaptor.exceptions import HfstException
-from project_reader import ProjectReader
+from project_reader import get_projects, get_all_fsts
 from .models import (ProjectMetadata,
                      FstType, FstTypeRelation,
                      FstLanguage, FstLanguageRelation)
@@ -32,8 +34,9 @@ class FstSustainedThrottle(throttling.UserRateThrottle):
 
 # Projects
 class ProjectViewSet(viewsets.ViewSet):    
+    @method_decorator(cache_page(settings.CACHE_TTL))
     def list(self, request):
-        present_projects = ProjectReader.get_projects()
+        present_projects = get_projects()
         return Response({
             'results': [{'name': p} for p in present_projects]
         })
@@ -44,19 +47,21 @@ class ProjectMetadataViewSet(viewsets.ReadOnlyModelViewSet):
     
 # Transducers
 class TransducerViewSet(viewsets.ViewSet): 
+    @method_decorator(cache_page(settings.CACHE_TTL))
     def list(self, request):
-        present_fst = ProjectReader.get_all_fsts()
+        present_fst = get_all_fsts()
         return Response({
             'results': [{'name': p} for p in present_fst]
         })
        
     @action(methods=['GET'], detail=False, url_path='filter', url_name='filter')
+    @method_decorator(cache_page(settings.CACHE_TTL))
     def filter(self, request, format=None):
         serializer = FstFilterRequestSerializer(data=request.query_params)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         # If no filters then return everything
-        all_fst_files = ProjectReader.get_all_fsts()
+        all_fst_files = get_all_fsts()
         if not ('type' in serializer.data or 'lang' in serializer.data):
             return Response({
                 'results': [{'name': fst} for fst in all_fst_files]
