@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union, Literal
+from typing import List, Tuple, Union, Literal, Dict
 from pathlib import Path
 from dataclasses import dataclass
 import subprocess
@@ -9,14 +9,6 @@ from .exceptions import HFSTInvalidFormat, HfstException
 
 logger = logging.getLogger(__name__)
 OUTPUT_FORMATS = ['xerox', 'cg', 'apertium']
-
-@dataclass
-class ParsedItem:
-    input_str: str
-    out_variants: List[str]
-
-    def __str__(self):
-        return f'{self.input_str} -> {"/".join(self.out_variants)}'
 
 def injection_filter(option: str) -> str:
     """
@@ -30,7 +22,7 @@ def injection_filter(option: str) -> str:
     """
     return re.sub(r'[ ";&|<>$(){}\[\]\\:*@#]', '', option)
 
-def call_command(args: List[str], input: str) -> Tuple[str, str, int]:
+def call_command(args: List[str], input: str = "") -> Tuple[str, str, int]:
     """Call custom bash command and pass input to stdin
 
     Parameters
@@ -54,6 +46,20 @@ def call_command(args: List[str], input: str) -> Tuple[str, str, int]:
     stderr = stderr.decode() if stderr else ''
     return stdout, stderr, proc.returncode
 
+def call_metadata_extractor(hfst_file: Union[Path, str]) -> str:
+    if isinstance(hfst_file, str):
+        hfst_file = Path(hfst_file)
+    if not hfst_file.is_file():
+        raise FileNotFoundError(hfst_file)
+    hfst_file = str(hfst_file)
+
+    stdout, stderr, code = call_command(['hfst-edit-metadata', '-p', 
+                                         injection_filter(hfst_file)])
+    
+    if code != 0:
+        raise HfstException(f'hfst-edit-metadata: {stdout.strip()} {hfst_file} code: {code}')
+    return stdout
+
 def call_hfst_proc(hfst_file: Union[Path, str],
                    input_strings: List[str],
                    oformat: str = 'cg') -> str:
@@ -73,7 +79,7 @@ def call_hfst_proc(hfst_file: Union[Path, str],
         if stdout.lower().strip() == 'transducer must be in hfst optimized lookup format.':
             raise HFSTInvalidFormat(f'hfst-proc: {stdout.strip()} {hfst_file}')
         else:
-            raise HfstException(f'hfst-proc: stdout={stdout}; stderr={stderr}')
+            raise HfstException(f'hfst-proc: stdout={stdout}; stderr={stderr} code: {code}')
     return stdout
 
 def call_hfst_lookup(hfst_file: Union[Path, str],
@@ -93,7 +99,7 @@ def call_hfst_lookup(hfst_file: Union[Path, str],
                                          injection_filter(hfst_file)], 
                                         inp_str)
     if code != 0:
-        raise HfstException(f'hfst-lookup: stdout={stdout}; stderr={stderr}')
+        raise HfstException(f'hfst-lookup: stdout={stdout}; stderr={stderr} code: {code}')
     return stdout
 
 def call_hfst(hfst_file: Union[Path, str], 
@@ -117,13 +123,3 @@ def call_hfst(hfst_file: Union[Path, str],
         except HFSTInvalidFormat:
             return call_hfst_lookup(hfst_file, input_strings, oformat)
     raise ValueError(f'Invalid FST format. Expected .hfst/.hfstol, got \'{hfst_file.suffix}\'')
-
-def parse_apertium_format(fst_stdout: str) -> List[ParsedItem]:
-    items: List[ParsedItem] = []
-    # regex: all strings like '^+$' (apertium format) with no nested ^ or $ 
-    for raw in re.finditer(r'\^([^\^\$]+)\$', fst_stdout):
-        apertium = raw.groups()[-1]
-        input_str, *output_variants = apertium.split('/')
-        items.append(ParsedItem(input_str=input_str,
-                                out_variants=output_variants))
-    return items

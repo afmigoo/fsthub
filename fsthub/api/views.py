@@ -1,39 +1,32 @@
-from django.http import JsonResponse, HttpRequest
-from rest_framework import permissions, viewsets, pagination
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView
+from rest_framework import viewsets, pagination, authentication, throttling
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, authentication_classes, throttle_classes
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.throttling import UserRateThrottle
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import action
-from rest_framework import permissions
-from rest_framework import mixins
-from rest_framework import generics, status
-from rest_framework.reverse import reverse
+from rest_framework import status
 from django.conf import settings
 
-from hfst_adaptor.call import call_hfst
+from hfst_adaptor.call import call_hfst, call_metadata_extractor
+from hfst_adaptor.parse import parse_metadata
 from hfst_adaptor.exceptions import HfstException
 from project_reader import ProjectReader
-from .models import ProjectMetadata, FstTypeRelation, FstType, FstLanguage, FstLanguageRelation
-from .serializers import (TypeSerializer, LanguageSerializer, ProjectSerializer,
-                          FstCallRequestSerializer, FstFilterRequestSerializer, TypeRelationFileSerializer, LangRelationFileSerializer)
+from .models import (ProjectMetadata,
+                     FstType, FstTypeRelation,
+                     FstLanguage, FstLanguageRelation)
+from .serializers import (FstRequest, TypeSerializer, LanguageSerializer, ProjectSerializer,
+                          FstCallRequestSerializer, FstFilterRequestSerializer, 
+                          TypeRelationFileSerializer, LangRelationFileSerializer)
 # Pagination
 class DefaultPagination(pagination.PageNumberPagination):
     page_size = 10
     page_size_query_param = 'page_size'
     max_page_size = 100
 # Auth
-class CsrfDisableAuthentication(SessionAuthentication):
+class CsrfDisableAuthentication(authentication.SessionAuthentication):
     def enforce_csrf(self, request):
         return
 # Throttling
-class FstBurstThrottle(UserRateThrottle):
+class FstBurstThrottle(throttling.UserRateThrottle):
     scope='fst_burst'
-class FstSustainedThrottle(UserRateThrottle):
+class FstSustainedThrottle(throttling.UserRateThrottle):
     scope='fst_sustained'
 
 
@@ -45,17 +38,10 @@ class ProjectViewSet(viewsets.ViewSet):
             'results': [{'name': p} for p in present_projects]
         })
     
-    def retrieve(self, request, pk):
-        if not ProjectReader.project_exists(pk):
-            return Response({
-                'detail': f"'{pk}' does not exist"
-            }, status=status.HTTP_404_NOT_FOUND)
-        # TODO check if it exists in DB first
-        meta = ProjectMetadata.objects.get(directory=pk)
-        return Response({
-            'results': meta
-        })
-        
+class ProjectMetadataViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ProjectMetadata.objects.all()
+    serializer_class = ProjectSerializer
+    
 # Transducers
 class TransducerViewSet(viewsets.ViewSet): 
     def list(self, request):
@@ -93,9 +79,9 @@ class TransducerViewSet(viewsets.ViewSet):
             'results': [{'name': n} for n in candidates]
         })
         
-    @action(methods=['POST'], detail=False, url_path='call', url_name='call')
-    @throttle_classes([FstBurstThrottle, FstSustainedThrottle])
-    @authentication_classes([CsrfDisableAuthentication])
+    @action(methods=['POST'], detail=False, url_path='call', url_name='call', 
+            authentication_classes=[CsrfDisableAuthentication],
+            throttle_classes=[FstBurstThrottle, FstSustainedThrottle])
     def call(self, request, format=None):
         serializer = FstCallRequestSerializer(data=request.data)
         if not serializer.is_valid():
@@ -107,6 +93,23 @@ class TransducerViewSet(viewsets.ViewSet):
                 oformat=serializer.data['output_format']
             )
             return Response({'output': output})
+        except HfstException as e:
+            return Response({
+                'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
+            }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        
+    @action(methods=['GET'], detail=False, url_path='metadata', url_name='metadata',
+            throttle_classes=[FstBurstThrottle, FstSustainedThrottle])
+    def metadata(self, request, format=None):
+        serializer = FstRequest(data=request.query_params)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            output = call_metadata_extractor(
+                settings.HFST_CONTENT_ROOT / serializer.data['hfst_file'],
+            )
+            parsed = parse_metadata(output)
+            return Response({'metadata': parsed})
         except HfstException as e:
             return Response({
                 'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')

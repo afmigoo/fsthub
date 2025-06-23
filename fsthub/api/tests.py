@@ -5,6 +5,7 @@ from outside with the `reqests` module.
 """
 from dotenv import load_dotenv, find_dotenv
 from django.test import LiveServerTestCase
+from django.conf import settings
 
 from typing import Tuple
 from pathlib import Path
@@ -51,6 +52,7 @@ class ApiTest(LiveServerTestCase):
 
     def create_test_root(self):
         PR.root = self.test_root
+        settings.HFST_CONTENT_ROOT = self.test_root
         self.test_root.mkdir(exist_ok=True)
 
     def populate_test_root(self):
@@ -65,6 +67,8 @@ class ApiTest(LiveServerTestCase):
 
     def setUp(self):
         self.create_test_root()
+        PR.update_interval = self.cache_upd_interval
+        sleep(0.01)
         
     def tearDown(self):
         self.wipe_test_root()
@@ -99,7 +103,7 @@ class ApiTest(LiveServerTestCase):
     def test_projects(self):
         # test if all projects are returned correctly
         self.populate_test_root()
-        sleep(self.cache_upd_interval)
+        sleep(PR.update_interval)
         code, url, resp = self.get_json('/api/project')
         self.assertIn('results', resp, url)
         resp_projects = set(v['name'] for v in resp['results'])
@@ -110,7 +114,7 @@ class ApiTest(LiveServerTestCase):
 
         # test after one was deleted from filesystem
         shutil.rmtree(self.test_root / self.dummy_projects[0])
-        sleep(self.cache_upd_interval)
+        sleep(PR.update_interval)
         code, url, resp = self.get_json('/api/project')
         self.assertIn('results', resp, url)
         resp_projects = set(v['name'] for v in resp['results'])
@@ -122,7 +126,7 @@ class ApiTest(LiveServerTestCase):
         # test after one was created in filesystem
         new_proj = self.test_root / 'Gibberish'
         new_proj.mkdir()
-        sleep(self.cache_upd_interval)
+        sleep(PR.update_interval)
         code, url, resp = self.get_json('/api/project')
         self.assertIn('results', resp, url)
         resp_projects = set(v['name'] for v in resp['results'])
@@ -139,4 +143,22 @@ class ApiTest(LiveServerTestCase):
                                              self.dummy_projects))
 
     def test_fsts(self):
-        pass
+        # test if all transducers are returned correctly
+        self.populate_test_root()
+        sleep(self.cache_upd_interval)
+        code, url, resp = self.get_json('/api/fst')
+        self.assertIn('results', resp, url)
+        resp_fsts = set(v['name'] for v in resp['results'])
+        filesystem_fsts = set(PR.get_all_fsts())
+        
+        self.assertSetEqual(resp_fsts, filesystem_fsts)
+
+        # test after one project was deleted from filesystem
+        shutil.rmtree(self.test_root / self.dummy_projects[0])
+        sleep(PR.update_interval)
+        code, url, resp = self.get_json('/api/fst')
+        self.assertIn('results', resp, url)
+        resp_fsts = set(v['name'] for v in resp['results'])
+        filesystem_fsts = set(PR.get_all_fsts())
+
+        self.assertSetEqual(resp_fsts, filesystem_fsts)

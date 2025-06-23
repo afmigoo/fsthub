@@ -29,10 +29,8 @@ class LangRelationFileSerializer(serializers.ModelSerializer):
         fields = ['fst_file']
 
 # Requests
-class FstCallRequestSerializer(serializers.Serializer):
-    fst_input = serializers.CharField(required=True, allow_blank=False, max_length=10_000)
+class FstRequest(serializers.Serializer):
     hfst_file = serializers.CharField(required=True, allow_blank=False, max_length=500)
-    output_format = serializers.ChoiceField(OUTPUT_FORMATS, required=False, default=OUTPUT_FORMATS[0])
 
     def validate(self, data):
         if '..' in data['hfst_file']:
@@ -41,6 +39,10 @@ class FstCallRequestSerializer(serializers.Serializer):
         if not (path_obj.is_file() and path_obj.exists()):
             raise ValidationError(f'hfst_file \'{data["hfst_file"]}\' does not exist.')
         return data
+
+class FstCallRequestSerializer(FstRequest):
+    fst_input = serializers.CharField(required=True, allow_blank=False, max_length=10_000)
+    output_format = serializers.ChoiceField(OUTPUT_FORMATS, required=False, default=OUTPUT_FORMATS[0])
 
 class FstFilterRequestSerializer(serializers.Serializer):
     type = serializers.CharField(required=False, allow_blank=True, max_length=500)
