@@ -15,6 +15,13 @@ class TooManyRequests extends Error {
   }
 }
 
+class NotFound extends Error {
+  constructor(message) {
+    super(message); // (1)
+    this.name = "NotFound"; // (2)
+  }
+}
+
 async function call_api(url, params = {}, options = {}, method = 'GET') {
     const href = form_href(url, params);
     // Merge default options with provided ones
@@ -29,6 +36,8 @@ async function call_api(url, params = {}, options = {}, method = 'GET') {
     const response = await fetch(href, mergedOptions);
     if (response.status == 429)
         throw new TooManyRequests();
+    if (response.status == 404)
+        throw new NotFound();
     if (!response.ok)
         throw new Error(`API returned ${response.status}(${response.statusText})\n${await response.text()}`);
     // Check content type

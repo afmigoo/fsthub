@@ -5,7 +5,7 @@ from time import sleep
 import shutil
 from django.conf import settings
 
-from . import get_all_fsts, get_projects, path_exists, get_fsts
+from . import get_all_fsts, get_projects, dir_exists, file_exists, get_fsts
 
 class TestPRViews(TestCase):
     test_root = Path(__file__).parent / 'tmp'
@@ -60,7 +60,7 @@ class TestPRViews(TestCase):
 
         prefixes = set(fst.split('/')[-2] for fst in get_all_fsts())
         for pref in prefixes:
-            self.assertTrue(path_exists(str(pref)))
+            self.assertTrue(dir_exists(str(pref)))
             
     def test_put_many_delete_many(self):
         Np, Nfst = 100, 20
@@ -104,8 +104,8 @@ class TestPRViews(TestCase):
         t_count = len(get_all_fsts())
         self.assertEqual(p_count, 0)
         self.assertEqual(t_count, 0)
-        self.assertFalse(path_exists('some/thing.hfst'))
-        self.assertFalse(path_exists('some'))
+        self.assertFalse(file_exists('some/thing.hfst'))
+        self.assertFalse(dir_exists('some'))
 
         all_projects = []
         all_fst = []
@@ -117,12 +117,12 @@ class TestPRViews(TestCase):
             self.create_project(new_p, fsts)
         sleep(0.1)
         for p in all_projects:
-            self.assertTrue(path_exists(p), f'{p} does not exist')
+            self.assertTrue(dir_exists(p), f'{p} does not exist')
             self.assertSetEqual(set(f'{p}/{f}' for f in fsts),
                                 set(get_fsts(p)))
         for fst in all_fst:
-            self.assertTrue(path_exists(fst), f'{fst} does not exist')
+            self.assertTrue(file_exists(fst), f'{fst} does not exist')
 
-        self.assertFalse(path_exists('some/thing.hfst'))
-        self.assertFalse(path_exists('some'))
+        self.assertFalse(file_exists('some/thing.hfst'))
+        self.assertFalse(dir_exists('some'))
     

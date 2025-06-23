@@ -9,12 +9,12 @@ from django.conf import settings
 from hfst_adaptor.call import call_hfst, call_metadata_extractor
 from hfst_adaptor.parse import parse_metadata
 from hfst_adaptor.exceptions import HfstException
-from project_reader import get_projects, get_all_fsts
+from project_reader import get_projects, get_all_fsts, get_fsts
 from .models import (ProjectMetadata,
                      FstType, FstTypeRelation,
                      FstLanguage, FstLanguageRelation)
 from .serializers import (FstRequest, TypeSerializer, LanguageSerializer, ProjectSerializer,
-                          FstCallRequestSerializer, FstFilterRequestSerializer, 
+                          FstCallRequestSerializer, FstFilterRequestSerializer, ProjectTransducersRequestSerializer,
                           TypeRelationFileSerializer, LangRelationFileSerializer)
 # Pagination
 class DefaultPagination(pagination.PageNumberPagination):
@@ -39,6 +39,17 @@ class ProjectViewSet(viewsets.ViewSet):
         present_projects = get_projects()
         return Response({
             'results': [{'name': p} for p in present_projects]
+        })
+
+    @action(methods=['GET'], detail=False, url_path='transducers', url_name='transducers')
+    @method_decorator(cache_page(settings.CACHE_TTL))
+    def get_transducers(self, request):
+        serializer = ProjectTransducersRequestSerializer(data=request.query_params)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        transducers = get_fsts(serializer.data['project'])
+        return Response({
+            'results': [{'name': p} for p in transducers]
         })
     
 class ProjectMetadataViewSet(viewsets.ReadOnlyModelViewSet):
@@ -81,7 +92,7 @@ class TransducerViewSet(viewsets.ViewSet):
             serialized = LangRelationFileSerializer(lang_filtered, many=True).data
             candidates.intersection_update(d['fst_file'] for d in serialized)
         return Response({
-            'results': [{'name': n} for n in candidates]
+            'results': [{'name': n} for n in sorted(candidates)]
         })
         
     @action(methods=['POST'], detail=False, url_path='call', url_name='call', 

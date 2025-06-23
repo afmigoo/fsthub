@@ -11,8 +11,8 @@ def _get_project_paths() -> List[Path]:
             if d.is_dir()]
 
 def get_projects() -> List[str]:
-    return [str(d.relative_to(settings.HFST_CONTENT_ROOT))
-            for d in _get_project_paths()]
+    return sorted([str(d.relative_to(settings.HFST_CONTENT_ROOT))
+                   for d in _get_project_paths()])
 
 def get_fsts(project: Union[str, Path]) -> List[str]:
     if isinstance(project, str):
@@ -23,7 +23,7 @@ def get_fsts(project: Union[str, Path]) -> List[str]:
         if not f.suffix in settings.HFST_FORMATS:
             continue
         fsts.append(str(f.relative_to(settings.HFST_CONTENT_ROOT)))
-    return fsts
+    return sorted(fsts)
 
 def get_all_fsts() -> List[str]:
     fsts = []
@@ -32,10 +32,16 @@ def get_all_fsts() -> List[str]:
             if not f.suffix in settings.HFST_FORMATS:
                 continue
             fsts.append(str(f.relative_to(settings.HFST_CONTENT_ROOT)))
-    return fsts
+    return sorted(fsts)
 
-def path_exists(path: Union[str, Path]) -> bool:
+def file_exists(path: Union[str, Path]) -> bool:
     if isinstance(path, str):
         path = Path(path)
     path = settings.HFST_CONTENT_ROOT.joinpath(path)
-    return path.exists()
+    return path.exists() and path.is_file()
+
+def dir_exists(path: Union[str, Path]) -> bool:
+    if isinstance(path, str):
+        path = Path(path)
+    path = settings.HFST_CONTENT_ROOT.joinpath(path)
+    return path.exists() and path.is_dir()

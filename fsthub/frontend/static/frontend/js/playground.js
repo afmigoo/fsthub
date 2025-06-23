@@ -123,6 +123,12 @@ async function on_load() {
             });
             await on_filter_change();
         })
+    
+    var fsts = fst_name_select.children;
+    for (var i = 0; i < fsts.length; i++) {
+        if (fsts[i].value == selected_fst)
+            fsts[i].selected = true;
+    }
 }
 document.addEventListener('DOMContentLoaded', async () => {
     on_load()

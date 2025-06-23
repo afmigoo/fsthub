@@ -1,8 +1,23 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 
-{% block title %}FSThub - {% translate "fst" %}{% endblock %}
+{% block title %}FSThub - {% translate "project" %}{% endblock %}
 
 {% block content %}
-<p>TODO: A fst page. It has file metadata and download button</p>
+<h3 id="title"></h3>
+<div>
+    <ul id="meta-container"></ul>
+    <a href="{% url 'front_playground' %}{{ transducer_name }}" class="button">
+        {% translate "Interact with transducer" %}
+    </a>
+</div>
+{% endblock %}
+
+{% block after_body %}
+<script>
+    const api_metadata_url = window.location.origin + "{% url 'api-transducer-metadata' %}";
+    const selected_transducer = "{{ transducer_name }}";
+</script>
+<script src="{% static 'frontend/js/transducer.js' %}"></script>
 {% endblock %}

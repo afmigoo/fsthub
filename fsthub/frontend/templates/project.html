@@ -1,9 +1,27 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block title %}FSThub - {% translate "project" %}{% endblock %}
 
 {% block content %}
-<p>TODO: A project page. It has some metadata and a list of FSTs</p>
-<p>{{ project_id }}</p>
+<h3 id="title"></h3>
+<div>
+    <ul id="meta-container"></ul>
+</div>
+<h4>{% translate "Transducers" %}</h4>
+<div>
+    <p id="fst-empty-text" hidden="hidden">{% translate "No transducers" %}</p>
+    <ul id="fst-container"></ul>
+</div>
+{% endblock %}
+
+{% block after_body %}
+<script>
+    const api_metadata_url = window.location.origin + "{% url 'api-project-meta-list' %}";
+    const api_fst_list_url = window.location.origin + "{% url 'api-project-transducers' %}";
+    const fst_url = window.location.origin + "{% url 'front_transducer' %}";
+    const selected_project = "{{ project_name }}";
+</script>
+<script src="{% static 'frontend/js/project.js' %}"></script>
 {% endblock %}

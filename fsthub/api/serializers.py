@@ -4,6 +4,7 @@ from pathlib import Path
 from django.conf import settings
 
 from hfst_adaptor.call import OUTPUT_FORMATS
+from project_reader import dir_exists
 from .models import ProjectMetadata, FstType, FstLanguage, FstTypeRelation, FstLanguageRelation
 
 # Models
@@ -59,4 +60,12 @@ class FstFilterRequestSerializer(serializers.Serializer):
                 _ = FstLanguage.objects.get(name=data['lang'])
             except FstLanguage.DoesNotExist:
                 raise ValidationError(f"lang \{data['lang']}' does not exist.")
+        return data
+
+class ProjectTransducersRequestSerializer(serializers.Serializer):
+    project = serializers.CharField(required=True, allow_blank=False, max_length=100)
+
+    def validate(self, data):
+        if not dir_exists(data['project']):
+            raise ValidationError(f"Project '{data['project']}' does not exist.")
         return data
