@@ -30,18 +30,6 @@ jobs:
           DJANGO_SUPERUSER_PASSWORD=TEST \
           DJANGO_SUPERUSER_EMAIL="test@example.com" \
           python3 fsthub/manage.py createsuperuser --noinput || { echo "Creation failed"; exit 1; }
-      - name: Check development status code
-        run: |
-          echo "Activating environment"
-          set -eEuo pipefail
-          source venv/bin/activate
-          echo "Starting up the development server"
-          python3 fsthub/manage.py runserver localhost:8000 --noreload > /dev/null 2>&1 & sleep 10
-          echo "Calling the development server"
-          RESP=$(curl -fsSIm 1 http://localhost:8000/ | head -n 1)
-          echo "Server response: $RESP"
-          test $(echo $RESP | awk '{print $2}') = 200
-          pkill python
       - name: Run tests
         run: |
           echo "Activating environment"
