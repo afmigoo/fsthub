@@ -1,5 +1,6 @@
 secret.env
 settings.env
+.env
 venv
 static
 !fsthub/frontend/static

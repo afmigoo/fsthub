@@ -4,7 +4,6 @@ services:
     container_name: fsthub_django
     build: .
     network_mode: bridge
-    env_file: settings.env
     environment:
       - PUID=${CONTAINER_PUID}
       - GUID=${CONTAINER_GUID}
