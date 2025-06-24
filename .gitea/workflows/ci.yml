@@ -13,10 +13,9 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -p ${{ secrets.FSTHUB_SSH_PORT }} lingconlab.ru >> ~/.ssh/known_hosts
-      - name: Explore the setup
-        run: ls -a ~/.ssh
-      - name: Test ssh command
-        run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} "ls -a"
+      - name: Pull from Github
+        run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
+             "cd production $$ git pull"
   
   #test-dev-app:
   #  name: Test the development app
