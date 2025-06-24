@@ -20,7 +20,7 @@ from dotenv import load_dotenv, find_dotenv
 from django.contrib import admin
 from django.urls import path, include
 
-load_dotenv(find_dotenv('.env'))
+load_dotenv(find_dotenv('settings.env'))
 
 FSTHUB_PREFIX = os.getenv('FSTHUB_PREFIX')
 FSTHUB_PREFIX = '' if FSTHUB_PREFIX is None else FSTHUB_PREFIX

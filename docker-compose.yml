@@ -4,3 +4,9 @@ services:
     container_name: fsthub_django
     build: .
     network_mode: bridge
+    ports:
+      - "1234:8000"
+    volumes:
+      - ./hfst_projects:/fsthub/hfst_projects:ro
+      - ./settings.env:/fsthub/settings.env
+      - ./secret.env:/fsthub/secret.env

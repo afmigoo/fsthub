@@ -34,7 +34,7 @@ runserver-job:
     - python
   before_script:
     - source venv/bin/activate
-    - source .env
+    - source settings.env
     - set -eEuo pipefail
   script:
     - python3 fsthub/manage.py runserver localhost:8000 &

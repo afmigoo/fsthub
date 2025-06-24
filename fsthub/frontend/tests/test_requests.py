@@ -16,7 +16,7 @@ def get_html(url: str, headers: dict = None) -> Tuple[int, str]:
 
 class TestRequestsPingViews(LiveServerTestCase):
     def setUp(self):
-        load_dotenv(find_dotenv('.env'))
+        load_dotenv(find_dotenv('settings.env'))
         self.url_prefix = os.getenv('FSTHUB_PREFIX')
         self.url_prefix = '' if self.url_prefix is None else self.url_prefix
         self.url_prefix = '/' + self.url_prefix
@@ -33,7 +33,7 @@ class TestRequestsPingViews(LiveServerTestCase):
 
 class TestRequestsLangLocale(LiveServerTestCase):
     def setUp(self):
-        load_dotenv(find_dotenv('.env'))
+        load_dotenv(find_dotenv('settings.env'))
         self.url_prefix = os.getenv('FSTHUB_PREFIX')
         self.url_prefix = '' if self.url_prefix is None else self.url_prefix
         self.url_prefix = '/' + self.url_prefix
