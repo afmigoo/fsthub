@@ -4,10 +4,15 @@ services:
     container_name: fsthub_django
     build: .
     network_mode: bridge
+    env_file: settings.env
+    environment:
+      - PUID=${CONTAINER_PUID}
+      - GUID=${CONTAINER_GUID}
     ports:
       - "1234:8000"
     volumes:
       - ./hfst_projects:/fsthub/hfst_projects:ro
       - ./settings.env:/fsthub/settings.env
       - ./secret.env:/fsthub/secret.env
+      - ./db.sqlite3:/fsthub/db.sqlite3
       - ./static:/static
