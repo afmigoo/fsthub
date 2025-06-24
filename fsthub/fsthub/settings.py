@@ -21,6 +21,8 @@ load_dotenv(find_dotenv('secret.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR.parent / 'data'
+DATA_DIR.mkdir(exist_ok=True)
 
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'insecure-secret-key-BrzC4A4bNdvCbCdvhyQYpxYWpfWt4IGW')
@@ -79,7 +81,7 @@ WSGI_APPLICATION = 'fsthub.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR.parent / 'db.sqlite3',
+        'NAME': DATA_DIR / 'db.sqlite3',
     }
 }
 
@@ -147,7 +149,7 @@ REST_FRAMEWORK = {
 }
 
 # Api settings
-HFST_CONTENT_ROOT = BASE_DIR.parent / "hfst_projects"
+HFST_CONTENT_ROOT = DATA_DIR / "hfst_projects"
 HFST_CONTENT_ROOT.mkdir(exist_ok=True)
 HFST_FORMATS = {'.hfst', '.hfstol'}
 CACHE_TTL = 3

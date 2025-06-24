@@ -3,6 +3,7 @@ settings.env
 .env
 venv
 static
+data
 !fsthub/frontend/static
 *.sqlite3
 *.hfst
