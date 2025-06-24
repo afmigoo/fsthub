@@ -1,5 +1,5 @@
 services:
-  django_backend:
+  app:
     image: fsthub_django
     container_name: fsthub_django
     build: .
@@ -10,3 +10,4 @@ services:
       - ./hfst_projects:/fsthub/hfst_projects:ro
       - ./settings.env:/fsthub/settings.env
       - ./secret.env:/fsthub/secret.env
+      - ./static:/static

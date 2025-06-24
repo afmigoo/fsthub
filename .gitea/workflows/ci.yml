@@ -52,16 +52,9 @@ jobs:
       - name: Pull from Github
         run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
              "cd production && git pull"
-      - name: Update venv
-        run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
-             "cd production && \
-              source venv/bin/activate && \
-              pip3 install -r requirements.txt"
-      - name: Collect static
-        run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
-             "cd production && \
-              source venv/bin/activate && \
-              python3 fsthub/manage.py collectstatic --noinput"
       - name: Restart container
         run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
              "cd production && docker compose stop && docker compose up --build -d"
+      - name: Collect static
+        run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
+             "docker compose exec -it app /bin/bash -c "python3 manage.py collectstatic --noinput"
