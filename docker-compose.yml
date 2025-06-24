@@ -8,7 +8,7 @@ services:
       - PUID=${CONTAINER_PUID}
       - GUID=${CONTAINER_GUID}
     ports:
-      - "1234:8000"
+      - "${CONTAINER_PORT}:8000"
     volumes:
       - ./hfst_projects:/fsthub/hfst_projects:ro
       - ./settings.env:/fsthub/settings.env
