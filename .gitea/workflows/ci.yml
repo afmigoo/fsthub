@@ -15,7 +15,7 @@ jobs:
           ssh-keyscan -p ${{ secrets.FSTHUB_SSH_PORT }} lingconlab.ru >> ~/.ssh/known_hosts
       - name: Pull from Github
         run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
-             "cd production $$ git pull"
+             "cd production && git pull"
   
   #test-dev-app:
   #  name: Test the development app
