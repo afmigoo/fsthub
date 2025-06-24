@@ -23,7 +23,7 @@ load_dotenv(find_dotenv('secret.env'))
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'insecure-secret-key-BrzC4A4bNdvCbCdvhyQYpxYWpfWt4IGW')
 DEBUG = os.getenv('DJANGO_DEBUG', 'FALSE') == 'TRUE'
 ALLOWED_HOSTS = [os.getenv('DJANGO_HOST', 'localhost')]
 
