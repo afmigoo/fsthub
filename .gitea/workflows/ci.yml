@@ -9,6 +9,8 @@ jobs:
       - uses: webfactory/ssh-agent@v0.9.1
         with:
             ssh-private-key: ${{ secrets.FSTHUB_SSH_PK }}
+      - name: Explore the setup
+        run: ls -a ~/.ssh
       - name: Test ssh command
         run: ssh fsthub@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} "ls -a"
   
