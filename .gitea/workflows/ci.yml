@@ -11,7 +11,7 @@ jobs:
       - name: Check if debug mode is enabled
         run: |
           source settings.env
-          test $(echo $DJANGO_DEBUG) != "TRUE" | { echo "DJANGO_DEBUG can not be set to TRUE in commits"; exit 1; }
+          test $(echo $DJANGO_DEBUG) != "TRUE" | { echo "In commits 'DJANGO_DEBUG' can not be TRUE in settings.env"; exit 1; }
       - name: Setup python
         run: |
           apt update && apt upgrade -y
