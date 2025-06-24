@@ -57,5 +57,4 @@ jobs:
              "cd production && docker compose stop && docker compose up --build -d"
       - name: Collect static
         run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
-             "cd production && \
-              docker compose exec app /bin/bash -c \"python3 manage.py collectstatic --noinput\""
+             "cd production && docker compose exec app /bin/bash -c \"python3 manage.py collectstatic --noinput\""
