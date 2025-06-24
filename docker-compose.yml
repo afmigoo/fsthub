@@ -10,7 +10,7 @@ services:
     ports:
       - "${CONTAINER_PORT}:8000"
     volumes:
-      - ./hfst_projects:/fsthub/hfst_projects:ro
+      - ./hfst_projects:/hfst_projects:ro
       - ./settings.env:/fsthub/settings.env
       - ./secret.env:/fsthub/secret.env
       - ./db.sqlite3:/fsthub/db.sqlite3
