@@ -52,3 +52,11 @@ jobs:
           echo "Running tests"
           python3 fsthub/manage.py test fsthub --verbosity=2 --no-input || \
           { echo "Tests failed"; exit 1; }
+
+  deploy-to-prod:
+    steps:
+      - uses: actions/checkout@v4
+      - uses: webfactory/ssh-agent@v0.9.1
+        with:
+            ssh-private-key: ${{ secrets.FSTHUB_SSH_PK }}
+  
