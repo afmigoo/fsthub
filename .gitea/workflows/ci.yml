@@ -10,7 +10,7 @@ jobs:
         with:
             ssh-private-key: ${{ secrets.FSTHUB_SSH_PK }}
       - name: Test ssh command
-        run: ssh fsthub@lingconlab.ru "ls -a"
+        run: ssh fsthub@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} "ls -a"
   
   #test-dev-app:
   #  name: Test the development app
