@@ -22,7 +22,7 @@ from django.urls import path, include
 
 load_dotenv(find_dotenv('settings.env'))
 
-FSTHUB_PREFIX = os.getenv('FSTHUB_PREFIX')
+FSTHUB_PREFIX = os.getenv('FSTHUB_PREFIX', '')
 FSTHUB_PREFIX = '' if FSTHUB_PREFIX is None else FSTHUB_PREFIX
 
 print(f'Global prefix: {FSTHUB_PREFIX}')

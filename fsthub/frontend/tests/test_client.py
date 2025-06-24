@@ -10,7 +10,7 @@ import os
 class TestClientPingViews(UnitTestCase):
     def setUp(self):
         load_dotenv(find_dotenv('settings.env'))
-        self.url_prefix = os.getenv('FSTHUB_PREFIX')
+        self.url_prefix = os.getenv('FSTHUB_PREFIX', '')
         self.url_prefix = '' if self.url_prefix is None else self.url_prefix
         self.url_prefix = '/' + self.url_prefix
         self.client = Client()
@@ -28,7 +28,7 @@ class TestClientPingViews(UnitTestCase):
 class TestClientLangLocale(UnitTestCase):
     def setUp(self):
         load_dotenv(find_dotenv('settings.env'))
-        self.url_prefix = os.getenv('FSTHUB_PREFIX')
+        self.url_prefix = os.getenv('FSTHUB_PREFIX', '')
         self.url_prefix = '' if self.url_prefix is None else self.url_prefix
         self.url_prefix = '/' + self.url_prefix
         self.client = Client()

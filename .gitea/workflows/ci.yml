@@ -8,10 +8,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Check if debug mode is enabled
-        run: |
-          source settings.env
-          test $(echo $DJANGO_DEBUG) != "TRUE" | { echo "In commits 'DJANGO_DEBUG' can not be TRUE in settings.env"; exit 1; }
       - name: Setup python
         run: |
           apt update && apt upgrade -y
@@ -39,12 +35,10 @@ jobs:
           echo "Activating environment"
           set -eEuo pipefail
           source venv/bin/activate
-          source settings.env
           echo "Starting up the development server"
           python3 fsthub/manage.py runserver localhost:8000 --noreload > /dev/null 2>&1 & sleep 10
           echo "Calling the development server"
-          source settings.env
-          RESP=$(curl -fsSIm 1 http://localhost:8000/$FSTHUB_PREFIX | head -n 1)
+          RESP=$(curl -fsSIm 1 http://localhost:8000/ | head -n 1)
           echo "Server response: $RESP"
           test $(echo $RESP | awk '{print $2}') = 200
           pkill python
@@ -52,7 +46,6 @@ jobs:
         run: |
           echo "Activating environment"
           source venv/bin/activate
-          source settings.env
           echo "Running tests"
           python3 fsthub/manage.py test fsthub --verbosity=2 --no-input || \
           { echo "Tests failed"; exit 1; }

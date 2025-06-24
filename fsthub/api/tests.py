@@ -20,9 +20,9 @@ from .management.commands.projectsautoinit import Command as ProjectsAutoInitCom
 from .models import ProjectMetadata, FstType, FstLanguage, FstTypeRelation, FstLanguageRelation
 
 load_dotenv(find_dotenv('settings.env'))
-URL_PREFIX = os.getenv('FSTHUB_PREFIX')
+URL_PREFIX = os.getenv('FSTHUB_PREFIX', '')
 URL_PREFIX = '' if URL_PREFIX is None else URL_PREFIX
-URL_TO_TEST = os.getenv('URL_TO_TEST')
+URL_TO_TEST = os.getenv('URL_TO_TEST', None)
 
 class ApiTest(LiveServerTestCase):
     db_cmd = ProjectsAutoInitCommand(stdout=open(os.devnull, 'w'))
