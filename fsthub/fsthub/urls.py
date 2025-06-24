@@ -25,8 +25,6 @@ load_dotenv(find_dotenv('settings.env'))
 FSTHUB_PREFIX = os.getenv('FSTHUB_PREFIX', '')
 FSTHUB_PREFIX = '' if FSTHUB_PREFIX is None else FSTHUB_PREFIX
 
-print(f'Global prefix: {FSTHUB_PREFIX}')
-
 urlpatterns = [
     path(f'{FSTHUB_PREFIX}', include('frontend.urls')),
     path(f'{FSTHUB_PREFIX}api/', include('api.urls')),

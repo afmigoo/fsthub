@@ -55,6 +55,9 @@ jobs:
       - name: Restart container
         run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
              "cd production && docker compose stop && docker compose up --build -d"
+      - name: Make migrations
+        run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
+             "cd production && docker compose exec app /bin/bash -c \"python3 manage.py migrate --noinput\""
       - name: Collect static
         run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} \
              "cd production && docker compose exec app /bin/bash -c \"python3 manage.py collectstatic --noinput\""
