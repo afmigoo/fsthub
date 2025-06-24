@@ -9,10 +9,14 @@ jobs:
       - uses: webfactory/ssh-agent@v0.9.1
         with:
             ssh-private-key: ${{ secrets.FSTHUB_SSH_PK }}
+      - name: Add known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.FSTHUB_SSH_PORT }} lingconlab.ru >> ~/.ssh/known_hosts
       - name: Explore the setup
         run: ls -a ~/.ssh
       - name: Test ssh command
-        run: ssh fsthub@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} "ls -a"
+        run: ssh ${{ secrets.FSTHUB_SSH_USER }}@lingconlab.ru -p ${{ secrets.FSTHUB_SSH_PORT }} "ls -a"
   
   #test-dev-app:
   #  name: Test the development app
