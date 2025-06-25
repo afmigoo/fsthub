@@ -2,10 +2,15 @@ name: FSThub CI
 run-name: ${{ gitea.actor }} is running FSThub CI
 on: [push]
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   testing:
     name: Test the development app
-    runs-on: python_ubuntu-22.04-slim
+    runs-on: ubuntu-latest
+    container: gitea.local:3003/elenkart/pyrunner:ubuntu-22.04-slim
     steps:
       - uses: actions/checkout@v4
       - name: Install HFST
@@ -28,8 +33,9 @@ jobs:
 
   deploy-to-prod:
     name: Deploy to production
-    runs-on: python_ubuntu-22.04-slim
     needs: [testing]
+    runs-on: ubuntu-latest
+    container: gitea.local:3003/elenkart/pyrunner:ubuntu-22.04-slim
     steps:
       - uses: actions/checkout@v4
       - uses: webfactory/ssh-agent@v0.9.1
