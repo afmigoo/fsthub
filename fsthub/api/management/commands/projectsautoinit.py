@@ -1,4 +1,5 @@
 from typing import List, Set
+from pathlib import Path
 from django.core.management.base import BaseCommand, CommandError
 from django.db.utils import IntegrityError
 from django.conf import settings
@@ -17,8 +18,9 @@ class Command(BaseCommand):
         'analyzer': ['ana_', '_ana', 'anal_', '_anal', 'analyzer'],
     }
 
-    def detect_autotypes(self, file_name: str) -> List[str]:
+    def detect_autotypes(self, file_path: str) -> List[str]:
         types = []
+        file_name = Path(file_path).name
         for k, markers in self.type_markers.items():
             for m in markers:
                 if m in file_name and not k in types:
@@ -47,24 +49,32 @@ class Command(BaseCommand):
         lang_obj, lang_created = FstLanguage.objects.get_or_create(name=lang_name)
         if lang_created:
             self.stdout.write(
-                self.style.SUCCESS(f"Created `{lang_obj}` language")
+                self.style.SUCCESS(f"[CREATED] language `{lang_name}`")
             )
         _, relation_created = FstLanguageRelation.objects.get_or_create(fst_file=file_name, language=lang_obj)
         if relation_created:
             self.stdout.write(
-                self.style.SUCCESS(f"`{file_name}`'s language marked as `{lang_name}`")
+                self.style.SUCCESS(f"[CREATED] lang relation `{file_name}` -> `{lang_name}`")
+            )
+        else:
+            self.stdout.write(
+                self.style.SUCCESS(f"[ALREADY EXISTS] lang relation `{file_name}` -> `{lang_name}`")
             )
     
     def add_type_relation(self, type_name: str, file_name: str) -> None:
         type_obj, type_created = FstType.objects.get_or_create(name=type_name)
         if type_created:
             self.stdout.write(
-                self.style.SUCCESS(f"Created `{type_name}` type")
+                self.style.SUCCESS(f"[CREATED] type `{type_name}`")
             )
         _, relation_created = FstTypeRelation.objects.get_or_create(fst_file=file_name, type=type_obj)
         if relation_created:
             self.stdout.write(
-                self.style.SUCCESS(f"`{file_name}` marked as `{type_name}`")
+                self.style.SUCCESS(f"[CREATED] type relation `{file_name}` -> `{type_name}`")
+            )
+        else:
+            self.stdout.write(
+                self.style.SUCCESS(f"[ALREADY EXISTS] type relation `{file_name}` -> `{type_name}`")
             )
 
     def init_projects(self):
@@ -76,17 +86,19 @@ class Command(BaseCommand):
                 self.style.SUCCESS(f'No new projects found')
             )
             return
-        self.stdout.write(
-            self.style.SUCCESS(f'New projects found: {list(db_missing)}')
-        )
         for proj in db_missing:
             ProjectMetadata.objects.create(directory=proj)
             self.stdout.write(
-                self.style.SUCCESS(f"Added '{proj}'")
+                self.style.SUCCESS(f"[CREATED] project '{proj}'")
             )
 
     def init_transducers(self):
-        filesystem_transducers = set(get_all_fsts())
+        filesystem_transducers = get_all_fsts()
+        if len(filesystem_transducers) == 0:
+            self.stdout.write(
+                self.style.NOTICE(f'No transducers found')
+            )
+            return
         for fst in filesystem_transducers:
             for t in self.detect_autotypes(fst):
                 self.add_type_relation(t, fst)
@@ -97,6 +109,3 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.init_projects()
         self.init_transducers()
-        
-        
-
