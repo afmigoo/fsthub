@@ -156,3 +156,4 @@ HFST_CONTENT_ROOT = DATA_DIR / "hfst_projects"
 HFST_CONTENT_ROOT.mkdir(exist_ok=True)
 HFST_FORMATS = {'.hfst', '.hfstol'}
 CACHE_TTL = 3
+HFST_METADATA_LANG_KEYS = ['language', 'lang', 'lng', 'l']

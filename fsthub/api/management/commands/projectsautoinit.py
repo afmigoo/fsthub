@@ -21,7 +21,7 @@ class Command(BaseCommand):
         types = []
         for k, markers in self.type_markers.items():
             for m in markers:
-                if m in file_name:
+                if m in file_name and not k in types:
                     types.append(k)
                     break
         return types
@@ -36,10 +36,10 @@ class Command(BaseCommand):
             return
         parsed = parse_metadata(metadata, lower_keys=True)
         language = None
-        if 'language' in parsed:
-            language = parsed['language']
-        if 'lang' in parsed:
-            language = parsed['lang']
+        for lang_key in settings.HFST_METADATA_LANG_KEYS:
+            if lang_key in parsed:
+                language = parsed[lang_key]
+                break
         return language
     
     def add_lang_relation(self, lang_name: str, file_name: str) -> None:
