@@ -68,7 +68,7 @@ class FstTypeRelation(FstFilterRelation):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['fst_file'],
+                fields=['fst_file', 'type'],
                 name='unique_fst_file_for_type'
             ),
         ]
@@ -81,7 +81,7 @@ class FstLanguageRelation(FstFilterRelation):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['fst_file'],
+                fields=['fst_file', 'language'],
                 name='unique_fst_file_for_lang'
             ),
         ]
