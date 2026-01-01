@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = []
 if os.getenv('DJANGO_HOST', None):
     ALLOWED_HOSTS.append(os.getenv('DJANGO_HOST', None))
-    CSRF_TRUSTED_ORIGINS.append('https://' + {os.getenv("DJANGO_HOST", None)})
+    CSRF_TRUSTED_ORIGINS.append('https://' + os.getenv("DJANGO_HOST", None))
 
 # Application definition
 
