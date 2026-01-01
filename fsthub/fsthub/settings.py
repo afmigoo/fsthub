@@ -132,9 +132,7 @@ USE_TZ = True
 STATIC_URL = os.getenv('DJANGO_STATIC_URL', 'static/')
 STATIC_ROOT = BASE_DIR.parent / 'static'
 STATICFILES_DIRS = [
-    BASE_DIR / "frontend/static",
-    BASE_DIR / "frontend"
-    BASE_DIR
+    BASE_DIR / "frontend/static"
 ]
 
 # Default primary key field type
