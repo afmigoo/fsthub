@@ -20,7 +20,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install fst dependencies
       run: |
-        apt install hfst
+        sudo apt install -y hfst
     - name: Install Python dependencies
       run: |
         python3 -m pip install --upgrade pip
