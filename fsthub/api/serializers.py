@@ -59,7 +59,7 @@ class FstFilterRequestSerializer(serializers.Serializer):
             try:
                 _ = FstLanguage.objects.get(name=data['lang'])
             except FstLanguage.DoesNotExist:
-                raise ValidationError(f"lang \{data['lang']}' does not exist.")
+                raise ValidationError(f"lang '{data['lang']}' does not exist.")
         return data
 
 class ProjectTransducersRequestSerializer(serializers.Serializer):
