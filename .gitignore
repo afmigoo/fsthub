@@ -1,6 +1,4 @@
-secret.env
-settings.env
-.env
+*.env
 venv
 static
 data

@@ -5,12 +5,15 @@ services:
     build: .
     network_mode: bridge
     environment:
-      - PUID=${CONTAINER_PUID}
-      - GUID=${CONTAINER_GUID}
+      PUID: ${CONTAINER_PUID}
+      GUID: ${CONTAINER_GUID}
+      FSTHUB_URL_PREFIX: ${FSTHUB_URL_PREFIX}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DJANGO_DEBUG: ${DJANGO_DEBUG}
+      DJANGO_HOST: ${DJANGO_HOST}
+      DJANGO_STATIC_URL: ${DJANGO_STATIC_URL}
     ports:
       - "${CONTAINER_PORT}:8000"
     volumes:
-      - ./settings.env:/fsthub/settings.env
-      - ./secret.env:/fsthub/secret.env
       - ./data:/data
       - ./static:/static

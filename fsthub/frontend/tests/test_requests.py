@@ -3,7 +3,6 @@ Test apps' views through real HTTP requests from outside.
 All tests match tests in `test_client.py`, but are done
 from outside with the `reqests` module.
 """
-from dotenv import load_dotenv, find_dotenv
 from django.test import LiveServerTestCase
 
 from typing import Tuple
@@ -16,8 +15,7 @@ def get_html(url: str, headers: dict = None) -> Tuple[int, str]:
 
 class TestRequestsPingViews(LiveServerTestCase):
     def setUp(self):
-        load_dotenv(find_dotenv('settings.env'))
-        self.url_prefix = os.getenv('FSTHUB_PREFIX', '')
+        self.url_prefix = os.getenv('FSTHUB_URL_PREFIX', '')
         self.url_prefix = '' if self.url_prefix is None else self.url_prefix
         self.url_prefix = '/' + self.url_prefix
 
@@ -33,8 +31,7 @@ class TestRequestsPingViews(LiveServerTestCase):
 
 class TestRequestsLangLocale(LiveServerTestCase):
     def setUp(self):
-        load_dotenv(find_dotenv('settings.env'))
-        self.url_prefix = os.getenv('FSTHUB_PREFIX', '')
+        self.url_prefix = os.getenv('FSTHUB_URL_PREFIX', '')
         self.url_prefix = '' if self.url_prefix is None else self.url_prefix
         self.url_prefix = '/' + self.url_prefix
 

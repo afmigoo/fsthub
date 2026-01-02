@@ -3,7 +3,6 @@ Test apps' views through real HTTP requests from outside.
 All tests match tests in `test_client.py`, but are done
 from outside with the `reqests` module.
 """
-from dotenv import load_dotenv, find_dotenv
 from django.test import LiveServerTestCase
 from django.conf import settings
 
@@ -19,10 +18,9 @@ from project_reader import get_all_fsts, get_projects
 from .management.commands.projectsautoinit import Command as ProjectsAutoInitCommand
 from .models import ProjectMetadata, FstType, FstLanguage, FstTypeRelation, FstLanguageRelation
 
-load_dotenv(find_dotenv('settings.env'))
-URL_PREFIX = os.getenv('FSTHUB_PREFIX', '')
+URL_PREFIX = os.getenv('FSTHUB_URL_PREFIX', '')
 URL_PREFIX = '' if URL_PREFIX is None else URL_PREFIX
-URL_TO_TEST = os.getenv('URL_TO_TEST', None)
+URL_TO_TEST = os.getenv('FSTHUB_URL_TO_TEST', '')
 
 class ApiTest(LiveServerTestCase):
     db_cmd = ProjectsAutoInitCommand(stdout=open(os.devnull, 'w'))
@@ -68,7 +66,7 @@ class ApiTest(LiveServerTestCase):
 
     def get_json(self, endpoint: str, headers: dict = None) -> Tuple[int, dict]:
         endpoint = f'{URL_PREFIX}{endpoint}'.replace('//', '/')
-        base_url = self.live_server_url if URL_TO_TEST is None else URL_TO_TEST
+        base_url = URL_TO_TEST or self.live_server_url
         url = f'{base_url}/{endpoint}'
 
         default_headers = {

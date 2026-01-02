@@ -38,7 +38,7 @@ runserver-job:
   script:
     - python3 fsthub/manage.py runserver localhost:8000 &
     - sleep 10
-    - curl -fsSIm 1 http://localhost:8000/$FSTHUB_PREFIX
+    - curl -fsSIm 1 http://localhost:8000/$FSTHUB_URL_PREFIX
     - deactivate
     - pkill python
   after_script:

@@ -11,13 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-from dotenv import load_dotenv, find_dotenv
 import os 
 
 from django.utils.translation import gettext_lazy as _
-
-load_dotenv(find_dotenv('settings.env'))
-load_dotenv(find_dotenv('secret.env'))
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,13 +21,13 @@ DATA_DIR = BASE_DIR.parent / 'data'
 DATA_DIR.mkdir(exist_ok=True)
 
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'insecure-secret-key-BrzC4A4bNdvCbCdvhyQYpxYWpfWt4IGW')
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', '') or 'insecure-secret-key-BrzC4A4bNdvCbCdvhyQYpxYWpfWt4IGW'
 DEBUG = os.getenv('DJANGO_DEBUG', 'FALSE') == 'TRUE'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 CSRF_TRUSTED_ORIGINS = []
-if os.getenv('DJANGO_HOST', None):
-    ALLOWED_HOSTS.append(os.getenv('DJANGO_HOST', None))
-    CSRF_TRUSTED_ORIGINS.append('https://' + os.getenv("DJANGO_HOST", None))
+if os.getenv('DJANGO_HOST', ''):
+    ALLOWED_HOSTS.append(os.getenv('DJANGO_HOST', ''))
+    CSRF_TRUSTED_ORIGINS.append('https://' + os.getenv("DJANGO_HOST", ''))
 
 # Application definition
 
@@ -129,7 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = os.getenv('DJANGO_STATIC_URL', 'static/')
+STATIC_URL = os.getenv('DJANGO_STATIC_URL', '') or 'static/'
 STATIC_ROOT = BASE_DIR.parent / 'static'
 STATICFILES_DIRS = [
     BASE_DIR / "frontend/static"

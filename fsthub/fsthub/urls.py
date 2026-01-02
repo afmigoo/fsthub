@@ -15,18 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 import os
-from dotenv import load_dotenv, find_dotenv
 
 from django.contrib import admin
 from django.urls import path, include
 
-load_dotenv(find_dotenv('settings.env'))
-
-FSTHUB_PREFIX = os.getenv('FSTHUB_PREFIX', '')
-FSTHUB_PREFIX = '' if FSTHUB_PREFIX is None else FSTHUB_PREFIX
+FSTHUB_URL_PREFIX = os.getenv('FSTHUB_URL_PREFIX', '')
+FSTHUB_URL_PREFIX = '' if FSTHUB_URL_PREFIX is None else FSTHUB_URL_PREFIX
 
 urlpatterns = [
-    path(f'{FSTHUB_PREFIX}', include('frontend.urls')),
-    path(f'{FSTHUB_PREFIX}api/', include('api.urls')),
-    path(f'{FSTHUB_PREFIX}admin/', admin.site.urls),
+    path(f'{FSTHUB_URL_PREFIX}', include('frontend.urls')),
+    path(f'{FSTHUB_URL_PREFIX}api/', include('api.urls')),
+    path(f'{FSTHUB_URL_PREFIX}admin/', admin.site.urls),
 ]
