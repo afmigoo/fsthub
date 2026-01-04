@@ -10,9 +10,9 @@ jobs:
     permissions:
       packages: write
     strategy:
-      max-parallel: 2
+      max-parallel: 3
       matrix:
-        python-version: [3.11, 3.12, 3.13, 3.14]
+        python-version: ['3.14', '3.13', '3.12', '3.11', '3.10', '3.9']
     env:
       IMAGE_NAME: ghcr.io/${{ github.repository }}:latest-python${{ matrix.python-version }}
     steps:
