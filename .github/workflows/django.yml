@@ -13,6 +13,8 @@ jobs:
       max-parallel: 4
       matrix:
         python-version: [3.13]
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository }}:latest-python${{ matrix.python-version }}
     steps:
     - uses: actions/checkout@v4
 
@@ -25,15 +27,12 @@ jobs:
 
     - name: Build Docker image
       run: |
-        IMAGE_NAME=ghcr.io/${{ github.repository }}/fsthub:latest-python${{ matrix.python-version }}
         docker build -f Dockerfile -t $IMAGE_NAME .
 
     - name: Run tests inside Docker
       run: |
-        IMAGE_NAME=ghcr.io/${{ github.repository }}/fsthub:latest-python${{ matrix.python-version }}
         docker run --rm $IMAGE_NAME 'bash -c "python3 manage.py test -v 2"'
 
     - name: Push Docker image
       run: |
-        IMAGE_NAME=ghcr.io/${{ github.repository }}/fsthub:latest-python${{ matrix.python-version }}
         docker push $IMAGE_NAME
