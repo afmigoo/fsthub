@@ -46,4 +46,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ghcr.io/afmigoo/fsthub/fsthub:latest-python${{ matrix.python-version }}
+        tags: ghcr.io/afmigoo/fsthub:latest-python${{ matrix.python-version }}
