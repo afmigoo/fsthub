@@ -1,4 +1,5 @@
-FROM python:3.13-slim-bookworm
+ARG PY_VER=3.14
+FROM python:${PY_VER}-slim-bookworm
 
 WORKDIR /fsthub
 
