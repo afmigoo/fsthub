@@ -29,8 +29,6 @@ msgid "Playground"
 msgstr "Интерактив"
 
 #: fsthub/frontend/templates/base.html:54
-#, fuzzy
-#| msgid "Browse FST"
 msgid "Browse"
 msgstr "Каталог FST"
 
