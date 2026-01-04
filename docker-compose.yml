@@ -1,9 +1,12 @@
+networks:
+  backend:
+    driver: bridge
+
 services:
   app:
     image: fsthub_django
     container_name: fsthub_django
     build: .
-    network_mode: bridge
     environment:
       PUID: ${CONTAINER_PUID}
       GUID: ${CONTAINER_GUID}
@@ -15,8 +18,21 @@ services:
       DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
       DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
       DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
-    ports:
-      - "${CONTAINER_PORT:-8000}:8000"
+    networks:
+      - backend
     volumes:
       - ./data:/data
       - ./static:/static
+
+  nginx:
+    image: nginx:alpine
+    container_name: fsthub_nginx
+    networks:
+      - backend
+    depends_on:
+      - app
+    ports:
+      - "${CONTAINER_PORT:-8000}:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./static:/var/www/fsthub/static:ro

@@ -2,13 +2,14 @@ FROM python:3.13-slim-bookworm
 
 WORKDIR /fsthub
 
-RUN apt update -y && apt upgrade -y
-RUN apt install -y hfst gcc
+RUN apt-get update -y && apt-get upgrade -y
+RUN apt-get install -y hfst gcc
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY fsthub ./
 
-CMD ["/usr/local/bin/uwsgi", "--http", ":8000", \
-                             "--wsgi-file", "fsthub/wsgi.py"]
+ENTRYPOINT ["sh", "-c"]
+CMD ["/usr/local/bin/python3 manage.py collectstatic --no-input && \
+      /usr/local/bin/uwsgi --http :8000 --wsgi-file fsthub/wsgi.py"]

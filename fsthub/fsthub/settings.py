@@ -24,7 +24,7 @@ DATA_DIR.mkdir(exist_ok=True)
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', '') or 'insecure-secret-key-BrzC4A4bNdvCbCdvhyQYpxYWpfWt4IGW'
 DEBUG = os.getenv('DJANGO_DEBUG', 'FALSE') == 'TRUE'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'http://127.0.0.1:8000']
 if os.getenv('DJANGO_HOST', ''):
     ALLOWED_HOSTS.append(os.getenv('DJANGO_HOST', ''))
     CSRF_TRUSTED_ORIGINS.append('https://' + os.getenv("DJANGO_HOST", ''))
