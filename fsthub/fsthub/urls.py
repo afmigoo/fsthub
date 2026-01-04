@@ -20,7 +20,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 FSTHUB_URL_PREFIX = os.getenv('FSTHUB_URL_PREFIX', '')
-FSTHUB_URL_PREFIX = '' if FSTHUB_URL_PREFIX is None else FSTHUB_URL_PREFIX
 
 urlpatterns = [
     path(f'{FSTHUB_URL_PREFIX}', include('frontend.urls')),

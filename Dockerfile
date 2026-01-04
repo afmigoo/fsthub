@@ -12,4 +12,4 @@ COPY fsthub ./
 
 ENTRYPOINT ["sh", "-c"]
 CMD ["/usr/local/bin/python3 manage.py collectstatic --no-input && \
-      /usr/local/bin/uwsgi --http :8000 --wsgi-file fsthub/wsgi.py"]
+      /usr/local/bin/uwsgi --http :80 --wsgi-file fsthub/wsgi.py"]

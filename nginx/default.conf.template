@@ -1,13 +1,13 @@
 server {
     listen 80;
 
-    location /static/ {
+    location /${FSTHUB_URL_PREFIX}static/ {
         alias /var/www/fsthub/static/;
         autoindex off;
     }
 
     location / {
-        proxy_pass http://app:8000;
+        proxy_pass http://app:80;
         proxy_http_version 1.1;
 
         proxy_set_header Host $host;
