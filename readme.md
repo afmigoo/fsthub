@@ -12,6 +12,8 @@ docker compose up -d
 ```
 The web app should be available now at http://localhost:8000
 ### Without Docker
+The app requires python>=3.10  
+
 To run the app without docker, first, install all the python dependencies:
 > Note that this example does not include any virtual environment handling instructions. The command below will install all python dependencies at global scope which is not recommended!
 ```shell
