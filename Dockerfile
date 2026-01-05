@@ -4,7 +4,7 @@ FROM python:${PY_VER}-slim-bookworm
 WORKDIR /fsthub
 
 RUN apt-get update -y && apt-get upgrade -y
-RUN apt-get install -y hfst gcc
+RUN apt-get install -y hfst gcc make
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt

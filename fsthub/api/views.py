@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from rest_framework import status
 from django.conf import settings
 
-from hfst_adaptor.call import call_hfst, call_metadata_extractor
+from hfst_adaptor.call import call_hfst, call_metadata_extractor, call_example_generator
 from hfst_adaptor.parse import parse_metadata
 from hfst_adaptor.exceptions import HfstException
 from project_reader import get_projects, get_all_fsts, get_fsts
@@ -51,11 +51,11 @@ class ProjectViewSet(viewsets.ViewSet):
         return Response({
             'results': [{'name': p} for p in transducers]
         })
-    
+
 class ProjectMetadataViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = ProjectMetadata.objects.all()
     serializer_class = ProjectSerializer
-    
+
 # Transducers
 class TransducerViewSet(viewsets.ViewSet): 
     @method_decorator(cache_page(settings.CACHE_TTL))
@@ -64,7 +64,7 @@ class TransducerViewSet(viewsets.ViewSet):
         return Response({
             'results': [{'name': p} for p in present_fst]
         })
-       
+
     @action(methods=['GET'], detail=False, url_path='filter', url_name='filter')
     @method_decorator(cache_page(settings.CACHE_TTL))
     def filter(self, request, format=None):
@@ -126,6 +126,24 @@ class TransducerViewSet(viewsets.ViewSet):
             )
             parsed = parse_metadata(output)
             return Response({'metadata': parsed})
+        except HfstException as e:
+            return Response({
+                'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
+            }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+    @action(methods=['GET'], detail=False, url_path='example', url_name='example',
+            throttle_classes=[FstBurstThrottle, FstSustainedThrottle])
+    @method_decorator(cache_page(settings.CACHE_TTL))
+    def example(self, request, format=None):
+        serializer = FstRequest(data=request.query_params)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            output = call_example_generator(
+                settings.HFST_CONTENT_ROOT / serializer.data['hfst_file'],
+            )
+            parsed = parse_metadata(output)
+            return Response({'example': parsed})
         except HfstException as e:
             return Response({
                 'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
