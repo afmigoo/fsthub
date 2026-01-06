@@ -61,12 +61,22 @@
     </div>
 </div>
 <div id="input-output">
-    <label for="fst-input-box">{% translate "FST input" %}</label>
-    <textarea id="fst-input-box"  wrap="off" placeholder="{% translate "Type input here..." %}" rows="5"></textarea>
+    <label for="fst-input-box">
+        <span>{% translate "FST input" %}</span>
+        <span id="fst-example-input-box" hidden="hidden">
+            ({% translate "for_an_example_short" %} "<u id="fst-example-input-str" style="cursor: pointer;"></u>")
+        </span>
+    </label>
+    <textarea id="fst-input-box"  wrap="off" placeholder='{% translate "Type input here..." %}'' rows="5"></textarea>
     <div id="ratelimit-box" hidden="hidden">{% translate "Too many requests! Please wait and try later." %}</div>
     <button id="fst-send">{% translate "Send" %}</button>
-    <label for="fst-output-box">{% translate "FST output" %}</label>
-    <textarea id="fst-output-box" wrap="off" placeholder="{% translate "Output will be here..." %}" rows="5" readonly="readonly"></textarea>
+    <label for="fst-output-box">
+        <span>{% translate "FST output" %}</span>
+        <span id="fst-example-output-box" hidden="hidden">
+            ({% translate "for_an_example_short" %} "<span id="fst-example-output-str"></span>")
+        </span>
+    </label>
+    <textarea id="fst-output-box" wrap="off" placeholder='{% translate "Output will be here..." %}' rows="5" readonly="readonly"></textarea>
 </div>
 {% endblock %}
 
@@ -76,6 +86,7 @@
     const api_fetch_fst_url = window.location.origin + "{% url 'api-transducer-filter' %}";
     const api_fetch_types_url = window.location.origin + "{% url 'api-transducer-type-list' %}";
     const api_fetch_langs_url = window.location.origin + "{% url 'api-transducer-lang-list' %}";
+    const api_example_url = window.location.origin + "{% url 'api-transducer-example' %}";
     const selected_fst = "{{ selected_fst }}";
 </script>
 <script src="{% static 'frontend/js/playground.js' %}"></script>

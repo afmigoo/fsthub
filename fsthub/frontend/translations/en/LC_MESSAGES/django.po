@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-06 10:45+0000\n"
+"POT-Creation-Date: 2026-01-06 13:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,27 +94,32 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:64
+#: fsthub/frontend/templates/playground.html:65
 msgid "FST input"
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:65
+#: fsthub/frontend/templates/playground.html:67
+#: fsthub/frontend/templates/playground.html:76
+msgid "for_an_example_short"
+msgstr "e.g."
+
+#: fsthub/frontend/templates/playground.html:70
 msgid "Type input here..."
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:66
+#: fsthub/frontend/templates/playground.html:71
 msgid "Too many requests! Please wait and try later."
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:67
+#: fsthub/frontend/templates/playground.html:72
 msgid "Send"
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:68
+#: fsthub/frontend/templates/playground.html:74
 msgid "FST output"
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:69
+#: fsthub/frontend/templates/playground.html:79
 msgid "Output will be here..."
 msgstr ""
 
