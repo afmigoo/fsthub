@@ -103,6 +103,7 @@ async function update_results() {
             display_fsts(data['results']);
         });
     console.log('update_results end');
+    await load_example(fst_name_select.value);
 }
 /** Transducer calling logic */
 async function call_fst() {
