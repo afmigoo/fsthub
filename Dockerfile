@@ -1,13 +1,16 @@
 ARG PY_VER=3.14
-FROM python:${PY_VER}-slim-bookworm
+FROM python:${PY_VER}-slim-trixie
 
 WORKDIR /fsthub
 
 RUN apt-get update -y && apt-get upgrade -y
-RUN apt-get install -y hfst gcc make
+RUN apt-get install -y hfst make
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN apt-get install -y gcc \
+      && pip install -r requirements.txt \
+      && apt-get purge -y gcc \
+      && apt-get autoremove -y
 
 COPY fsthub ./
 
