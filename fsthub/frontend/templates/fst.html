@@ -7,7 +7,18 @@
 {% block content %}
 <h3 id="title"></h3>
 <div>
-    <ul id="meta-container"></ul>
+    <h4>{% translate "Metadata" %}</h4>
+    <ul id="meta-container">
+        <li>
+            {% translate "Hasn't loaded yet" %}...
+        </li>
+    </ul>
+    <h5>{% translate "Input/output example" %}</h5>
+    <ul id="example-container">
+        <li>
+            {% translate "Hasn't loaded yet" %}...
+        </li>
+    </ul>
     <a href="{% url 'front_playground' %}{{ transducer_name }}" class="button">
         {% translate "Interact with transducer" %}
     </a>
@@ -17,7 +28,12 @@
 {% block after_body %}
 <script>
     const api_metadata_url = window.location.origin + "{% url 'api-transducer-metadata' %}";
+    const api_example_url = window.location.origin + "{% url 'api-transducer-example' %}";
     const selected_transducer = "{{ transducer_name }}";
+    const translate = {
+        'input': '{% translate "input" %}',
+        'output': '{% translate "output" %}',
+    };
 </script>
 <script src="{% static 'frontend/js/transducer.js' %}"></script>
 {% endblock %}

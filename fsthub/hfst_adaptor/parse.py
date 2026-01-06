@@ -10,6 +10,20 @@ class ParsedItem:
     def __str__(self):
         return f'{self.input_str} -> {"/".join(self.out_variants)}'
 
+@dataclass
+class ExampleItem:
+    inp: str
+    out: str
+
+    def __str__(self):
+        return f'{self.inp} -> {self.out}'
+
+    def asdict(self):
+        return {
+            'input': self.inp,
+            'output': self.out
+        }
+
 def parse_apertium_format(fst_stdout: str) -> List[ParsedItem]:
     items: List[ParsedItem] = []
     # regex: all strings like '^+$' (apertium format) with no nested ^ or $ 
@@ -31,3 +45,7 @@ def parse_metadata(hfst_output: str, lower_keys: bool = False) -> Dict[str, str]
         value = l[semicol_idx + 1:] if semicol_idx + 1 < len(l) else ''
         metadata[key] = value.strip()
     return metadata
+
+def parse_example(hfst_output: str) -> ExampleItem:
+    inp, out = hfst_output.split(':')    
+    return ExampleItem(inp, out)

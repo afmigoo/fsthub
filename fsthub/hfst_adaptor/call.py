@@ -77,7 +77,7 @@ def call_example_generator(hfst_file: Union[Path, str]) -> str:
     stdout, stderr, code = call_command(
         ['hfst-fst2strings',
          '--max-strings', '100',
-         '--cycles', '4',
+         '--cycles', '3',
          injection_filter(hfst_file)]
     )
     if code != 0:

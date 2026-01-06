@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-04 12:40+0000\n"
+"POT-Creation-Date: 2026-01-06 10:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,9 +53,32 @@ msgstr "Фильтр"
 msgid "project"
 msgstr "проект"
 
-#: fsthub/frontend/templates/fst.html:12
+#: fsthub/frontend/templates/fst.html:10
+msgid "Metadata"
+msgstr "Метаданные"
+
+#: fsthub/frontend/templates/fst.html:13 fsthub/frontend/templates/fst.html:19
+#: fsthub/frontend/templates/playground.html:47
+#: fsthub/frontend/templates/playground.html:53
+#: fsthub/frontend/templates/playground.html:59
+msgid "Hasn't loaded yet"
+msgstr "Ещё не загрузилось"
+
+#: fsthub/frontend/templates/fst.html:16
+msgid "Input/output example"
+msgstr "Пример ввода/вывода"
+
+#: fsthub/frontend/templates/fst.html:23
 msgid "Interact with transducer"
 msgstr "Взаимодействовать с трансдьюсером"
+
+#: fsthub/frontend/templates/fst.html:34
+msgid "input"
+msgstr "Ввод"
+
+#: fsthub/frontend/templates/fst.html:35
+msgid "output"
+msgstr "Вывод"
 
 #: fsthub/frontend/templates/index.html:8
 msgid "Placeholder data."
@@ -64,12 +87,6 @@ msgstr "Текст-затычка."
 #: fsthub/frontend/templates/playground.html:45
 msgid "Transducer"
 msgstr "Трансдьюсер"
-
-#: fsthub/frontend/templates/playground.html:47
-#: fsthub/frontend/templates/playground.html:53
-#: fsthub/frontend/templates/playground.html:59
-msgid "Hasn't loaded yet"
-msgstr "Ещё не загрузилось"
 
 #: fsthub/frontend/templates/playground.html:51
 msgid "Type"

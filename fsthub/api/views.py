@@ -6,16 +6,24 @@ from django.utils.decorators import method_decorator
 from rest_framework import status
 from django.conf import settings
 
-from hfst_adaptor.call import call_hfst, call_metadata_extractor, call_example_generator
-from hfst_adaptor.parse import parse_metadata
+from hfst_adaptor.call import (
+    call_hfst, call_metadata_extractor, call_example_generator
+)
+from hfst_adaptor.parse import parse_metadata, parse_example
 from hfst_adaptor.exceptions import HfstException
 from project_reader import get_projects, get_all_fsts, get_fsts
-from .models import (ProjectMetadata,
-                     FstType, FstTypeRelation,
-                     FstLanguage, FstLanguageRelation)
-from .serializers import (FstRequest, TypeSerializer, LanguageSerializer, ProjectSerializer,
-                          FstCallRequestSerializer, FstFilterRequestSerializer, ProjectTransducersRequestSerializer,
-                          TypeRelationFileSerializer, LangRelationFileSerializer)
+from .models import (
+    ProjectMetadata,
+    FstType, FstTypeRelation,
+    FstLanguage, FstLanguageRelation
+)
+from .serializers import (
+    FstRequest, TypeSerializer, LanguageSerializer, ProjectSerializer,
+    FstCallRequestSerializer, FstFilterRequestSerializer, 
+    ProjectTransducersRequestSerializer,
+    TypeRelationFileSerializer, LangRelationFileSerializer
+)
+
 # Pagination
 class DefaultPagination(pagination.PageNumberPagination):
     page_size = 10
@@ -142,8 +150,8 @@ class TransducerViewSet(viewsets.ViewSet):
             output = call_example_generator(
                 settings.HFST_CONTENT_ROOT / serializer.data['hfst_file'],
             )
-            parsed = parse_metadata(output)
-            return Response({'example': parsed})
+            parsed = parse_example(output)
+            return Response({'example': parsed.asdict()})
         except HfstException as e:
             return Response({
                 'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
