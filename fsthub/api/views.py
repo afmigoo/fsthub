@@ -116,7 +116,7 @@ class TransducerViewSet(viewsets.ViewSet):
                 serializer.data['fst_input'].split(),
                 oformat=serializer.data['output_format']
             )
-            return Response({'output': output})
+            return Response({'output': output.strip()})
         except HfstException as e:
             return Response({
                 'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
