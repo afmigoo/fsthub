@@ -17,7 +17,7 @@ class TestClientPingViews(UnitTestCase):
         href = f'{self.url_prefix}{path}'
         resp = self.client.get(href)
         self.assertEqual(resp.status_code, 200, f'{href} - {resp}')
-    def test_ping_all(self):
+    def test_front_client_ping_all(self):
         self.ping_page('')
         self.ping_page('playground')
         self.ping_page('projects')
@@ -30,14 +30,14 @@ class TestClientLangLocale(UnitTestCase):
         self.url_prefix = '/' + self.url_prefix
         self.client = Client()
 
-    def test_ping_index_en(self):
+    def test_front_client_ping_index_en(self):
         href = f'{self.url_prefix}'
         resp = self.client.get(href, headers={
             'Accept-Language': 'en-US,en;q=0.5'
         })
         html = resp.content.decode()
         self.assertIn(f'<a href="{self.url_prefix}">Home</a>', html)
-    def test_ping_index_ru(self):
+    def test_front_client_ping_index_ru(self):
         href = f'{self.url_prefix}'
         resp = self.client.get(href, headers={
             'Accept-Language': 'ru-RU,ru;q=0.5'

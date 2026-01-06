@@ -23,7 +23,7 @@ class TestRequestsPingViews(LiveServerTestCase):
         url = f'{self.live_server_url}{self.url_prefix}{path}'
         code, resp = get_html(url)
         self.assertEqual(code, 200, f'{url} - {resp}')
-    def test_ping_all(self):
+    def test_front_requests_ping_all(self):
         self.ping_page('')
         self.ping_page('playground')
         self.ping_page('projects')
@@ -35,13 +35,13 @@ class TestRequestsLangLocale(LiveServerTestCase):
         self.url_prefix = '' if self.url_prefix is None else self.url_prefix
         self.url_prefix = '/' + self.url_prefix
 
-    def test_ping_index_en(self):
+    def test_front_requests_ping_index_en(self):
         url = f'{self.live_server_url}{self.url_prefix}'
         _, html = get_html(url, headers={
             'Accept-Language': 'en-US,en;q=0.5'
         })
         self.assertIn(f'<a href="{self.url_prefix}">Home</a>', html)
-    def test_ping_index_ru(self):
+    def test_front_requests_ping_index_ru(self):
         url = f'{self.live_server_url}{self.url_prefix}'
         _, html = get_html(url, headers={
             'Accept-Language': 'ru-RU,ru;q=0.5'

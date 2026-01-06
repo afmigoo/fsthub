@@ -28,7 +28,7 @@ class TestPRViews(TestCase):
             f = d / fst_name
             f.touch()
 
-    def test_put_single(self):
+    def test_reader_put_single(self):
         p_count = len(get_projects())
         t_count = len(get_all_fsts())
         self.assertEqual(p_count, 0)
@@ -42,7 +42,7 @@ class TestPRViews(TestCase):
         self.assertEqual(p_count, 1)
         self.assertEqual(t_count, 100)
     
-    def test_put_many(self):
+    def test_reader_put_many(self):
         Np, Nfst = 1_000, 10
         p_count = len(get_projects())
         t_count = len(get_all_fsts())
@@ -62,7 +62,7 @@ class TestPRViews(TestCase):
         for pref in prefixes:
             self.assertTrue(dir_exists(str(pref)))
             
-    def test_put_many_delete_many(self):
+    def test_reader_put_many_delete_many(self):
         Np, Nfst = 100, 20
         p_count = len(get_projects())
         t_count = len(get_all_fsts())
@@ -95,7 +95,7 @@ class TestPRViews(TestCase):
         self.assertEqual(p_count, 0)
         self.assertEqual(t_count, 0)
 
-    def test_all_exist(self):
+    def test_reader_all_exist(self):
         sleep(0.01)
         Np = 3
         Nfst = 3

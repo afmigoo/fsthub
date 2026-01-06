@@ -30,7 +30,7 @@ class TestHfstCompilable(TestCase):
     def tearDown(self):
         shutil.rmtree(self.test_root)
 
-    def test_hfst_binary_compilation_ability(self):
+    def test_adaptor_binary_compilation_ability(self):
         result = subprocess.run(
             ["make"],
             cwd=self.test_root,
@@ -75,7 +75,7 @@ class TestHfstCalls(TestCase):
     def tearDown(self):
         shutil.rmtree(self.test_root)
 
-    def test_hfst_proc(self):
+    def test_adaptor_hfst_proc(self):
         for fmt, exp_out in self.expected_proc_out.items():
             real_out = call_hfst_proc(
                 self.test_hfst,
@@ -86,7 +86,7 @@ class TestHfstCalls(TestCase):
                 f'Hfst returned unexpected output ({fmt}):\n{real_out}\nexpected:\n{exp_out}'
             )
 
-    def test_hfst_lookup(self):
+    def test_adaptor_hfst_lookup(self):
         for fmt, exp_out in self.expected_lookup_out.items():
             real_out = call_hfst_lookup(
                 self.test_hfst,
@@ -97,7 +97,7 @@ class TestHfstCalls(TestCase):
                 f'Hfst returned unexpected output ({fmt}):\n{real_out}\nexpected:\n{exp_out}'
             )
 
-    def test_hfst_call(self):
+    def test_adaptor_hfst_call(self):
         for fmt, exp_out in self.expected_proc_out.items():
             real_out = call_hfst(
                 self.test_hfst,
@@ -108,7 +108,7 @@ class TestHfstCalls(TestCase):
                 f'Hfst returned unexpected output ({fmt}):\n{real_out}\nexpected:\n{exp_out}'
             )
 
-    def test_hfst_gen_example(self):
+    def test_adaptor_hfst_gen_example(self):
         exp_out = 'ping:pong'
         for _ in range(20):
             real_out = call_example_generator(
@@ -119,7 +119,7 @@ class TestHfstCalls(TestCase):
                 f'Hfst example generator returned unexpected output:\n{real_out}\nexpected:\n{exp_out}'
             )
 
-    def test_hfst_meta_extraction(self):
+    def test_adaptor_hfst_meta_extraction(self):
         exp_lines = [
             'foo: bar',
             'Author: Jane Doe',
