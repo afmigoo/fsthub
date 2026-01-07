@@ -19,7 +19,7 @@ def get_fsts(project: Union[str, Path]) -> List[str]:
         project = Path(project)
     project = settings.HFST_CONTENT_ROOT.joinpath(project)
     fsts = []
-    for f in project.iterdir():
+    for f in project.glob('**/*'):
         if not f.suffix in settings.HFST_FORMATS:
             continue
         fsts.append(str(f.relative_to(settings.HFST_CONTENT_ROOT)))
@@ -28,7 +28,7 @@ def get_fsts(project: Union[str, Path]) -> List[str]:
 def get_all_fsts() -> List[str]:
     fsts = []
     for p in _get_project_paths():
-        for f in p.iterdir():
+        for f in p.glob('**/*'):
             if not f.suffix in settings.HFST_FORMATS:
                 continue
             fsts.append(str(f.relative_to(settings.HFST_CONTENT_ROOT)))

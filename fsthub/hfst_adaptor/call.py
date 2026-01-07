@@ -76,15 +76,14 @@ def call_example_generator(hfst_file: Union[Path, str]) -> str:
     hfst_file = str(hfst_file)
     stdout, stderr, code = call_command(
         ['hfst-fst2strings',
-         '--max-strings', '100',
-         '--cycles', '3',
+         '--max-strings', '10',
          injection_filter(hfst_file)]
     )
     if code != 0:
         raise HfstException(f'hfst-fst2strings: {stdout.strip()} {hfst_file} code: {code}')
     examples = [x for x in stdout.split('\n') if x]
     return choice(examples)
-    
+
 @validate_file_existance
 def call_metadata_extractor(hfst_file: Union[Path, str]) -> str:
     hfst_file = str(hfst_file)
