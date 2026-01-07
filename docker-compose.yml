@@ -6,7 +6,8 @@ services:
   app:
     image: ghcr.io/afmigoo/fsthub:v0.3.1-python3.14
     container_name: fsthub_django
-    build: .
+    build:
+      target: app
     environment:
       PUID: ${CONTAINER_PUID}
       GUID: ${CONTAINER_GUID}
@@ -40,3 +41,10 @@ services:
     volumes:
       - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ./static:/var/www/fsthub/static:ro
+
+  builder:
+    profiles:
+      - donotstart
+    image: ghcr.io/afmigoo/hfst-builder:v1-python3.14
+    build:
+      target: builder

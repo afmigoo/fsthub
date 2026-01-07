@@ -29,7 +29,9 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t $IMAGE_NAME_VER --build-arg PY_VER=${{ matrix.python-version }} .
+        docker build -t $IMAGE_NAME_VER \
+                     --build-arg PY_VER=${{ matrix.python-version }} \
+                     --target app .
         docker tag $IMAGE_NAME_VER $IMAGE_NAME_LATEST
 
     - name: Run tests inside Docker
