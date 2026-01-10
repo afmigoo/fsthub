@@ -27,7 +27,6 @@ class TestRequestsPingViews(LiveServerTestCase):
         self.ping_page('')
         self.ping_page('playground')
         self.ping_page('projects')
-        self.ping_page('about')
 
 class TestRequestsLangLocale(LiveServerTestCase):
     def setUp(self):

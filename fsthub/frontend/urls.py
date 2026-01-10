@@ -12,6 +12,5 @@ urlpatterns = [
     path("playground", views.playground, name="front_playground"),
     path("playground/", views.playground, name="front_playground"),
     path("playground/<path:fst>", views.playground, name="front_playground"),
-    path("about", views.about, name="front_about"),
     path("i18n", include("django.conf.urls.i18n")),
 ]

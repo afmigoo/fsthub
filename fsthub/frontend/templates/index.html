@@ -5,16 +5,24 @@
 
 {% block content %}
 <h3>FSThub</h3>
-<p style="text-align-last: justify;">
+<p>
 {% blocktrans with hfst_href="https://hfst.github.io/" trimmed %}
 FSThub is a tool that allows to host and interact with <a href="{{ hfst_href }}">HFST</a>
 transducers via a web-interface. Its goal is to reduce the technical barrier for researchers
 working with compiled finite-state transducers.
 {% endblocktrans %}
 </p>
+<h4>{% translate "About" %}</h4>
 <p>
-{% blocktrans with hfst_href="https://hfst.github.io/" trimmed %}
-a
-{% endblocktrans %}
+    {% blocktrans with conlab_url='https://lingconlab.ru/' trimmed %}
+    Development initiated at
+    <a href="{{ conlab_url }}">Linguistic Convergence Laboratory, HSE University</a>
+    {% endblocktrans %}
 </p>
+<h5>{% translate "Technical stack" %}</h5>
+<ul>
+    <li>{% translate "Backend powered by" %} <a href="https://www.djangoproject.com/" target="_blank">Django</a></li>
+    <li>{% translate "Frontend style powered by" %} <a href="https://simplecss.org/" target="_blank">Simple.css</a></li>
+    <li>{% translate "Storage powered by" %} <a href="https://sqlite.org/" target="_blank">Sqlite</a></li>
+</ul>
 {% endblock %}

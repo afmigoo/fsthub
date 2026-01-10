@@ -21,7 +21,6 @@ class TestClientPingViews(UnitTestCase):
         self.ping_page('')
         self.ping_page('playground')
         self.ping_page('projects')
-        self.ping_page('about')
 
 class TestClientLangLocale(UnitTestCase):
     def setUp(self):
