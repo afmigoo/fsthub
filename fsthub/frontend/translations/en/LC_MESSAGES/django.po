@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 14:24+0000\n"
+"POT-Creation-Date: 2026-01-10 15:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: fsthub/frontend/templates/about.html:7
-#: fsthub/frontend/templates/base.html:55
+#: fsthub/frontend/templates/base.html:66
 msgid "About"
 msgstr ""
 
@@ -46,17 +46,21 @@ msgstr ""
 msgid "Storage powered by"
 msgstr ""
 
-#: fsthub/frontend/templates/base.html:52
+#: fsthub/frontend/templates/base.html:63
 msgid "Home"
 msgstr ""
 
-#: fsthub/frontend/templates/base.html:53
+#: fsthub/frontend/templates/base.html:64
 msgid "Playground"
 msgstr "Interact"
 
-#: fsthub/frontend/templates/base.html:54
+#: fsthub/frontend/templates/base.html:65
 msgid "Browse"
-msgstr "Browse FST"
+msgstr "Browse"
+
+#: fsthub/frontend/templates/base.html:67
+msgid "Admin"
+msgstr ""
 
 #: fsthub/frontend/templates/browse_projects.html:5
 msgid "projects"

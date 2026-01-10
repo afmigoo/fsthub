@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 14:24+0000\n"
+"POT-Creation-Date: 2026-01-10 15:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,7 +21,7 @@ msgstr ""
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: fsthub/frontend/templates/about.html:7
-#: fsthub/frontend/templates/base.html:55
+#: fsthub/frontend/templates/base.html:66
 msgid "About"
 msgstr "О сайте"
 
@@ -50,17 +50,21 @@ msgstr "Фронтенд оформлен с помощью"
 msgid "Storage powered by"
 msgstr "Данные хранятся в"
 
-#: fsthub/frontend/templates/base.html:52
+#: fsthub/frontend/templates/base.html:63
 msgid "Home"
 msgstr "Главная"
 
-#: fsthub/frontend/templates/base.html:53
+#: fsthub/frontend/templates/base.html:64
 msgid "Playground"
 msgstr "Интерактив"
 
-#: fsthub/frontend/templates/base.html:54
+#: fsthub/frontend/templates/base.html:65
 msgid "Browse"
-msgstr "Каталог FST"
+msgstr "Каталог"
+
+#: fsthub/frontend/templates/base.html:67
+msgid "Admin"
+msgstr "Админ"
 
 #: fsthub/frontend/templates/browse_projects.html:5
 msgid "projects"
@@ -158,10 +162,10 @@ msgid ""
 "'%(fst_output_translated)s' box."
 msgstr ""
 "Здесь вы можете выбрать, какой трансдьюсер будет использоваться. Список "
-"доступных вариантов в поле определяются фильтрами '%(select_type_translated)s' и "
-"'%(select_lang_translated)s'. Текст из поля '%(fst_input_translated)s' будет "
-"передан выбранному трансдьюсеру на ввод, и его вывод будет отображён в поле "
-"'%(fst_output_translated)s'."
+"доступных вариантов в поле определяются фильтрами "
+"'%(select_type_translated)s' и '%(select_lang_translated)s'. Текст из поля "
+"'%(fst_input_translated)s' будет передан выбранному трансдьюсеру на ввод, и "
+"его вывод будет отображён в поле '%(fst_output_translated)s'."
 
 #: fsthub/frontend/templates/playground.html:72
 #, python-format
@@ -188,9 +192,9 @@ msgid ""
 "example below. You can just click an example and it will auto-fill the "
 "'%(fst_input_translated)s' box."
 msgstr ""
-"Введите ваш текст на ввод трансдьюсеру здесь. Если вы не уверены, что сюда ввести, "
-"можете использовать пример, указанный ниже. Можно кликнуть по примеру, и он "
-"автоматически будет вставлен в поле '%(fst_input_translated)s'."
+"Введите ваш текст на ввод трансдьюсеру здесь. Если вы не уверены, что сюда "
+"ввести, можете использовать пример, указанный ниже. Можно кликнуть по "
+"примеру, и он автоматически будет вставлен в поле '%(fst_input_translated)s'."
 
 #: fsthub/frontend/templates/playground.html:108
 #: fsthub/frontend/templates/playground.html:135
@@ -212,8 +216,9 @@ msgid ""
 "box. This will execute the transducer on the backend and return you its "
 "output."
 msgstr ""
-"Нажмите эту кнопку после того как вы ввели что-нибудь в поле '%(fst_input_translated)s'. "
-"Это запустит трансдьюсер на сервере с вашим вводом и выдаст вам его вывод."
+"Нажмите эту кнопку после того как вы ввели что-нибудь в поле "
+"'%(fst_input_translated)s'. Это запустит трансдьюсер на сервере с вашим "
+"вводом и выдаст вам его вывод."
 
 #: fsthub/frontend/templates/playground.html:129
 #, python-format
@@ -221,8 +226,9 @@ msgid ""
 "Your transducer output will be here after you enter anything in "
 "'%(fst_input_translated)s' box and press '%(send_button_translated)s' button."
 msgstr ""
-"Ваш вывод трансдьюсера будет в этом поле, после того, как вы введёте что-нибудь "
-"в поле '%(fst_input_translated)s' и нажмёте кнопку '%(send_button_translated)s'."
+"Ваш вывод трансдьюсера будет в этом поле, после того, как вы введёте что-"
+"нибудь в поле '%(fst_input_translated)s' и нажмёте кнопку "
+"'%(send_button_translated)s'."
 
 #: fsthub/frontend/templates/playground.html:138
 msgid "Output will be here..."
