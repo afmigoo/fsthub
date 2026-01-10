@@ -1,7 +1,20 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}FSThub - about{% endblock %}
 
 {% block content %}
-<p>About page: TODO</p>
+<h3>{% translate "About" %}</h3>
+<p>
+    {% blocktrans with conlab_url='https://lingconlab.ru/' trimmed %}
+    Development initiated at
+    <a href="{{ conlab_url }}">Linguistic Convergence Laboratory, HSE University</a>
+    {% endblocktrans %}
+</p>
+<h3>{% translate "Technical stack" %}</h3>
+<ul>
+    <li>{% translate "Backend powered by" %} <a href="https://www.djangoproject.com/" target="_blank">Django</a></li>
+    <li>{% translate "Frontend style powered by" %} <a href="https://simplecss.org/" target="_blank">Simple.css</a></li>
+    <li>{% translate "Storage powered by" %} <a href="https://sqlite.org/" target="_blank">Sqlite</a></li>
+</ul>
 {% endblock %}
