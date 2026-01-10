@@ -4,7 +4,7 @@ networks:
 
 services:
   app:
-    image: ghcr.io/afmigoo/fsthub:v0.4.0-python3.14
+    image: ghcr.io/afmigoo/fsthub:v0.4.1-python3.14
     container_name: fsthub_django
     build:
       target: app
