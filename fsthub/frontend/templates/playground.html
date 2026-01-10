@@ -21,9 +21,12 @@
         #control-panel {
             display: inline-block;
         }
-        .control-50, .control-25 {
+        .control-big, .control-small {
             display: block;
             width: 100%;
+        }
+        .control-big {
+            padding-right: 0;
         }
     }
     #input-output {
@@ -41,39 +44,95 @@
 {% block content %}
 <div id="error-box"></div>
 <div id="control-panel">
+    {% translate "FST input" as fst_input_translated %}
+    {% translate "FST output" as fst_output_translated %}
+    {% translate "Transducer" as fst_select_translated %}
+    {% translate "Type" as select_type_translated %}
+    {% translate "Language" as select_lang_translated %}
+    {% translate "Send" as send_button_translated %}
     <div class="control-big">
-        <label for="fst-name">{% translate "Transducer" %}</label>
+        <label for="fst-name">
+            {{ fst_select_translated }}
+            {% blocktrans trimmed asvar select_fst_help_text %}
+            Here you can chose which transducer will be used.
+            Available options in this select are dictated by the
+            '{{ select_type_translated }}' and '{{ select_lang_translated }}' filters.
+            Text from '{{ fst_input_translated }}' box will be fed to the chosen
+            transducer and its output will be displayed in '{{ fst_output_translated }}' box.
+            {% endblocktrans %}
+            <a title="{{ select_fst_help_text }}" style="cursor: help;">ⓘ</a>
+        </label>
         <select id="fst-name">
             <option value="value1" selected disabled>{% translate "Hasn't loaded yet" %}</option>
         </select>
     </div>
     <div class="control-small">
-        <label for="fst-type">{% translate "Type" %}</label>
+        <label for="fst-type">
+            {{ select_type_translated }}
+            {% blocktrans trimmed asvar select_type_help_text %}
+            Here you can choose which types of transducers will be listed
+            in the '{{ fst_select_translated }}' select box.
+            {% endblocktrans %}
+            <a title="{{ select_type_help_text }}" style="cursor: help;">ⓘ</a>
+        </label>
         <select id="fst-type">
             <option value="all" selected disabled>{% translate "Hasn't loaded yet" %}</option>
         </select>
     </div>
     <div class="control-small">
-        <label for="fst-lang">{% translate "Language" %}</label>
+        <label for="fst-lang">
+            {{ select_lang_translated }}
+            {% blocktrans trimmed asvar select_lang_help_text %}
+            Here you can set a specific language, so the '{{ fst_select_translated }}'
+            select box contains only transducers that work with seleted language.
+            {% endblocktrans %}
+            <a title="{{ select_lang_help_text }}" style="cursor: help;">ⓘ</a>
+        </label>
         <select id="fst-lang">
             <option value="all" selected disabled>{% translate "Hasn't loaded yet" %}</option>
         </select>
     </div>
 </div>
 <div id="input-output">
+    <!-- Input box -->
     <label for="fst-input-box">
-        <span>{% translate "FST input" %}</span>
-        <span id="fst-example-input-box" hidden="hidden">
-            ({% translate "for_an_example_short" %}, "<u id="fst-example-input-str" style="cursor: pointer;"></u>")
-        </span>
+        {{ fst_input_translated }}
+        {% blocktrans trimmed asvar fst_input_box_help_text %}
+        Write your transducer input here. If you are not sure what to type,
+        use the example below. You can just click an example and it will
+        auto-fill the '{{ fst_input_translated }}' box.
+        {% endblocktrans %}
+        <a title="{{ fst_input_box_help_text }}" style="cursor: help;">ⓘ</a>
     </label>
+    <span id="fst-example-input-box" hidden="hidden">
+        <i>({% translate "e.g." %}, "<u id="fst-example-input-str" style="cursor: pointer;" tabindex=0></u>")</i>
+    </span>
     <textarea id="fst-input-box"  wrap="off" placeholder='{% translate "Type input here..." %}'' rows="5"></textarea>
+    <!-- Ratelimit message -->
     <div id="ratelimit-box" hidden="hidden">{% translate "Too many requests! Please wait and try later." %}</div>
-    <button id="fst-send">{% translate "Send" %}</button>
+    <!-- Send button -->
+    <div style="display: inline-flex; align-items: center; gap: 0.5em;">
+        <button id="fst-send">
+            {{ send_button_translated }}
+        </button>
+        <label for="fst-send">
+            {% blocktrans trimmed asvar send_button_help_text %}
+            Press this button after typing anything to the '{{ fst_input_translated }}' box.
+            This will execute the transducer on the backend and return you its output.
+            {% endblocktrans %}
+            <a title="{{ send_button_help_text }}" style="cursor: help;">ⓘ</a>
+        </label>
+    </div>
+    <!-- Output box -->
     <label for="fst-output-box">
-        <span>{% translate "FST output" %}</span>
+        {{ fst_output_translated }}
+        {% blocktrans trimmed asvar fst_output_box_help_text %}
+        Your transducer output will be here after you enter anything in
+        '{{ fst_input_translated }}' box and press '{{ send_button_translated }}' button.
+        {% endblocktrans %}
+        <a title="{{ fst_output_box_help_text }}" style="cursor: help;">ⓘ</a>
         <span id="fst-example-output-box" hidden="hidden">
-            ({% translate "for_an_example_short" %}, "<span id="fst-example-output-str"></span>")
+            ({% translate "e.g." %}, "<span id="fst-example-output-str"></span>")
         </span>
     </label>
     <textarea id="fst-output-box" wrap="off" placeholder='{% translate "Output will be here..." %}' rows="5" readonly="readonly"></textarea>

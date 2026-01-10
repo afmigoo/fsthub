@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-06 13:19+0000\n"
+"POT-Creation-Date: 2026-01-10 14:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,36 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: fsthub/frontend/templates/about.html:7
+#: fsthub/frontend/templates/base.html:55
+msgid "About"
+msgstr "О сайте"
+
+#: fsthub/frontend/templates/about.html:9
+#, python-format
+msgid ""
+"Development initiated at <a href=\"%(conlab_url)s\">Linguistic Convergence "
+"Laboratory, HSE University</a>"
+msgstr ""
+"Разработка инициирована в <a href=\"%(conlab_url)s\">Международной "
+"лаборатории языковой конвергенции, НИУ ВШЭ</a>"
+
+#: fsthub/frontend/templates/about.html:14
+msgid "Technical stack"
+msgstr "Используемые технологии"
+
+#: fsthub/frontend/templates/about.html:16
+msgid "Backend powered by"
+msgstr "Бэкенд работает на"
+
+#: fsthub/frontend/templates/about.html:17
+msgid "Frontend style powered by"
+msgstr "Фронтенд оформлен с помощью"
+
+#: fsthub/frontend/templates/about.html:18
+msgid "Storage powered by"
+msgstr "Данные хранятся в"
 
 #: fsthub/frontend/templates/base.html:52
 msgid "Home"
@@ -31,10 +61,6 @@ msgstr "Интерактив"
 #: fsthub/frontend/templates/base.html:54
 msgid "Browse"
 msgstr "Каталог FST"
-
-#: fsthub/frontend/templates/base.html:55
-msgid "About"
-msgstr "О сайте"
 
 #: fsthub/frontend/templates/browse_projects.html:5
 msgid "projects"
@@ -58,9 +84,9 @@ msgid "Metadata"
 msgstr "Метаданные"
 
 #: fsthub/frontend/templates/fst.html:13 fsthub/frontend/templates/fst.html:19
-#: fsthub/frontend/templates/playground.html:47
-#: fsthub/frontend/templates/playground.html:53
-#: fsthub/frontend/templates/playground.html:59
+#: fsthub/frontend/templates/playground.html:66
+#: fsthub/frontend/templates/playground.html:79
+#: fsthub/frontend/templates/playground.html:92
 msgid "Hasn't loaded yet"
 msgstr "Ещё не загрузилось"
 
@@ -80,48 +106,125 @@ msgstr "Ввод"
 msgid "output"
 msgstr "Вывод"
 
-#: fsthub/frontend/templates/index.html:8
-msgid "Placeholder data."
-msgstr "Текст-затычка."
+#: fsthub/frontend/templates/index.html:9
+#, python-format
+msgid ""
+"FSThub is a tool that allows to host and interact with <a "
+"href=\"%(hfst_href)s\">HFST</a> transducers via a web-interface. Its goal is "
+"to reduce the technical barrier for researchers working with compiled finite-"
+"state transducers."
+msgstr ""
+"FSThub — это инструмент который позволяет размещать <a "
+"href=\"%(hfst_href)s\">HFST</a> трансдьюсеры (≈конечные автоматы) в сети "
+"Интернет и взаимодействовать с ними через веб-интерфейс. Цель этого проекта "
+"— снизить технический порог для исследователей, работающих со "
+"скомпилированными трансдьюсерами."
 
-#: fsthub/frontend/templates/playground.html:45
-msgid "Transducer"
-msgstr "Трансдьюсер"
+#: fsthub/frontend/templates/index.html:16
+msgid "a"
+msgstr ""
 
-#: fsthub/frontend/templates/playground.html:51
-msgid "Type"
-msgstr "Тип"
-
-#: fsthub/frontend/templates/playground.html:57
-msgid "Language"
-msgstr "Язык"
-
-#: fsthub/frontend/templates/playground.html:65
+#: fsthub/frontend/templates/playground.html:47
 msgid "FST input"
 msgstr "FST ввод"
 
-#: fsthub/frontend/templates/playground.html:67
-#: fsthub/frontend/templates/playground.html:76
-msgid "for_an_example_short"
-msgstr "напр."
-
-#: fsthub/frontend/templates/playground.html:70
-msgid "Type input here..."
-msgstr "Напечатайте ввод здесь..."
-
-#: fsthub/frontend/templates/playground.html:71
-msgid "Too many requests! Please wait and try later."
-msgstr "Слишком много запросов! Подождите и попробуйте позже."
-
-#: fsthub/frontend/templates/playground.html:72
-msgid "Send"
-msgstr "Отправить"
-
-#: fsthub/frontend/templates/playground.html:74
+#: fsthub/frontend/templates/playground.html:48
 msgid "FST output"
 msgstr "FST вывод"
 
-#: fsthub/frontend/templates/playground.html:79
+#: fsthub/frontend/templates/playground.html:49
+msgid "Transducer"
+msgstr "Трансдьюсер"
+
+#: fsthub/frontend/templates/playground.html:50
+msgid "Type"
+msgstr "Тип"
+
+#: fsthub/frontend/templates/playground.html:51
+msgid "Language"
+msgstr "Язык"
+
+#: fsthub/frontend/templates/playground.html:52
+msgid "Send"
+msgstr "Отправить"
+
+#: fsthub/frontend/templates/playground.html:56
+#, python-format
+msgid ""
+"Here you can chose which transducer will be used. Available options in this "
+"select are dictated by the '%(select_type_translated)s' and "
+"'%(select_lang_translated)s' filters. Text from '%(fst_input_translated)s' "
+"box will be fed to the chosen transducer and its output will be displayed in "
+"'%(fst_output_translated)s' box."
+msgstr ""
+"Здесь вы можете выбрать, какой трансдьюсер будет использоваться. Список "
+"доступных вариантов в поле определяются фильтрами '%(select_type_translated)s' и "
+"'%(select_lang_translated)s'. Текст из поля '%(fst_input_translated)s' будет "
+"передан выбранному трансдьюсеру на ввод, и его вывод будет отображён в поле "
+"'%(fst_output_translated)s'."
+
+#: fsthub/frontend/templates/playground.html:72
+#, python-format
+msgid ""
+"Here you can choose which types of transducers will be listed in the "
+"'%(fst_select_translated)s' select box."
+msgstr ""
+"Здесь вы можете выбрать, какого типа трансдьюсеры будут отображены в списке "
+"'%(fst_select_translated)s'."
+
+#: fsthub/frontend/templates/playground.html:85
+#, python-format
+msgid ""
+"Here you can set a specific language, so the '%(fst_select_translated)s' "
+"select box contains only transducers that work with seleted language."
+msgstr ""
+"Здесь можно задать язык, и в поле '%(fst_select_translated)s' будут "
+"перечислены только трансдьюсеры, работающие с выбранным языком."
+
+#: fsthub/frontend/templates/playground.html:100
+#, python-format
+msgid ""
+"Write your transducer input here. If you are not sure what to type, use the "
+"example below. You can just click an example and it will auto-fill the "
+"'%(fst_input_translated)s' box."
+msgstr ""
+"Введите ваш текст на ввод трансдьюсеру здесь. Если вы не уверены, что сюда ввести, "
+"можете использовать пример, указанный ниже. Можно кликнуть по примеру, и он "
+"автоматически будет вставлен в поле '%(fst_input_translated)s'."
+
+#: fsthub/frontend/templates/playground.html:108
+#: fsthub/frontend/templates/playground.html:135
+msgid "e.g."
+msgstr "напр."
+
+#: fsthub/frontend/templates/playground.html:110
+msgid "Type input here..."
+msgstr "Напечатайте ввод здесь..."
+
+#: fsthub/frontend/templates/playground.html:112
+msgid "Too many requests! Please wait and try later."
+msgstr "Слишком много запросов! Подождите и попробуйте позже."
+
+#: fsthub/frontend/templates/playground.html:119
+#, python-format
+msgid ""
+"Press this button after typing anything to the '%(fst_input_translated)s' "
+"box. This will execute the transducer on the backend and return you its "
+"output."
+msgstr ""
+"Нажмите эту кнопку после того как вы ввели что-нибудь в поле '%(fst_input_translated)s'. "
+"Это запустит трансдьюсер на сервере с вашим вводом и выдаст вам его вывод."
+
+#: fsthub/frontend/templates/playground.html:129
+#, python-format
+msgid ""
+"Your transducer output will be here after you enter anything in "
+"'%(fst_input_translated)s' box and press '%(send_button_translated)s' button."
+msgstr ""
+"Ваш вывод трансдьюсера будет в этом поле, после того, как вы введёте что-нибудь "
+"в поле '%(fst_input_translated)s' и нажмёте кнопку '%(send_button_translated)s'."
+
+#: fsthub/frontend/templates/playground.html:138
 msgid "Output will be here..."
 msgstr "Вывод будет здесь..."
 
@@ -1364,6 +1467,30 @@ msgstr ""
 #: venv/lib/python3.13/site-packages/django/views/templates/default_urlconf.html:236
 msgid "Connect, get help, or contribute"
 msgstr ""
+
+#~ msgid "Development initiated at"
+#~ msgstr "Разработка инициирована в"
+
+#~ msgid ""
+#~ "This is a long paragraph explaining how the system works. It may span "
+#~ "multiple lines in the template. It will still be a single translation "
+#~ "entry."
+#~ msgstr ""
+#~ "Это длинный параграф показывающий как работает система. Он может занимать "
+#~ "несколько строк в шаблоне. Но он всё ещё будет считаться одной единицей "
+#~ "перевода. "
+
+#~ msgid ""
+#~ "This is a second long paragraph explaining how the system works. It may "
+#~ "also span multiple lines in the template. It will still be a single "
+#~ "translation entry too."
+#~ msgstr ""
+#~ "Это второй длинный параграф показывающий как работает система. Он также "
+#~ "может занимать несколько строк в шаблоне. Но он тоже всё ещё будет "
+#~ "считаться одной единицей перевода. "
+
+#~ msgid "Placeholder data."
+#~ msgstr "Текст-затычка."
 
 #~ msgid "FST catalog"
 #~ msgstr "Каталог FST"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-06 13:19+0000\n"
+"POT-Creation-Date: 2026-01-10 14:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,34 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: fsthub/frontend/templates/about.html:7
+#: fsthub/frontend/templates/base.html:55
+msgid "About"
+msgstr ""
+
+#: fsthub/frontend/templates/about.html:9
+#, python-format
+msgid ""
+"Development initiated at <a href=\"%(conlab_url)s\">Linguistic Convergence "
+"Laboratory, HSE University</a>"
+msgstr ""
+
+#: fsthub/frontend/templates/about.html:14
+msgid "Technical stack"
+msgstr ""
+
+#: fsthub/frontend/templates/about.html:16
+msgid "Backend powered by"
+msgstr ""
+
+#: fsthub/frontend/templates/about.html:17
+msgid "Frontend style powered by"
+msgstr ""
+
+#: fsthub/frontend/templates/about.html:18
+msgid "Storage powered by"
+msgstr ""
 
 #: fsthub/frontend/templates/base.html:52
 msgid "Home"
@@ -29,10 +57,6 @@ msgstr "Interact"
 #: fsthub/frontend/templates/base.html:54
 msgid "Browse"
 msgstr "Browse FST"
-
-#: fsthub/frontend/templates/base.html:55
-msgid "About"
-msgstr ""
 
 #: fsthub/frontend/templates/browse_projects.html:5
 msgid "projects"
@@ -56,9 +80,9 @@ msgid "Metadata"
 msgstr ""
 
 #: fsthub/frontend/templates/fst.html:13 fsthub/frontend/templates/fst.html:19
-#: fsthub/frontend/templates/playground.html:47
-#: fsthub/frontend/templates/playground.html:53
-#: fsthub/frontend/templates/playground.html:59
+#: fsthub/frontend/templates/playground.html:66
+#: fsthub/frontend/templates/playground.html:79
+#: fsthub/frontend/templates/playground.html:92
 msgid "Hasn't loaded yet"
 msgstr ""
 
@@ -78,48 +102,104 @@ msgstr "Input"
 msgid "output"
 msgstr "Output"
 
-#: fsthub/frontend/templates/index.html:8
-msgid "Placeholder data."
+#: fsthub/frontend/templates/index.html:9
+#, python-format
+msgid ""
+"FSThub is a tool that allows to host and interact with <a "
+"href=\"%(hfst_href)s\">HFST</a> transducers via a web-interface. Its goal is "
+"to reduce the technical barrier for researchers working with compiled finite-"
+"state transducers."
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:45
-msgid "Transducer"
+#: fsthub/frontend/templates/index.html:16
+msgid "a"
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:51
-msgid "Type"
-msgstr ""
-
-#: fsthub/frontend/templates/playground.html:57
-msgid "Language"
-msgstr ""
-
-#: fsthub/frontend/templates/playground.html:65
+#: fsthub/frontend/templates/playground.html:47
 msgid "FST input"
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:67
-#: fsthub/frontend/templates/playground.html:76
-msgid "for_an_example_short"
-msgstr "e.g."
-
-#: fsthub/frontend/templates/playground.html:70
-msgid "Type input here..."
-msgstr ""
-
-#: fsthub/frontend/templates/playground.html:71
-msgid "Too many requests! Please wait and try later."
-msgstr ""
-
-#: fsthub/frontend/templates/playground.html:72
-msgid "Send"
-msgstr ""
-
-#: fsthub/frontend/templates/playground.html:74
+#: fsthub/frontend/templates/playground.html:48
 msgid "FST output"
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:79
+#: fsthub/frontend/templates/playground.html:49
+msgid "Transducer"
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:50
+msgid "Type"
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:51
+msgid "Language"
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:52
+msgid "Send"
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:56
+#, python-format
+msgid ""
+"Here you can chose which transducer will be used. Available options in this "
+"select are dictated by the '%(select_type_translated)s' and "
+"'%(select_lang_translated)s' filters. Text from '%(fst_input_translated)s' "
+"box will be fed to the chosen transducer and its output will be displayed in "
+"'%(fst_output_translated)s' box."
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:72
+#, python-format
+msgid ""
+"Here you can choose which types of transducers will be listed in the "
+"'%(fst_select_translated)s' select box."
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:85
+#, python-format
+msgid ""
+"Here you can set a specific language, so the '%(fst_select_translated)s' "
+"select box contains only transducers that work with seleted language."
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:100
+#, python-format
+msgid ""
+"Write your transducer input here. If you are not sure what to type, use the "
+"example below. You can just click an example and it will auto-fill the "
+"'%(fst_input_translated)s' box."
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:108
+#: fsthub/frontend/templates/playground.html:135
+msgid "e.g."
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:110
+msgid "Type input here..."
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:112
+msgid "Too many requests! Please wait and try later."
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:119
+#, python-format
+msgid ""
+"Press this button after typing anything to the '%(fst_input_translated)s' "
+"box. This will execute the transducer on the backend and return you its "
+"output."
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:129
+#, python-format
+msgid ""
+"Your transducer output will be here after you enter anything in "
+"'%(fst_input_translated)s' box and press '%(send_button_translated)s' button."
+msgstr ""
+
+#: fsthub/frontend/templates/playground.html:138
 msgid "Output will be here..."
 msgstr ""
 
@@ -1362,6 +1442,9 @@ msgstr ""
 #: venv/lib/python3.13/site-packages/django/views/templates/default_urlconf.html:236
 msgid "Connect, get help, or contribute"
 msgstr ""
+
+#~ msgid "for_an_example_short"
+#~ msgstr "e.g."
 
 #~ msgid "home_title"
 #~ msgstr "Home"
