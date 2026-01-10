@@ -4,7 +4,17 @@
 {% block title %}FSThub - home{% endblock %}
 
 {% block content %}
-<h3>FST hub</h3>
-<p>{% translate "Placeholder data." %}</p>
-<p></p>
+<h3>FSThub</h3>
+<p style="text-align-last: justify;">
+{% blocktrans with hfst_href="https://hfst.github.io/" trimmed %}
+FSThub is a tool that allows to host and interact with <a href="{{ hfst_href }}">HFST</a>
+transducers via a web-interface. Its goal is to reduce the technical barrier for researchers
+working with compiled finite-state transducers.
+{% endblocktrans %}
+</p>
+<p>
+{% blocktrans with hfst_href="https://hfst.github.io/" trimmed %}
+a
+{% endblocktrans %}
+</p>
 {% endblock %}
