@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 11:15+0000\n"
+"POT-Creation-Date: 2026-01-11 11:27+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -123,6 +123,7 @@ msgid "FST input"
 msgstr ""
 
 #: fsthub/frontend/templates/playground.html:48
+#: fsthub/frontend/templates/playground.html:150
 msgid "FST output"
 msgstr ""
 
@@ -207,12 +208,12 @@ msgid "Output will be here..."
 msgstr ""
 
 #: fsthub/frontend/templates/playground.html:144
-msgid "Export (.txt)"
+msgid "Export as file (.txt)"
 msgstr ""
 
-#: fsthub/frontend/templates/playground.html:158
+#: fsthub/frontend/templates/playground.html:159
 #, python-format
-msgid "%(fst_output_translated)s is empty!"
+msgid "\\'%(fst_output_translated)s\\' is empty!"
 msgstr ""
 
 #: fsthub/frontend/templates/project.html:12

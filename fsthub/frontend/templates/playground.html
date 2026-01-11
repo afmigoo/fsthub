@@ -141,12 +141,13 @@
     <textarea id="fst-output-box" wrap="off" placeholder='{% translate "Output will be here..." %}' rows="5" readonly="readonly"></textarea>
     <!-- Export controls -->
     <span style="display: inline;">
-        <button id="file-export-button">{% translate "Export (.txt)" %}</button>
+        <button id="file-export-button">{% translate "Export as file (.txt)" %}</button>
     </span>
 </div>
 {% endblock %}
 
 {% block after_body %}
+{% translate "FST output" as fst_output_translated %}
 <script>
     const api_call_fst_url = window.location.origin + "{% url 'api-transducer-call' %}";
     const api_fetch_fst_url = window.location.origin + "{% url 'api-transducer-filter' %}";
@@ -155,7 +156,7 @@
     const api_example_url = window.location.origin + "{% url 'api-transducer-example' %}";
     const selected_fst = "{{ selected_fst }}";
     const translations = {
-        'error_export_output_empty': '{% blocktrans %}{{ fst_output_translated }} is empty!{% endblocktrans %}'
+        'error_export_output_empty': '{% blocktrans %}\'{{ fst_output_translated }}\' is empty!{% endblocktrans %}'
     };
 </script>
 <script src="{% static 'frontend/js/playground.js' %}"></script>
