@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 10:42+0000\n"
+"POT-Creation-Date: 2026-01-11 11:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,9 +62,9 @@ msgid "Metadata"
 msgstr "Метаданные"
 
 #: fsthub/frontend/templates/fst.html:13 fsthub/frontend/templates/fst.html:19
-#: fsthub/frontend/templates/playground.html:66
-#: fsthub/frontend/templates/playground.html:79
-#: fsthub/frontend/templates/playground.html:92
+#: fsthub/frontend/templates/playground.html:67
+#: fsthub/frontend/templates/playground.html:81
+#: fsthub/frontend/templates/playground.html:95
 msgid "Hasn't loaded yet"
 msgstr "Ещё не загрузилось"
 
@@ -151,7 +151,7 @@ msgstr "Язык"
 msgid "Send"
 msgstr "Отправить"
 
-#: fsthub/frontend/templates/playground.html:56
+#: fsthub/frontend/templates/playground.html:57
 #, python-format
 msgid ""
 "Here you can chose which transducer will be used. Available options in this "
@@ -166,7 +166,7 @@ msgstr ""
 "'%(fst_input_translated)s' будет передан выбранному трансдьюсеру на ввод, и "
 "его вывод будет отображён в поле '%(fst_output_translated)s'."
 
-#: fsthub/frontend/templates/playground.html:72
+#: fsthub/frontend/templates/playground.html:74
 #, python-format
 msgid ""
 "Here you can choose which types of transducers will be listed in the "
@@ -175,7 +175,7 @@ msgstr ""
 "Здесь вы можете выбрать, какого типа трансдьюсеры будут отображены в списке "
 "'%(fst_select_translated)s'."
 
-#: fsthub/frontend/templates/playground.html:85
+#: fsthub/frontend/templates/playground.html:88
 #, python-format
 msgid ""
 "Here you can set a specific language, so the '%(fst_select_translated)s' "
@@ -184,7 +184,7 @@ msgstr ""
 "Здесь можно задать язык, и в поле '%(fst_select_translated)s' будут "
 "перечислены только трансдьюсеры, работающие с выбранным языком."
 
-#: fsthub/frontend/templates/playground.html:100
+#: fsthub/frontend/templates/playground.html:103
 #, python-format
 msgid ""
 "Write your transducer input here. If you are not sure what to type, use the "
@@ -195,20 +195,20 @@ msgstr ""
 "ввести, можете использовать пример, указанный ниже. Можно кликнуть по "
 "примеру, и он автоматически будет вставлен в поле '%(fst_input_translated)s'."
 
-#: fsthub/frontend/templates/playground.html:108
-#: fsthub/frontend/templates/playground.html:135
+#: fsthub/frontend/templates/playground.html:111
+#: fsthub/frontend/templates/playground.html:138
 msgid "e.g."
 msgstr "напр."
 
-#: fsthub/frontend/templates/playground.html:110
+#: fsthub/frontend/templates/playground.html:113
 msgid "Type input here..."
 msgstr "Напечатайте ввод здесь..."
 
-#: fsthub/frontend/templates/playground.html:112
+#: fsthub/frontend/templates/playground.html:115
 msgid "Too many requests! Please wait and try later."
 msgstr "Слишком много запросов! Подождите и попробуйте позже."
 
-#: fsthub/frontend/templates/playground.html:119
+#: fsthub/frontend/templates/playground.html:122
 #, python-format
 msgid ""
 "Press this button after typing anything to the '%(fst_input_translated)s' "
@@ -219,7 +219,7 @@ msgstr ""
 "'%(fst_input_translated)s'. Это запустит трансдьюсер на сервере с вашим "
 "вводом и выдаст вам его вывод."
 
-#: fsthub/frontend/templates/playground.html:129
+#: fsthub/frontend/templates/playground.html:132
 #, python-format
 msgid ""
 "Your transducer output will be here after you enter anything in "
@@ -229,9 +229,18 @@ msgstr ""
 "нибудь в поле '%(fst_input_translated)s' и нажмёте кнопку "
 "'%(send_button_translated)s'."
 
-#: fsthub/frontend/templates/playground.html:138
+#: fsthub/frontend/templates/playground.html:141
 msgid "Output will be here..."
 msgstr "Вывод будет здесь..."
+
+#: fsthub/frontend/templates/playground.html:144
+msgid "Export (.txt)"
+msgstr "Экспортировать (.txt)"
+
+#: fsthub/frontend/templates/playground.html:158
+#, python-format
+msgid "%(fst_output_translated)s is empty!"
+msgstr "Поле %(fst_output_translated)s пустое!"
 
 #: fsthub/frontend/templates/project.html:12
 msgid "Transducers"

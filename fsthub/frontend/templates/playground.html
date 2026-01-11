@@ -50,6 +50,7 @@
     {% translate "Type" as select_type_translated %}
     {% translate "Language" as select_lang_translated %}
     {% translate "Send" as send_button_translated %}
+    <!-- FST select -->
     <div class="control-big">
         <label for="fst-name">
             {{ fst_select_translated }}
@@ -66,6 +67,7 @@
             <option value="value1" selected disabled>{% translate "Hasn't loaded yet" %}</option>
         </select>
     </div>
+    <!-- Type filter -->
     <div class="control-small">
         <label for="fst-type">
             {{ select_type_translated }}
@@ -79,6 +81,7 @@
             <option value="all" selected disabled>{% translate "Hasn't loaded yet" %}</option>
         </select>
     </div>
+    <!-- Lang filter box -->
     <div class="control-small">
         <label for="fst-lang">
             {{ select_lang_translated }}
@@ -136,6 +139,10 @@
         </span>
     </label>
     <textarea id="fst-output-box" wrap="off" placeholder='{% translate "Output will be here..." %}' rows="5" readonly="readonly"></textarea>
+    <!-- Export controls -->
+    <span style="display: inline;">
+        <button id="file-export-button">{% translate "Export (.txt)" %}</button>
+    </span>
 </div>
 {% endblock %}
 
@@ -147,6 +154,9 @@
     const api_fetch_langs_url = window.location.origin + "{% url 'api-transducer-lang-list' %}";
     const api_example_url = window.location.origin + "{% url 'api-transducer-example' %}";
     const selected_fst = "{{ selected_fst }}";
+    const translations = {
+        'error_export_output_empty': '{% blocktrans %}{{ fst_output_translated }} is empty!{% endblocktrans %}'
+    };
 </script>
 <script src="{% static 'frontend/js/playground.js' %}"></script>
 {% endblock %}

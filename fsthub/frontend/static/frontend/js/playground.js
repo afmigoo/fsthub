@@ -14,6 +14,7 @@ const fst_box = {
     "output": document.getElementById("fst-output-box")
 };
 const send_button = document.getElementById("fst-send");
+const file_export_button = document.getElementById("file-export-button");
 const error_box = document.getElementById("error-box");
 const ratelimit_box = document.getElementById("ratelimit-box");
 
@@ -126,6 +127,20 @@ async function call_fst() {
         fst_box['output'].value = data["output"];
     })
 }
+/** Output export logic */
+function file_export() {
+    if (fst_box['output'].value == '') {
+        alert(translations['error_export_output_empty']);
+        return;
+    }
+    var tmp = document.createElement('a');
+    tmp.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(fst_box['output'].value));
+    tmp.setAttribute('download', 'export.txt');
+    tmp.style.display = 'none';
+    document.body.appendChild(tmp);
+    tmp.click();
+    document.body.removeChild(tmp);
+}
 
 /** Events */
 send_button.addEventListener("click", async () => {
@@ -174,6 +189,7 @@ fst_name_select.addEventListener("change", async () => {
 fst_example_str['input'].addEventListener("click", () => {
     fst_box['input'].value = fst_example_str['input'].innerText;
 });
+file_export_button.addEventListener('click', file_export);
 document.addEventListener('DOMContentLoaded', async () => {
     on_load()
 });
