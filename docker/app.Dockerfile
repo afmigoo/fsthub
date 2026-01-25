@@ -16,6 +16,7 @@ RUN apt-get install -y gcc \
 
 COPY fsthub ./
 
+ENTRYPOINT ["sh", "-c"]
 CMD ["/usr/local/bin/python3 manage.py migrate && \
       /usr/local/bin/python3 manage.py projectsautoinit && \
       /usr/local/bin/uwsgi --http :80 --wsgi-file fsthub/wsgi.py"]
