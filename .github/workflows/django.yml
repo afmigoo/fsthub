@@ -26,10 +26,10 @@ jobs:
         docker compose -f docker/docker-compose.yml build server
 
     - name: Run app tests inside Docker
-      run: >
-        docker compose run
-          --entrypoint='bash' --rm 
-          app
+      run: |
+        docker compose run          \
+          --entrypoint='bash' --rm  \
+          app                       \
           -c 'python3 manage.py test -v 2'
 
     - name: Push Docker images
