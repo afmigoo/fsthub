@@ -23,5 +23,6 @@
     const fst_url = window.location.origin + "{% url 'front_transducer' %}";
     const selected_project = "{{ project_name }}";
 </script>
+<script src="{% static 'frontend/js/api.js' %}"></script>
 <script src="{% static 'frontend/js/project.js' %}"></script>
 {% endblock %}

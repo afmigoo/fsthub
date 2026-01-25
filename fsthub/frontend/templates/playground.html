@@ -5,40 +5,7 @@
 {% block title %}FSThub{% endblock %}
 
 {% block head %}
-<style>
-    #control-panel {
-        width: 100%; 
-        display: flex;
-    }
-    .control-big {
-        width: 60%;
-        padding-right: 2rem;
-    }
-    .control-small {
-        width: 20%; 
-    }
-    @media (max-width: 500px) {
-        #control-panel {
-            display: inline-block;
-        }
-        .control-big, .control-small {
-            display: block;
-            width: 100%;
-        }
-        .control-big {
-            padding-right: 0;
-        }
-    }
-    #input-output {
-        padding-top: 1rem;
-    }
-    #fst-input-box, #fst-output-box, select {
-        min-width: 100%;
-    }
-    #ratelimit-box {
-        color: red;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'frontend/css/playground.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -141,7 +108,7 @@
     <textarea id="fst-output-box" wrap="off" placeholder='{% translate "Output will be here..." %}' rows="5" readonly="readonly"></textarea>
     <!-- Export controls -->
     <span style="display: inline;">
-        <button id="file-export-button">{% translate "Export as file (.txt)" %}</button>
+        <button id="file-export-button" class="outline">{% translate "Export as file (.txt)" %}</button>
     </span>
 </div>
 {% endblock %}
@@ -159,5 +126,6 @@
         'error_export_output_empty': '{% blocktrans %}\'{{ fst_output_translated }}\' is empty!{% endblocktrans %}'
     };
 </script>
+<script src="{% static 'frontend/js/api.js' %}"></script>
 <script src="{% static 'frontend/js/playground.js' %}"></script>
 {% endblock %}

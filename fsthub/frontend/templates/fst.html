@@ -7,19 +7,27 @@
 {% block content %}
 <h3 id="title"></h3>
 <div>
-    <h4>{% translate "Metadata" %}</h4>
-    <ul id="meta-container">
-        <li>
-            {% translate "Hasn't loaded yet" %}...
-        </li>
-    </ul>
-    <h5>{% translate "Input/output example" %}</h5>
-    <ul id="example-container">
-        <li>
-            {% translate "Hasn't loaded yet" %}...
-        </li>
-    </ul>
-    <a href="{% url 'front_playground' %}{{ transducer_name }}" class="button">
+    <article>
+        <header>
+            {% translate "Metadata" %}
+        </header>
+        <ul id="meta-container">
+            <li>
+                {% translate "Hasn't loaded yet" %}...
+            </li>
+        </ul>
+    </article>
+    <article>
+        <header>
+            {% translate "Input/output example" %}
+        </header>
+        <ul id="example-container">
+            <li>
+                {% translate "Hasn't loaded yet" %}...
+            </li>
+        </ul>
+    </article>
+    <a href="{% url 'front_playground' %}{{ transducer_name }}" role="button" class="outline">
         {% translate "Interact with transducer" %}
     </a>
 </div>
@@ -35,5 +43,6 @@
         'output': '{% translate "output" %}',
     };
 </script>
-<script src="{% static 'frontend/js/transducer.js' %}"></script>
+<script src="{% static 'frontend/js/api.js' %}"></script>
+<script src="{% static 'frontend/js/fst.js' %}"></script>
 {% endblock %}

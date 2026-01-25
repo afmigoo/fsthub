@@ -5,13 +5,13 @@ const results_footer = document.getElementById("results-footer");
 
 /* Search logic */
 function add_result_item(project) {
-    const div = document.createElement('div');
+    const article = document.createElement('article');
     const link = document.createElement('a');
     link.innerText = `${project['name']}`;
     link.href = project_base_url + project['name'];
-    div.classList.add('result-item');
-    div.appendChild(link);
-    results_list.appendChild(div);
+    article.classList.add('result-item');
+    article.appendChild(link);
+    results_list.appendChild(article);
 }
 function set_page_buttons(prev_href, next_href) {
     const prev = document.createElement('button');
