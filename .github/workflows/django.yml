@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FSTHUB_VER: ${{ github.ref_name }}
+      BUILD_COMPOSE: docker/docker-compose.yml
     steps:
     - uses: actions/checkout@v4
 
@@ -22,16 +23,16 @@ jobs:
 
     - name: Build Docker images
       run: |
-        docker compose -f docker/docker-compose.yml build app
-        docker compose -f docker/docker-compose.yml build server
+        docker compose -f ${BUILD_COMPOSE} build app
+        docker compose -f ${BUILD_COMPOSE} build server
 
     - name: Run app tests inside Docker
       run: |
-        docker compose run          \
-          --entrypoint='bash' --rm  \
-          app                       \
+        docker compose -f ${BUILD_COMPOSE} run \
+          --entrypoint='bash' --rm \
+          app \
           -c 'python3 manage.py test -v 2'
 
     - name: Push Docker images
       run: |
-        docker compose push app server
+        docker compose -f ${BUILD_COMPOSE} push app server
