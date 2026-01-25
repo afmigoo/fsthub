@@ -2,14 +2,9 @@ networks:
   backend:
     driver: bridge
 
-volumes:
-  front-static:
-
 services:
   app:
-    image: ghcr.io/afmigoo/fsthub-app:v0.4.4-python3.14
-    build:
-      dockerfile: ./docker/app.Dockerfile
+    image: docker.io/kartinka/fsthub-app:v0.4.4
     container_name: fsthub_django
     environment:
       PUID: ${CONTAINER_PUID}
@@ -26,14 +21,9 @@ services:
       - backend
     volumes:
       - ./data:/data
-      - front-static:/static
 
   server:
-    image: ghcr.io/afmigoo/fsthub-server:v0.4.4-python3.14
-    build:
-      dockerfile: ./docker/server.Dockerfile
-      args:
-        FSTHUB_VER: ${FSTHUB_VER}
+    image: docker.io/kartinka/fsthub-server:v0.4.4
     container_name: fsthub_nginx
     environment:
       PUID: ${CONTAINER_PUID}
