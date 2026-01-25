@@ -1,0 +1,22 @@
+services:
+  app:
+    image: docker.io/kartinka/fsthub-app:${FSTHUB_VER}
+    container_name: fsthub_django
+    build:
+      dockerfile: ./docker/app.Dockerfile
+      context: ../
+
+  server:
+    image: docker.io/kartinka/fsthub-server:${FSTHUB_VER}
+    build:
+      dockerfile: ./docker/server.Dockerfile
+      context: ../
+      args:
+        FSTHUB_VER: ${FSTHUB_VER}
+    depends_on:
+      - app
+
+  builder:
+    image: docker.io/kartinka/hfst-builder:${HFSTBUILDER_VER}
+    build:
+      dockerfile: ./builder.Dockerfile
