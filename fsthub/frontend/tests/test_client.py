@@ -35,11 +35,11 @@ class TestClientLangLocale(UnitTestCase):
             'Accept-Language': 'en-US,en;q=0.5'
         })
         html = resp.content.decode()
-        self.assertIn(f'<a href="{self.url_prefix}">Home</a>', html)
+        self.assertIn(f'<a class="contrast" href="{self.url_prefix}">Home</a>', html)
     def test_front_client_ping_index_ru(self):
         href = f'{self.url_prefix}'
         resp = self.client.get(href, headers={
             'Accept-Language': 'ru-RU,ru;q=0.5'
         })
         html = resp.content.decode()
-        self.assertIn(f'<a href="{self.url_prefix}">Главная</a>', html)
+        self.assertIn(f'<a class="contrast" href="{self.url_prefix}">Главная</a>', html)

@@ -44,12 +44,14 @@ function display_results(data) {
 }
 async function update_results(href) {
     clear_results();
-    await call_api(href)
-        .then((data) => display_results(data))
-        .catch((error) => {
-            display_error(results_list, error);
-            throw error;
+    const data = await call_api(href)
+        .catch((exception) => {
+            show_error(
+                `${translations['plain']['error_failed_to_fetch_projects']}: ${get_error_message(exception)}`
+            );
+            throw exception;
         })
+    display_results(data);
 }
 
 /* Events */

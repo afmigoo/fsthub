@@ -27,6 +27,3 @@
 #fst-input-box, #fst-output-box, select {
     min-width: 100%;
 }
-#ratelimit-box {
-    color: red;
-}

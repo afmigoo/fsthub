@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-11 11:27+0000\n"
+"POT-Creation-Date: 2026-01-30 11:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,67 +20,117 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: fsthub/frontend/templates/base.html:63
+#: fsthub/frontend/templates/base.html:20
 msgid "Home"
 msgstr "Главная"
 
-#: fsthub/frontend/templates/base.html:64
+#: fsthub/frontend/templates/base.html:21
 msgid "Playground"
 msgstr "Интерактив"
 
-#: fsthub/frontend/templates/base.html:65
+#: fsthub/frontend/templates/base.html:22
 msgid "Browse"
 msgstr "Каталог"
 
-#: fsthub/frontend/templates/base.html:90
+#: fsthub/frontend/templates/base.html:50
+#: fsthub/frontend/templates/base.html:91
+msgid "Error"
+msgstr "Ошибка"
+
+#: fsthub/frontend/templates/base.html:65
 msgid "Admin panel"
 msgstr "Админ панель"
 
-#: fsthub/frontend/templates/base.html:95
+#: fsthub/frontend/templates/base.html:69
 msgid "Source code"
 msgstr "Исходный код"
+
+#: fsthub/frontend/templates/base.html:83
+#, python-format
+msgid "\\'%(fst_output_translated)s\\' is empty!"
+msgstr "Поле \\'%(fst_output_translated)s\\' пустое!"
+
+#: fsthub/frontend/templates/base.html:84
+msgid "Failed to fetch filters"
+msgstr "Ошибка при загрузке списка фильтров"
+
+#: fsthub/frontend/templates/base.html:85
+msgid "Failed to update transducers"
+msgstr "Ошибка при загрузке списка трансдьюсеров"
+
+#: fsthub/frontend/templates/base.html:86
+msgid "Failed to load an example"
+msgstr "Ошибка при загрузке примера"
+
+#: fsthub/frontend/templates/base.html:87
+msgid "Failed to load metadata"
+msgstr "Ошибка при загрузке метаданных"
+
+#: fsthub/frontend/templates/base.html:88
+msgid "Failed to load FST list"
+msgstr "Ошибка при загрузке списка трансдьюсеров"
+
+#: fsthub/frontend/templates/base.html:89
+msgid "Failed to call the FST"
+msgstr "Ошибка при вызове трансдьюсера"
+
+#: fsthub/frontend/templates/base.html:90
+msgid "Failed to fetch projects"
+msgstr "Ошибка при загрузке списка проектов"
+
+#: fsthub/frontend/templates/base.html:94
+msgid "Too many requests! Please wait and try later."
+msgstr "Слишком много запросов! Подождите и попробуйте позже."
+
+#: fsthub/frontend/templates/base.html:95
+msgid "Not found"
+msgstr "Не найдено"
+
+#: fsthub/frontend/templates/base.html:96
+msgid "Invalid request"
+msgstr "Неверный запрос"
 
 #: fsthub/frontend/templates/browse_projects.html:5
 msgid "projects"
 msgstr "проекты"
 
-#: fsthub/frontend/templates/browse_projects.html:35
+#: fsthub/frontend/templates/browse_projects.html:12
 msgid "Projects"
 msgstr "Проекты"
 
-#: fsthub/frontend/templates/browse_projects.html:40
-msgid "Filter"
-msgstr "Фильтр"
+#: fsthub/frontend/templates/browse_projects.html:16
+msgid "Search"
+msgstr "Поиск"
 
 #: fsthub/frontend/templates/fst.html:5
 #: fsthub/frontend/templates/project.html:5
 msgid "project"
 msgstr "проект"
 
-#: fsthub/frontend/templates/fst.html:10
+#: fsthub/frontend/templates/fst.html:12
 msgid "Metadata"
 msgstr "Метаданные"
 
-#: fsthub/frontend/templates/fst.html:13 fsthub/frontend/templates/fst.html:19
-#: fsthub/frontend/templates/playground.html:67
-#: fsthub/frontend/templates/playground.html:81
-#: fsthub/frontend/templates/playground.html:95
+#: fsthub/frontend/templates/fst.html:16 fsthub/frontend/templates/fst.html:26
+#: fsthub/frontend/templates/playground.html:33
+#: fsthub/frontend/templates/playground.html:47
+#: fsthub/frontend/templates/playground.html:61
 msgid "Hasn't loaded yet"
 msgstr "Ещё не загрузилось"
 
-#: fsthub/frontend/templates/fst.html:16
+#: fsthub/frontend/templates/fst.html:22
 msgid "Input/output example"
 msgstr "Пример ввода/вывода"
 
-#: fsthub/frontend/templates/fst.html:23
+#: fsthub/frontend/templates/fst.html:31
 msgid "Interact with transducer"
 msgstr "Взаимодействовать с трансдьюсером"
 
-#: fsthub/frontend/templates/fst.html:34
+#: fsthub/frontend/templates/fst.html:42
 msgid "input"
 msgstr "Ввод"
 
-#: fsthub/frontend/templates/fst.html:35
+#: fsthub/frontend/templates/fst.html:43
 msgid "output"
 msgstr "Вывод"
 
@@ -115,44 +165,46 @@ msgstr ""
 msgid "Technical stack"
 msgstr "Используемые технологии"
 
-#: fsthub/frontend/templates/index.html:25
+#: fsthub/frontend/templates/index.html:26
 msgid "Backend powered by"
 msgstr "Бэкенд работает на"
 
-#: fsthub/frontend/templates/index.html:26
+#: fsthub/frontend/templates/index.html:29
+#: venv/lib/python3.14/site-packages/django/db/models/base.py:1600
+#: venv/lib/python3.14/site-packages/django/forms/models.py:908
+msgid "and"
+msgstr "и"
+
+#: fsthub/frontend/templates/index.html:32
 msgid "Frontend style powered by"
 msgstr "Фронтенд оформлен с помощью"
 
-#: fsthub/frontend/templates/index.html:27
-msgid "Storage powered by"
-msgstr "Данные хранятся в"
-
-#: fsthub/frontend/templates/playground.html:47
+#: fsthub/frontend/templates/playground.html:13
 msgid "FST input"
 msgstr "FST ввод"
 
-#: fsthub/frontend/templates/playground.html:48
-#: fsthub/frontend/templates/playground.html:150
+#: fsthub/frontend/templates/playground.html:14
+#: fsthub/frontend/templates/playground.html:114
 msgid "FST output"
 msgstr "FST вывод"
 
-#: fsthub/frontend/templates/playground.html:49
+#: fsthub/frontend/templates/playground.html:15
 msgid "Transducer"
 msgstr "Трансдьюсер"
 
-#: fsthub/frontend/templates/playground.html:50
+#: fsthub/frontend/templates/playground.html:16
 msgid "Type"
 msgstr "Тип"
 
-#: fsthub/frontend/templates/playground.html:51
+#: fsthub/frontend/templates/playground.html:17
 msgid "Language"
 msgstr "Язык"
 
-#: fsthub/frontend/templates/playground.html:52
+#: fsthub/frontend/templates/playground.html:18
 msgid "Send"
 msgstr "Отправить"
 
-#: fsthub/frontend/templates/playground.html:57
+#: fsthub/frontend/templates/playground.html:23
 #, python-format
 msgid ""
 "Here you can chose which transducer will be used. Available options in this "
@@ -167,7 +219,7 @@ msgstr ""
 "'%(fst_input_translated)s' будет передан выбранному трансдьюсеру на ввод, и "
 "его вывод будет отображён в поле '%(fst_output_translated)s'."
 
-#: fsthub/frontend/templates/playground.html:74
+#: fsthub/frontend/templates/playground.html:40
 #, python-format
 msgid ""
 "Here you can choose which types of transducers will be listed in the "
@@ -176,7 +228,7 @@ msgstr ""
 "Здесь вы можете выбрать, какого типа трансдьюсеры будут отображены в списке "
 "'%(fst_select_translated)s'."
 
-#: fsthub/frontend/templates/playground.html:88
+#: fsthub/frontend/templates/playground.html:54
 #, python-format
 msgid ""
 "Here you can set a specific language, so the '%(fst_select_translated)s' "
@@ -185,7 +237,7 @@ msgstr ""
 "Здесь можно задать язык, и в поле '%(fst_select_translated)s' будут "
 "перечислены только трансдьюсеры, работающие с выбранным языком."
 
-#: fsthub/frontend/templates/playground.html:103
+#: fsthub/frontend/templates/playground.html:69
 #, python-format
 msgid ""
 "Write your transducer input here. If you are not sure what to type, use the "
@@ -196,20 +248,16 @@ msgstr ""
 "ввести, можете использовать пример, указанный ниже. Можно кликнуть по "
 "примеру, и он автоматически будет вставлен в поле '%(fst_input_translated)s'."
 
-#: fsthub/frontend/templates/playground.html:111
-#: fsthub/frontend/templates/playground.html:138
+#: fsthub/frontend/templates/playground.html:77
+#: fsthub/frontend/templates/playground.html:102
 msgid "e.g."
 msgstr "напр."
 
-#: fsthub/frontend/templates/playground.html:113
+#: fsthub/frontend/templates/playground.html:79
 msgid "Type input here..."
 msgstr "Напечатайте ввод здесь..."
 
-#: fsthub/frontend/templates/playground.html:115
-msgid "Too many requests! Please wait and try later."
-msgstr "Слишком много запросов! Подождите и попробуйте позже."
-
-#: fsthub/frontend/templates/playground.html:122
+#: fsthub/frontend/templates/playground.html:86
 #, python-format
 msgid ""
 "Press this button after typing anything to the '%(fst_input_translated)s' "
@@ -220,7 +268,7 @@ msgstr ""
 "'%(fst_input_translated)s'. Это запустит трансдьюсер на сервере с вашим "
 "вводом и выдаст вам его вывод."
 
-#: fsthub/frontend/templates/playground.html:132
+#: fsthub/frontend/templates/playground.html:96
 #, python-format
 msgid ""
 "Your transducer output will be here after you enter anything in "
@@ -230,18 +278,13 @@ msgstr ""
 "нибудь в поле '%(fst_input_translated)s' и нажмёте кнопку "
 "'%(send_button_translated)s'."
 
-#: fsthub/frontend/templates/playground.html:141
+#: fsthub/frontend/templates/playground.html:105
 msgid "Output will be here..."
 msgstr "Вывод будет здесь..."
 
-#: fsthub/frontend/templates/playground.html:144
-msgid "Export (.txt)"
-msgstr "Экспортировать (.txt)"
-
-#: fsthub/frontend/templates/playground.html:159
-#, python-format
-msgid "\\'%(fst_output_translated)s\\' is empty!"
-msgstr "Поле \\'%(fst_output_translated)s\\' пустое!"
+#: fsthub/frontend/templates/playground.html:108
+msgid "Export as file (.txt)"
+msgstr "Экспорт в файл (.txt)"
 
 #: fsthub/frontend/templates/project.html:12
 msgid "Transducers"
@@ -438,11 +481,6 @@ msgstr ""
 
 #: venv/lib/python3.14/site-packages/django/core/validators.py:659
 msgid "Null characters are not allowed."
-msgstr ""
-
-#: venv/lib/python3.14/site-packages/django/db/models/base.py:1600
-#: venv/lib/python3.14/site-packages/django/forms/models.py:908
-msgid "and"
 msgstr ""
 
 #: venv/lib/python3.14/site-packages/django/db/models/base.py:1602
@@ -1482,6 +1520,12 @@ msgstr ""
 #: venv/lib/python3.14/site-packages/django/views/templates/default_urlconf.html:236
 msgid "Connect, get help, or contribute"
 msgstr ""
+
+#~ msgid "Filter"
+#~ msgstr "Фильтр"
+
+#~ msgid "Storage powered by"
+#~ msgstr "Данные хранятся в"
 
 #~ msgid "Development initiated at"
 #~ msgstr "Разработка инициирована в"

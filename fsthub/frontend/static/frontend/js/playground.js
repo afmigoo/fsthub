@@ -15,8 +15,6 @@ const fst_box = {
 };
 const send_button = document.getElementById("fst-send");
 const file_export_button = document.getElementById("file-export-button");
-const error_box = document.getElementById("error-box");
-const ratelimit_box = document.getElementById("ratelimit-box");
 
 
 function create_option(text) {
@@ -27,9 +25,6 @@ function create_option(text) {
 }
 
 /** Filters logic */
-async function get_filters(url) {
-    return await call_api(url);
-}
 function display_filters(element, filters) {
     remove_children(element);
     all_option = create_option('all');
@@ -44,12 +39,12 @@ function display_filters(element, filters) {
     }
 }
 async function init_filters() {
-    console.log('Init_filters start');
-    const types = await get_filters(api_fetch_types_url);
-    const langs = await get_filters(api_fetch_langs_url);
+    console.debug('init_filters start');
+    const types = await call_api(api_fetch_types_url);
+    const langs = await call_api(api_fetch_langs_url);
     display_filters(fst_type_select, types);
     display_filters(fst_lang_select, langs);
-    console.log('Init_filters end');
+    console.debug('init_filters end');
 }
 /** Example fetching logic */
 function display_example(data) {
@@ -67,13 +62,11 @@ async function load_example(transducer_name) {
         fst_example_str[key].innerText = '';
         fst_example_box[key].hidden = true;
     }
-    await call_api(api_example_url, {
+    const data = await call_api(api_example_url, {
         'hfst_file': transducer_name
     })
-    .then((data) => {
-        console.log(data);
-        display_example(data['example']);
-    })
+    console.info("Loaded example", data);
+    display_example(data['example']);
 }
 /** Transducer list logic */
 function display_fsts(transducers) {
@@ -97,35 +90,31 @@ function get_filter_params() {
     return params;
 }
 async function update_results() {
-    console.log('update_results start');
+    console.debug('update_results start');
     const params = get_filter_params();
-    await call_api(api_fetch_fst_url, params)
-        .then((data) => {
-            display_fsts(data['results']);
-        });
-    console.log('update_results end');
+    const data = await call_api(api_fetch_fst_url, params)
+    display_fsts(data['results']);
+    console.debug('update_results end');
     await load_example(fst_name_select.value);
 }
 /** Transducer calling logic */
 async function call_fst() {
-    ratelimit_box.hidden = true;
     fst_box['output'].value = "";
-    await call_api(api_call_fst_url, {}, {
-        body: JSON.stringify({
-            "fst_input": fst_box['input'].value,
-            "hfst_file": fst_name_select.value
-        }),
-        method: 'POST'
-    })
-    .catch((error) => {
-        if (error instanceof TooManyRequests) 
-            ratelimit_box.hidden = false;
-        else 
-            throw error;
-    })
-    .then((data) => {
-        fst_box['output'].value = data["output"];
-    })
+    try {
+        data = await call_api(api_call_fst_url, {}, {
+            body: JSON.stringify({
+                "fst_input": fst_box['input'].value,
+                "hfst_file": fst_name_select.value
+            }),
+            method: 'POST'
+        })
+    } catch (exception) {
+        show_error(
+            `${translations['plain']['error_failed_to_call_fst']}: ${get_error_message(exception)}`
+        );
+        throw exception;
+    };
+    fst_box['output'].value = data["output"];
 }
 /** Output export logic */
 function file_export() {
@@ -143,51 +132,55 @@ function file_export() {
 }
 
 /** Events */
-send_button.addEventListener("click", async () => {
-    remove_children(error_box);
-    await call_fst()
-        .catch((error) => {
-            display_error(error_box, `Failed to call API\n${error}`);
-            throw error;
-        });
-});
 async function on_filter_change() {
-    remove_children(error_box);
+    hide_error(error_dialog, error_dialog_msg);
     await update_results()
-    .catch((error) => {
-        display_error(error_box, `Failed to update transducers\n${error}`);
-            throw error;
-        })
-    }
-    async function on_load() {
+}
+async function on_load() {
     await init_filters()
-        .catch((error) => {
-            display_error(error_box, `Failed to fetch filters\n${error}`);
-            throw error;
-        })
-        .then(async () => {
-            fst_type_select.addEventListener("change", async () => {
-                await on_filter_change();
-            });
-            fst_lang_select.addEventListener("change", async () => {
-                await on_filter_change();
-            });
-            await on_filter_change();
-        })
+        .catch((exception) => {
+            show_error(
+                `${translations['plain']['error_failed_to_fetch_filters']}: ${get_error_message(exception)}`
+            );
+            throw exception;
+        });
+    await on_filter_change()
+        .catch((exception) => {
+            show_error(
+                `${translations['plain']['error_failed_to_update_transducers']}: ${get_error_message(exception)}`
+            );
+            throw exception;
+        });
     
-        var fsts = fst_name_select.children;
+    var fsts = fst_name_select.children;
     for (var i = 0; i < fsts.length; i++) {
         if (fsts[i].value == selected_fst)
             fsts[i].selected = true;
     }
 
-    await load_example(fst_name_select.value);
+    await load_example(fst_name_select.value)
+        .catch((exception) => {
+            show_error(
+                `${translations['plain']['error_failed_to_load_example']}: ${get_error_message(exception)}`
+            );
+            throw exception;
+        });
 }
+send_button.addEventListener("click", async () => {
+    hide_error(error_dialog, error_dialog_msg);
+    await call_fst();
+});
 fst_name_select.addEventListener("change", async () => {
     await load_example(fst_name_select.value);
 });
 fst_example_str['input'].addEventListener("click", () => {
     fst_box['input'].value = fst_example_str['input'].innerText;
+});
+fst_type_select.addEventListener("change", async () => {
+    await on_filter_change();
+});
+fst_lang_select.addEventListener("change", async () => {
+    await on_filter_change();
 });
 file_export_button.addEventListener('click', file_export);
 document.addEventListener('DOMContentLoaded', async () => {

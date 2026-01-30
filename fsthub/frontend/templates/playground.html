@@ -9,7 +9,6 @@
 {% endblock %}
 
 {% block content %}
-<div id="error-box"></div>
 <div id="control-panel">
     {% translate "FST input" as fst_input_translated %}
     {% translate "FST output" as fst_output_translated %}
@@ -78,8 +77,6 @@
         <i>({% translate "e.g." %}, "<u id="fst-example-input-str" style="cursor: pointer;" tabindex=0></u>")</i>
     </span>
     <textarea id="fst-input-box"  wrap="off" placeholder='{% translate "Type input here..." %}'' rows="5"></textarea>
-    <!-- Ratelimit message -->
-    <div id="ratelimit-box" hidden="hidden">{% translate "Too many requests! Please wait and try later." %}</div>
     <!-- Send button -->
     <div style="display: inline-flex; align-items: center; gap: 0.5em;">
         <button id="fst-send">
@@ -122,10 +119,6 @@
     const api_fetch_langs_url = window.location.origin + "{% url 'api-transducer-lang-list' %}";
     const api_example_url = window.location.origin + "{% url 'api-transducer-example' %}";
     const selected_fst = "{{ selected_fst }}";
-    const translations = {
-        'error_export_output_empty': '{% blocktrans %}\'{{ fst_output_translated }}\' is empty!{% endblocktrans %}'
-    };
 </script>
-<script src="{% static 'frontend/js/api.js' %}"></script>
 <script src="{% static 'frontend/js/playground.js' %}"></script>
 {% endblock %}

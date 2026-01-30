@@ -43,6 +43,17 @@
             </section>
         </header>
         <main class="container main-container">
+            <dialog id="error-dialog">
+                <article>
+                    <header>
+                        <span id="error-dialog-title">
+                            {% translate "Error" %}
+                        </span>
+                        <button id="error-dialog-close" aria-label="Close" rel="prev"></button>
+                    </header>
+                    <p id="error-dialog-msg"></p>
+                </article>
+            </dialog>
             {% block content %}{% endblock %}
         </main>
         <hr>
@@ -66,5 +77,26 @@
             </aside>
         </footer>
     </body>
+    <script>
+        const translations = {
+            'plain': {
+                'error_export_output_empty': '{% blocktrans %}\'{{ fst_output_translated }}\' is empty!{% endblocktrans %}',
+                'error_failed_to_fetch_filters': '{% translate "Failed to fetch filters" %}',
+                'error_failed_to_update_transducers': '{% translate "Failed to update transducers" %}',
+                'error_failed_to_load_example': '{% translate "Failed to load an example" %}',
+                'error_failed_to_load_meta': '{% translate "Failed to load metadata" %}',
+                'error_failed_to_load_fst_list': '{% translate "Failed to load FST list" %}',
+                'error_failed_to_call_fst': '{% translate "Failed to call the FST" %}',
+                'error_failed_to_fetch_projects': '{% translate "Failed to fetch projects" %}',
+                'error': '{% translate "Error" %}'
+            },
+            'exceptions': {
+                'TooManyRequests': '{% translate "Too many requests! Please wait and try later." %}',
+                'NotFound': '{% translate "Not found" %}',
+                'BadRequest': '{% translate "Invalid request" %}'
+            },
+        };
+    </script>
+    <script src="{% static 'frontend/js/api.js' %}"></script>
     {% block after_body %}{% endblock %}
 </html>

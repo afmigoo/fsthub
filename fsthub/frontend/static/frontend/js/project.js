@@ -14,19 +14,22 @@ function display_metadata(data) {
     }
 }
 async function load_meta() {
-    await call_api(api_metadata_url + selected_project)
-    .then((data) => {
-        console.log(data);
-        title.innerHTML = data["directory"];
-        delete data['directory'];
-        display_metadata(data);
-    })
-    .catch((error) => {
-        if (error instanceof NotFound)
+    data = await call_api(api_metadata_url + selected_project)
+    .catch((exception) => {
+        if (exception instanceof NotFound)
             title.innerText = selected_project;
-        else 
-            throw error;
+        else {
+            show_error(
+                `${translations['plain']['error_failed_to_load_meta']}: ${get_error_message(exception)}`
+            );
+            throw exception;
+        }
     })
+
+    console.info("Loaded metadata", data);
+    title.innerHTML = data["directory"];
+    delete data['directory'];
+    display_metadata(data);
 }
 
 /** Transducer fetching logic */
@@ -34,7 +37,6 @@ function display_fsts(data) {
     if (data.length == 0) 
         fst_empty_text.hidden = false;
     for (const it in data) {
-        console.log(it);
         const li = document.createElement('li');
         const a = document.createElement('a');
         a.href = fst_url + data[it]['name'];
@@ -44,12 +46,16 @@ function display_fsts(data) {
     }
 }
 async function load_fst_list() {
-    await call_api(api_fst_list_url, {
-        'project': selected_project
+    data = await call_api(api_fst_list_url, {'project': selected_project})
+    .catch((exception) => {
+        show_error(
+            `${translations['plain']['error_failed_to_load_fst_list']}: ${get_error_message(exception)}`
+        );
+        throw error;
     })
-    .then((data) => {
-        display_fsts(data['results']);
-    })
+
+    console.info("Loaded fst list", data);
+    display_fsts(data['results']);
 }
 
 /** Events */

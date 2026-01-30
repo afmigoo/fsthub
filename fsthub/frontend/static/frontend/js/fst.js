@@ -15,20 +15,22 @@ function display_metadata(data) {
     }
 }
 async function load_meta() {
-    await call_api(api_metadata_url, {
+    data = await call_api(api_metadata_url, {
         'hfst_file': selected_transducer
-    })
-    .then((data) => {
-        console.log(data);
-        title.innerHTML = selected_transducer;
-        display_metadata(data['metadata']);
-    })
-    .catch((error) => {
-        if (error instanceof NotFound)
+    }).catch((exception) => {
+        if (exception instanceof NotFound)
             title.innerText = selected_project;
-        else 
-            throw error;
+        else {
+            show_error(
+                `${translations['plain']['error_failed_to_load_meta']}: ${get_error_message(exception)}`
+            );
+            throw exception;
+        }
     })
+
+    console.info("Fetched meta", data);
+    title.innerHTML = selected_transducer;
+    display_metadata(data['metadata']);
 }
 /** Example fetching logic */
 function display_example(data) {
@@ -43,20 +45,22 @@ function display_example(data) {
     }
 }
 async function load_example() {
-    await call_api(api_example_url, {
+    data = await call_api(api_example_url, {
         'hfst_file': selected_transducer
-    })
-    .then((data) => {
-        console.log(data);
-        title.innerHTML = selected_transducer;
-        display_example(data['example']);
-    })
-    .catch((error) => {
-        if (error instanceof NotFound)
+    }).catch((exception) => {
+        if (exception instanceof NotFound)
             title.innerText = selected_project;
-        else 
-            throw error;
+        else {
+            show_error(
+                `${translations['plain']['error_failed_to_load_example']}: ${get_error_message(exception)}`
+            );
+            throw exception;
+        }
     })
+
+    console.log(data);
+    title.innerHTML = selected_transducer;
+    display_example(data['example']);
 }
 
 /** Events */
