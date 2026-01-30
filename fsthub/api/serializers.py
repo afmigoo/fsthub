@@ -36,9 +36,6 @@ class FstRequest(serializers.Serializer):
     def validate(self, data):
         if '..' in data['hfst_file']:
             raise ValidationError(f'hfst_file \'{data["hfst_file"]}\' is invalid.')
-        path_obj = settings.HFST_CONTENT_ROOT.joinpath(data['hfst_file'])
-        if not (path_obj.is_file() and path_obj.exists()):
-            raise ValidationError(f'hfst_file \'{data["hfst_file"]}\' does not exist.')
         return data
 
 class FstCallRequestSerializer(FstRequest):
@@ -64,8 +61,3 @@ class FstFilterRequestSerializer(serializers.Serializer):
 
 class ProjectTransducersRequestSerializer(serializers.Serializer):
     project = serializers.CharField(required=True, allow_blank=False, max_length=100)
-
-    def validate(self, data):
-        if not dir_exists(data['project']):
-            raise ValidationError(f"Project '{data['project']}' does not exist.")
-        return data

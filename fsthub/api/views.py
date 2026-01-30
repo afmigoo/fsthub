@@ -11,7 +11,7 @@ from hfst_adaptor.call import (
 )
 from hfst_adaptor.parse import parse_metadata, parse_example
 from hfst_adaptor.exceptions import HfstException
-from project_reader import get_projects, get_all_fsts, get_fsts
+from project_reader import get_projects, get_all_fsts, get_fsts, file_exists, dir_exists
 from .models import (
     ProjectMetadata,
     FstType, FstTypeRelation,
@@ -55,6 +55,10 @@ class ProjectViewSet(viewsets.ViewSet):
         serializer = ProjectTransducersRequestSerializer(data=request.query_params)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not dir_exists(serializer.data['project']):
+            return Response({
+                'details': 'Project does not exist'
+            }, status=status.HTTP_404_NOT_FOUND)
         transducers = get_fsts(serializer.data['project'])
         return Response({
             'results': [{'name': p} for p in transducers]
@@ -128,6 +132,10 @@ class TransducerViewSet(viewsets.ViewSet):
         serializer = FstRequest(data=request.query_params)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not file_exists(serializer.data['hfst_file']):
+            return Response({
+                'details': 'FST does not exist'
+            }, status=status.HTTP_404_NOT_FOUND)
         try:
             output = call_metadata_extractor(
                 settings.HFST_CONTENT_ROOT / serializer.data['hfst_file'],
@@ -146,6 +154,10 @@ class TransducerViewSet(viewsets.ViewSet):
         serializer = FstRequest(data=request.query_params)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if not file_exists(serializer.data['hfst_file']):
+            return Response({
+                'details': 'FST does not exist'
+            }, status=status.HTTP_404_NOT_FOUND)
         try:
             output = call_example_generator(
                 settings.HFST_CONTENT_ROOT / serializer.data['hfst_file'],
