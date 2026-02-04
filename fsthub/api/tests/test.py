@@ -142,6 +142,22 @@ class GetFstsTest(ApiTest):
         
         self.assertSetEqual(resp_fsts, filesystem_fsts)
 
+class GetTypesTest(ApiTest):
+    def test_api_get_fst_types(self):
+        self.populate_test_root()
+        sleep(0.01)
+        code, url, resp = self.send_request('/api/fst_type')
+        self.assertEqual(code, 200, url)
+        self.assertIsInstance(resp, list, url)
+        for it in resp:
+            self.assertIsInstance(it, dict, url)
+            self.assertIn('name', it, url)
+        self.assertSetEqual(
+            set(x['name'] for x in resp),
+            {'generator', 'analyzer', 'transliterator'},
+            url
+        )
+
 class FstOperationsTest(ApiTest):
     @classmethod
     def setUpClass(cls):
