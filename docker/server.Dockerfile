@@ -1,6 +1,7 @@
-ARG FSTHUB_VER=latest
+ARG APP_IMAGE=docker.io/kartinka/fsthub-app
+ARG FSTHUB_VER
 
-FROM docker.io/kartinka/fsthub-app:${FSTHUB_VER} AS base-static
+FROM ${APP_IMAGE}:${FSTHUB_VER} AS base-static
 COPY fsthub/frontend/static ./frontend/static
 RUN /usr/local/bin/python3 manage.py collectstatic --no-input
 

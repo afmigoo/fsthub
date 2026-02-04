@@ -4,6 +4,7 @@ networks:
 
 services:
   app:
+    image: fsthub-app:dev
     container_name: fsthub_django_dev
     build:
       context: ../
@@ -23,10 +24,14 @@ services:
       - ../data:/data
 
   server:
+    image: fsthub-server:dev
     container_name: fsthub_nginx_dev
     build:
       context: ../
       dockerfile: ./docker/server.Dockerfile
+      args:
+        APP_IMAGE: fsthub-app
+        FSTHUB_VER: dev
     environment:
       FSTHUB_URL_PREFIX: ${FSTHUB_URL_PREFIX}
     networks:

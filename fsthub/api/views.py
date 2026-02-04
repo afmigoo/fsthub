@@ -7,7 +7,7 @@ from rest_framework import status
 from django.conf import settings
 
 from hfst_adaptor.call import (
-    call_hfst, call_metadata_extractor, call_example_generator
+    call_hfst, call_metadata_extractor, call_example_generator, OUTPUT_FORMATS
 )
 from hfst_adaptor.parse import parse_metadata, parse_example
 from hfst_adaptor.exceptions import HfstException
@@ -42,7 +42,7 @@ class FstSustainedThrottle(throttling.UserRateThrottle):
 
 # Projects
 class ProjectViewSet(viewsets.ViewSet):    
-    @method_decorator(cache_page(settings.CACHE_TTL))
+    @method_decorator(cache_page(30))
     def list(self, request):
         present_projects = get_projects()
         return Response({
@@ -50,7 +50,7 @@ class ProjectViewSet(viewsets.ViewSet):
         })
 
     @action(methods=['GET'], detail=False, url_path='transducers', url_name='transducers')
-    @method_decorator(cache_page(settings.CACHE_TTL))
+    @method_decorator(cache_page(30))
     def get_transducers(self, request):
         serializer = ProjectTransducersRequestSerializer(data=request.query_params)
         if not serializer.is_valid():
@@ -70,15 +70,15 @@ class ProjectMetadataViewSet(viewsets.ReadOnlyModelViewSet):
 
 # Transducers
 class TransducerViewSet(viewsets.ViewSet): 
-    @method_decorator(cache_page(settings.CACHE_TTL))
+    @method_decorator(cache_page(30))
     def list(self, request):
         present_fst = get_all_fsts()
         return Response({
             'results': [{'name': p} for p in present_fst]
         })
 
-    @action(methods=['GET'], detail=False, url_path='filter', url_name='filter')
-    @method_decorator(cache_page(settings.CACHE_TTL))
+    @action(methods=['GET'], detail=False)
+    @method_decorator(cache_page(60))
     def filter(self, request, format=None):
         serializer = FstFilterRequestSerializer(data=request.query_params)
         if not serializer.is_valid():
@@ -107,7 +107,7 @@ class TransducerViewSet(viewsets.ViewSet):
             'results': [{'name': n} for n in sorted(candidates)]
         })
         
-    @action(methods=['POST'], detail=False, url_path='call', url_name='call', 
+    @action(methods=['POST'], detail=False,
             authentication_classes=[CsrfDisableAuthentication],
             throttle_classes=[FstBurstThrottle, FstSustainedThrottle])
     def call(self, request, format=None):
@@ -126,8 +126,9 @@ class TransducerViewSet(viewsets.ViewSet):
                 'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
             }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
         
-    @action(methods=['GET'], detail=False, url_path='metadata', url_name='metadata',
+    @action(methods=['GET'], detail=False,
             throttle_classes=[FstBurstThrottle, FstSustainedThrottle])
+    @method_decorator(cache_page(60))
     def metadata(self, request, format=None):
         serializer = FstRequest(data=request.query_params)
         if not serializer.is_valid():
@@ -147,9 +148,9 @@ class TransducerViewSet(viewsets.ViewSet):
                 'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
             }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
 
-    @action(methods=['GET'], detail=False, url_path='example', url_name='example',
+    @action(methods=['GET'], detail=False,
             throttle_classes=[FstBurstThrottle, FstSustainedThrottle])
-    @method_decorator(cache_page(settings.CACHE_TTL))
+    @method_decorator(cache_page(5))
     def example(self, request, format=None):
         serializer = FstRequest(data=request.query_params)
         if not serializer.is_valid():
@@ -168,6 +169,11 @@ class TransducerViewSet(viewsets.ViewSet):
             return Response({
                 'details': str(e).replace(str(settings.HFST_CONTENT_ROOT), '.')
             }, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+    @action(methods=['GET'], detail=False)
+    @method_decorator(cache_page(300))
+    def output_formats(self, request, format=None):
+        return Response({'formats': OUTPUT_FORMATS})
 
 # Transducer filters
 class TypesViewset(viewsets.ReadOnlyModelViewSet):
