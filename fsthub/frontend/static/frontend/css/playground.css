@@ -4,7 +4,7 @@
 }
 .control-big {
     width: 60%;
-    padding-right: 2rem;
+    padding-right: 1rem;
 }
 .control-small {
     width: 20%; 
@@ -21,9 +21,12 @@
         padding-right: 0;
     }
 }
-#input-output {
-    padding-top: 1rem;
-}
 #fst-input-box, #fst-output-box, select {
     min-width: 100%;
+}
+.tip {
+    cursor: help;
+}
+.middle-controls {
+    margin-bottom: 1rem;
 }
