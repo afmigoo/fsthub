@@ -1,4 +1,4 @@
-ARG FSTHUB_VER
+ARG FSTHUB_VER=latest
 
 FROM docker.io/kartinka/fsthub-app:${FSTHUB_VER} AS base-static
 COPY fsthub/frontend/static ./frontend/static

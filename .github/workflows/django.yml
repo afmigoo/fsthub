@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       FSTHUB_VER: ${{ github.ref_name }}
-      BUILD_COMPOSE: docker/docker-compose.yml
+      PY_VER: "3.14"
+      BUILD_COMPOSE: docker/compose-build.yml
     steps:
     - uses: actions/checkout@v4
 

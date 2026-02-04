@@ -1,0 +1,37 @@
+networks:
+  backend:
+    driver: bridge
+
+services:
+  app:
+    container_name: fsthub_django_dev
+    build:
+      context: ../
+      dockerfile: ./docker/app.Dockerfile
+    environment:
+      FSTHUB_URL_PREFIX: ${FSTHUB_URL_PREFIX}
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+      DJANGO_STATIC_URL: ${DJANGO_STATIC_URL}
+      DJANGO_DEBUG: ${DJANGO_DEBUG}
+      DJANGO_HOST: ${DJANGO_HOST}
+      DJANGO_SUPERUSER_USERNAME: ${DJANGO_SUPERUSER_USERNAME}
+      DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD}
+      DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL}
+    networks:
+      - backend
+    volumes:
+      - ../data:/data
+
+  server:
+    container_name: fsthub_nginx_dev
+    build:
+      context: ../
+      dockerfile: ./docker/server.Dockerfile
+    environment:
+      FSTHUB_URL_PREFIX: ${FSTHUB_URL_PREFIX}
+    networks:
+      - backend
+    depends_on:
+      - app
+    ports:
+      - "${CONTAINER_PORT:-8000}:80"

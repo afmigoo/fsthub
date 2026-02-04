@@ -1,16 +1,21 @@
 services:
   app:
     image: docker.io/kartinka/fsthub-app:${FSTHUB_VER}
-    container_name: fsthub_django
     build:
-      dockerfile: ./docker/app.Dockerfile
       context: ../
+      dockerfile: ./docker/app.Dockerfile
+      tags:
+        - docker.io/kartinka/fsthub-app:latest
+      args:
+        PY_VER: ${PY_VER}
 
   server:
     image: docker.io/kartinka/fsthub-server:${FSTHUB_VER}
     build:
-      dockerfile: ./docker/server.Dockerfile
       context: ../
+      dockerfile: ./docker/server.Dockerfile
+      tags:
+        - docker.io/kartinka/fsthub-server:latest
       args:
         FSTHUB_VER: ${FSTHUB_VER}
     depends_on:
@@ -20,3 +25,7 @@ services:
     image: docker.io/kartinka/hfst-builder:${HFSTBUILDER_VER}
     build:
       dockerfile: ./builder.Dockerfile
+      tags:
+        - docker.io/kartinka/hfst-builder:latest
+      args:
+        PY_VER: ${PY_VER}
