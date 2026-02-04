@@ -14,29 +14,30 @@ const fst_box = {
     "output": document.getElementById("fst-output-box")
 };
 const send_button = document.getElementById("fst-send");
+const fst_format_select = document.getElementById("fst-format");
 const file_export_button = document.getElementById("file-export-button");
 
 
-function create_option(text) {
+function create_option(text, selected=false) {
     const op = document.createElement('option');
     op.value = text;
     op.innerText = text;
+    op.selected = selected;
     return op;
+}
+function populate_select(select_obj, options, flush_children=false) {
+    if (flush_children)
+        remove_children(select_obj);
+    for (i in options)
+        select_obj.appendChild(create_option(options[i]));
 }
 
 /** Filters logic */
-function display_filters(element, filters) {
-    remove_children(element);
-    all_option = create_option('all');
-    all_option.selected = 'selected';
-    element.appendChild(all_option);
-    for (i in filters) {
-        const name = filters[i]['name'];
-        if (name == undefined) {
-            throw new Error(`Filter['name'] is undefined; ${JSON.stringify(filters)}`)
-        }
-        element.appendChild(create_option(name));
-    }
+function display_filters(select_obj, filters) {
+    const filter_names = filters.map(x => x.name);
+    remove_children(select_obj);
+    select_obj.appendChild(create_option('all', selected=true));
+    populate_select(select_obj, filter_names, flush_children=false)
 }
 async function init_filters() {
     console.debug('init_filters start');
@@ -67,6 +68,13 @@ async function load_example(transducer_name) {
     })
     console.info("Loaded example", data);
     display_example(data['example']);
+}
+/** Fst output formats logic */
+async function init_fst_out_formats() {
+    console.debug('init_fst_out_formats start');
+    const data = await call_api(api_fetch_fst_out_formats);
+    populate_select(fst_format_select, data['formats'], flush_children=true);
+    console.debug('init_fst_out_formats end');
 }
 /** Transducer list logic */
 function display_fsts(transducers) {
@@ -104,7 +112,8 @@ async function call_fst() {
         data = await call_api(api_call_fst_url, {}, {
             body: JSON.stringify({
                 "fst_input": fst_box['input'].value,
-                "hfst_file": fst_name_select.value
+                "hfst_file": fst_name_select.value,
+                "output_format": fst_format_select.value
             }),
             method: 'POST'
         })
@@ -134,7 +143,7 @@ function file_export() {
 /** Events */
 async function on_filter_change() {
     hide_error(error_dialog, error_dialog_msg);
-    await update_results()
+    await update_results();
 }
 async function on_load() {
     await init_filters()
@@ -162,6 +171,14 @@ async function on_load() {
         .catch((exception) => {
             show_error(
                 `${translations['plain']['error_failed_to_load_example']}: ${get_error_message(exception)}`
+            );
+            throw exception;
+        });
+
+    await init_fst_out_formats()
+        .catch((exception) => {
+            show_error(
+                `${translations['plain']['error_failed_to_fetch_fst_out_formats']}: ${get_error_message(exception)}`
             );
             throw exception;
         });

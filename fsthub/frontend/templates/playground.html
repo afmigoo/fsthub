@@ -15,98 +15,140 @@
     {% translate "Transducer" as fst_select_translated %}
     {% translate "Type" as select_type_translated %}
     {% translate "Language" as select_lang_translated %}
+    {% translate "Output format" as select_format_translated %}
     {% translate "Send" as send_button_translated %}
     <!-- FST select -->
     <div class="control-big">
+        {% blocktrans trimmed asvar select_fst_help_text %}
+        Here you can chose which transducer will be used.
+        Available options in this select are dictated by the
+        '{{ select_type_translated }}' and '{{ select_lang_translated }}' filters.
+        Text from '{{ fst_input_translated }}' box will be fed to the chosen
+        transducer and its output will be displayed in '{{ fst_output_translated }}' box.
+        {% endblocktrans %}
         <label for="fst-name">
             {{ fst_select_translated }}
-            {% blocktrans trimmed asvar select_fst_help_text %}
-            Here you can chose which transducer will be used.
-            Available options in this select are dictated by the
-            '{{ select_type_translated }}' and '{{ select_lang_translated }}' filters.
-            Text from '{{ fst_input_translated }}' box will be fed to the chosen
-            transducer and its output will be displayed in '{{ fst_output_translated }}' box.
-            {% endblocktrans %}
-            <a title="{{ select_fst_help_text }}" style="cursor: help;">ⓘ</a>
+            <sup class="tip" title="{{ select_fst_help_text }}"><u>?</u></sup>
         </label>
-        <select id="fst-name">
+        <span id="fst-name-tip-accessible" class="visually-hidden">
+            {{ select_fst_help_text }}
+        </span>
+        <select id="fst-name" aria-describedby="fst-name-tip-accessible">
             <option value="value1" selected disabled>{% translate "Hasn't loaded yet" %}</option>
         </select>
     </div>
     <!-- Type filter -->
     <div class="control-small">
+        {% blocktrans trimmed asvar select_type_help_text %}
+        Here you can choose which types of transducers will be listed
+        in the '{{ fst_select_translated }}' select box.
+        {% endblocktrans %}
         <label for="fst-type">
             {{ select_type_translated }}
-            {% blocktrans trimmed asvar select_type_help_text %}
-            Here you can choose which types of transducers will be listed
-            in the '{{ fst_select_translated }}' select box.
-            {% endblocktrans %}
-            <a title="{{ select_type_help_text }}" style="cursor: help;">ⓘ</a>
+            <sup class="tip" title="{{ select_type_help_text }}"><u>?</u></sup>
         </label>
-        <select id="fst-type">
+        <span id="fst-type-tip-accessible" class="visually-hidden">
+            {{ select_type_help_text }}
+        </span>
+        <select id="fst-type" aria-describedby="fst-type-tip-accessible">
             <option value="all" selected disabled>{% translate "Hasn't loaded yet" %}</option>
         </select>
     </div>
     <!-- Lang filter box -->
     <div class="control-small">
+        {% blocktrans trimmed asvar select_lang_help_text %}
+        Here you can set a specific language, so the '{{ fst_select_translated }}'
+        select box contains only transducers that work with seleted language.
+        {% endblocktrans %}
         <label for="fst-lang">
             {{ select_lang_translated }}
-            {% blocktrans trimmed asvar select_lang_help_text %}
-            Here you can set a specific language, so the '{{ fst_select_translated }}'
-            select box contains only transducers that work with seleted language.
-            {% endblocktrans %}
-            <a title="{{ select_lang_help_text }}" style="cursor: help;">ⓘ</a>
+            <sup class="tip" title="{{ select_lang_help_text }}"><u>?</u></sup>
         </label>
-        <select id="fst-lang">
+        <span id="fst-lang-tip-accessible" class="visually-hidden">
+            {{ select_lang_help_text }}
+        </span>
+        <select id="fst-lang" aria-describedby="fst-lang-tip-accessible">
             <option value="all" selected disabled>{% translate "Hasn't loaded yet" %}</option>
         </select>
     </div>
 </div>
 <div id="input-output">
     <!-- Input box -->
-    <label for="fst-input-box">
-        {{ fst_input_translated }}
+    <div>
         {% blocktrans trimmed asvar fst_input_box_help_text %}
         Write your transducer input here. If you are not sure what to type,
         use the example below. You can just click an example and it will
         auto-fill the '{{ fst_input_translated }}' box.
         {% endblocktrans %}
-        <a title="{{ fst_input_box_help_text }}" style="cursor: help;">ⓘ</a>
-    </label>
-    <span id="fst-example-input-box" hidden="hidden">
-        <i>({% translate "e.g." %}, "<u id="fst-example-input-str" style="cursor: pointer;" tabindex=0></u>")</i>
-    </span>
-    <textarea id="fst-input-box"  wrap="off" placeholder='{% translate "Type input here..." %}'' rows="5"></textarea>
-    <!-- Send button -->
-    <div style="display: inline-flex; align-items: center; gap: 0.5em;">
-        <button id="fst-send">
+        <label for="fst-input-box">
+            {{ fst_input_translated }}
+            <sup class="tip" title="{{ fst_input_box_help_text }}"><u>?</u></sup>
+        </label>
+        <span id="fst-example-input-box" hidden="hidden">
+            <small><i>({% translate "e.g." %}, "<u id="fst-example-input-str" style="cursor: pointer;"></u>")</i></small>
+        </span>
+        <span id="fst-input-box-tip-accessible" class="visually-hidden">
+            {{ fst_input_box_help_text }}
+        </span>
+        <textarea id="fst-input-box" 
+                  placeholder='{% translate "Type input here..." %}'
+                  aria-describedby="fst-input-box-tip-accessible"
+                  wrap="off" rows="5"></textarea>
+    </div>
+    <!-- Output controls -->
+    <div class="middle-controls">
+        {% blocktrans trimmed asvar select_format_help_text %}
+        Select an output format of a transducer
+        {% endblocktrans %}
+        {% blocktrans trimmed asvar send_button_help_text %}
+        Press this button after typing anything to the '{{ fst_input_translated }}' box.
+        This will execute the transducer on the backend and return you its output.
+        {% endblocktrans %}
+        <!-- Format select -->
+        <label for="fst-format">
+            {{ select_format_translated }}
+            <sup class="tip" title="{{ select_format_help_text }}"><u>?</u></sup>
+        </label>
+        <span id="fst-format-tip-accessible" class="visually-hidden">
+            {{ select_format_help_text }}
+        </span>
+        <select id="fst-format" aria-describedby="fst-format-tip-accessible">
+            <option value="all" selected disabled>{% translate "Hasn't loaded yet" %}</option>
+        </select>
+        <!-- Send button -->
+        <span id="fst-send-tip-accessible" class="visually-hidden">
+            {{ send_button_help_text }}
+        </span>
+        <button id="fst-send" aria-describedby="fst-send-tip-accessible">
             {{ send_button_translated }}
         </button>
-        <label for="fst-send">
-            {% blocktrans trimmed asvar send_button_help_text %}
-            Press this button after typing anything to the '{{ fst_input_translated }}' box.
-            This will execute the transducer on the backend and return you its output.
-            {% endblocktrans %}
-            <a title="{{ send_button_help_text }}" style="cursor: help;">ⓘ</a>
-        </label>
+        <sup class="tip" title="{{ send_button_help_text }}"><u>?</u></sup>
     </div>
     <!-- Output box -->
-    <label for="fst-output-box">
-        {{ fst_output_translated }}
+    <div>
         {% blocktrans trimmed asvar fst_output_box_help_text %}
         Your transducer output will be here after you enter anything in
         '{{ fst_input_translated }}' box and press '{{ send_button_translated }}' button.
         {% endblocktrans %}
-        <a title="{{ fst_output_box_help_text }}" style="cursor: help;">ⓘ</a>
-        <span id="fst-example-output-box" hidden="hidden">
-            ({% translate "e.g." %}, "<span id="fst-example-output-str"></span>")
+        <label for="fst-output-box">
+            {{ fst_output_translated }}
+            <sup class="tip" title="{{ fst_output_box_help_text }}"><u>?</u></sup>
+            <span id="fst-example-output-box" hidden="hidden">
+                ({% translate "e.g." %}, "<span id="fst-example-output-str"></span>")
+            </span>
+        </label>
+        <span id="fst-output-tip-accessible" class="visually-hidden">
+            {{ fst_output_box_help_text }}
         </span>
-    </label>
-    <textarea id="fst-output-box" wrap="off" placeholder='{% translate "Output will be here..." %}' rows="5" readonly="readonly"></textarea>
-    <!-- Export controls -->
-    <span style="display: inline;">
-        <button id="file-export-button" class="outline">{% translate "Export as file (.txt)" %}</button>
-    </span>
+        <textarea id="fst-output-box" readonly="readonly"
+                  placeholder='{% translate "Output will be here..." %}'
+                  aria-describedby="fst-output-box-tip-accessible"
+                  wrap="off" rows="5"></textarea>
+        <!-- Export controls -->
+        <span style="display: inline;">
+            <button id="file-export-button" class="outline">{% translate "Export as file (.txt)" %}</button>
+        </span>
+    </div>
 </div>
 {% endblock %}
 
@@ -117,6 +159,7 @@
     const api_fetch_fst_url = window.location.origin + "{% url 'api-transducer-filter' %}";
     const api_fetch_types_url = window.location.origin + "{% url 'api-transducer-type-list' %}";
     const api_fetch_langs_url = window.location.origin + "{% url 'api-transducer-lang-list' %}";
+    const api_fetch_fst_out_formats = window.location.origin + "{% url 'api-transducer-output-formats' %}";
     const api_example_url = window.location.origin + "{% url 'api-transducer-example' %}";
     const selected_fst = "{{ selected_fst }}";
 </script>
