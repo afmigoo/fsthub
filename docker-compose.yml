@@ -4,7 +4,7 @@ networks:
 
 services:
   app:
-    image: docker.io/kartinka/fsthub-app:v0.5.0
+    image: docker.io/kartinka/fsthub-app:v0.6.0
     container_name: fsthub_django
     environment:
       PUID: ${CONTAINER_PUID}
@@ -23,7 +23,7 @@ services:
       - ./data:/data
 
   server:
-    image: docker.io/kartinka/fsthub-server:v0.5.0
+    image: docker.io/kartinka/fsthub-server:v0.6.0
     container_name: fsthub_nginx
     environment:
       PUID: ${CONTAINER_PUID}
