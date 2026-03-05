@@ -1,9 +1,16 @@
 server {
     listen 80;
 
+    gzip on;
+    gzip_comp_level 1;
+    gzip_types text/html text/plain text/css application/json image/svg+xml
+               application/javascript application/x-javascript text/javascript
+               text/xml application/xml application/xml+rss;
+
     location /${FSTHUB_URL_PREFIX}static/ {
         alias /var/www/fsthub/static/;
         autoindex off;
+        add_header Cache-Control "public, max-age=21600"; # 6 hours cache
     }
 
     location / {
