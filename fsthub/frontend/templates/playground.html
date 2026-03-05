@@ -5,7 +5,7 @@
 {% block title %}FSThub{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'frontend/css/playground.css' %}">
+<link rel="stylesheet" href="{% static 'fsthub/css/playground.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -163,5 +163,5 @@
     const api_example_url = window.location.origin + "{% url 'api-transducer-example' %}";
     const selected_fst = "{{ selected_fst }}";
 </script>
-<script src="{% static 'frontend/js/playground.js' %}"></script>
+<script src="{% static 'fsthub/js/playground.js' %}"></script>
 {% endblock %}

@@ -5,7 +5,7 @@
 {% block title %}FSThub - {% translate "projects" %}{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{% static 'frontend/css/browse_projects.css' %}">
+<link rel="stylesheet" href="{% static 'fsthub/css/browse_projects.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -27,5 +27,5 @@
     const api_search_url = window.location.origin + "{% url 'api-project-list' %}";
     const project_base_url = window.location.origin + "{% url 'front_project' %}";
 </script>
-<script src="{% static 'frontend/js/browse_projects.js' %}"></script>
+<script src="{% static 'fsthub/js/browse_projects.js' %}"></script>
 {% endblock %}

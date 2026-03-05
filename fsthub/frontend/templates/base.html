@@ -6,10 +6,11 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}FSThub{% endblock %}</title>
+        <link rel="icon" type="image/svg+xml" href="{% static 'fsthub/favicon.svg' %}">
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        <link rel="stylesheet" href="{% static 'frontend/css/pico/pico.jade.min.css' %}">
-        <link rel="stylesheet" href="{% static 'frontend/css/pico/pico.colors.min.css' %}">
-        <link rel="stylesheet" href="{% static 'frontend/css/fsthub.css' %}">
+        <link rel="stylesheet" href="{% static 'fsthub/css/pico/pico.jade.min.css' %}">
+        <link rel="stylesheet" href="{% static 'fsthub/css/pico/pico.colors.min.css' %}">
+        <link rel="stylesheet" href="{% static 'fsthub/css/fsthub.css' %}">
         {% block head %}{% endblock %}
     </head>
     <body>
@@ -29,7 +30,10 @@
                             <form action="{% url 'set_language' %}" method="post">
                                 {% csrf_token %}
                                 <input name="next" type="hidden" value="{{ redirect_to }}">
-                                <select name="language" onchange="this.form.submit()">
+                                <label for="fst-lang-select" class="visually-hidden">
+                                    {% translate "Select language" %}
+                                </label>
+                                <select id="fst-lang-select" name="language" onchange="this.form.submit()">
                                     {% for lang in languages %}
                                     <option value="{{ lang.code }}" {% if lang.code == LANGUAGE_CODE %}selected{% endif %}>
                                         {{ lang.code }}
@@ -77,6 +81,7 @@
             </aside>
         </footer>
     </body>
+    {% translate "FST output" as fst_output_translated %}
     <script>
         const translations = {
             'plain': {
@@ -98,6 +103,6 @@
             },
         };
     </script>
-    <script src="{% static 'frontend/js/api.js' %}"></script>
+    <script src="{% static 'fsthub/js/api.js' %}"></script>
     {% block after_body %}{% endblock %}
 </html>

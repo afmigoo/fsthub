@@ -128,7 +128,7 @@ async function call_fst() {
 /** Output export logic */
 function file_export() {
     if (fst_box['output'].value == '') {
-        alert(translations['error_export_output_empty']);
+        show_error(translations['plain']['error_export_output_empty']);
         return;
     }
     var tmp = document.createElement('a');
